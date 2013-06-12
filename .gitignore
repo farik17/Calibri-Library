@@ -11,3 +11,6 @@
 *.lai
 *.la
 *.a
+
+# IDE users files
+*.pro.user
