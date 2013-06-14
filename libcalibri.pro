@@ -7,39 +7,39 @@ DESTDIR     = lib
 OBJECTS_DIR = obj
 
 HEADERS    += \
-    defines.h \
-    datastream.h
+    cdatastream.h \
+    cdefines.h
 
-include(tcpserver/tcpserver.pri)
-include(socket/socket.pri)
-include(eventdispatcher/eventdispatcher.pri)
-include(ssl/ssl.pri)
-include(crypto/crypto.pri)
-include(settings/settings.pri)
-include(datetime/datetime.pri)
-include(uniqueid/uniqueid.pri)
-include(filesystem/filesystem.pri)
-include(utils/utils.pri)
+include(ctcpserver/ctcpserver.pri)
+include(csocket/csocket.pri)
+include(ceventdispatcher/ceventdispatcher.pri)
+include(cssl/cssl.pri)
+include(ccrypto/ccrypto.pri)
+include(csettings/csettings.pri)
+include(cdatetime/cdatetime.pri)
+include(cuniqueid/cuniqueid.pri)
+include(cfilesystem/cfilesystem.pri)
+include(cutils/cutils.pri)
 
 win32 {
-    INCLUDEPATH += \
-        C:/openssl/include \
-        C:/libevent/WIN32-Code \
-        C:/libevent/include
+    INCLUDEPATH    += \
+        c:/openssl/include \
+        c:/libevent/WIN32-Code \
+        c:/libevent/include
 
-    LIBS    += \
+    LIBS           += \
         -lWs2_32 \
         -lAdvapi32 \
         -lShell32 \
         -lRpcrt4 \
         -lKernel32 \
-        -LC:/openssl/lib/vc -llibeay32MD \
-        -LC:/openssl/lib/vc -lssleay32MD \
-        -LC:/libevent -llibevent_core \
-        -LC:/libevent -llibevent_extras \
-        -LC:/libevent -llibevent_openssl
+        -Lc:/openssl/lib/vc -llibeay32MD \
+        -Lc:/openssl/lib/vc -lssleay32MD \
+        -Lc:/libevent -llibevent_core \
+        -Lc:/libevent -llibevent_extras \
+        -Lc:/libevent -llibevent_openssl
 } else:unix {
-    LIBS    += \
+    LIBS           += \
         -luuid \
         -levent_core \
         -levent_extra \
@@ -49,32 +49,33 @@ win32 {
 
     target.path     = /usr/lib/calibri
     headers.path    = /usr/include/calibri
-    headers.files  += eventdispatcher/eventdispatcher.h \
-        eventdispatcher/eventdispatcher_config.h \
-        eventdispatcher/eventdispatcher_types.h \
-        tcpserver/tcpserver.h \
-        socket/tcpsocket.h \
-        socket/sslsocket.h \
-        ssl/ssl.h \
-        crypto/crypto.h \
-        settings/settings.h \
-        datetime/datetime.h \
-        uniqueid/uniqueid.h \
-        filesystem/filesystem.h \
-        utils/utils.h \
-        datastream.h \
-        defines.h
+    headers.files  += \
+        ceventdispatcher/ceventdispatcher.h \
+        ceventdispatcher/ceventdispatcher_config.h \
+        ceventdispatcher/ceventdispatcher_types.h \
+        ctcpserver/ctcpserver.h \
+        csocket/ctcpsocket.h \
+        csocket/csslsocket.h \
+        cssl/cssl.h \
+        ccrypto/ccrypto.h \
+        csettings/csettings.h \
+        cdatetime/cdatetime.h \
+        cuniqueid/cuniqueid.h \
+        cfilesystem/cfilesystem.h \
+        cutils/cutils.h \
+        cdatastream.h \
+        cdefines.h
 
-    QMAKE_PKGCONFIG_NAME        = calibri
-    QMAKE_PKGCONFIG_DESCRIPTION = "Calibri Library"
-    QMAKE_PKGCONFIG_LIBDIR      = $$target.path
-    QMAKE_PKGCONFIG_INCDIR      = $$headers.path
-    QMAKE_PKGCONFIG_DESTDIR     = pkgconfig
+    QMAKE_PKGCONFIG_NAME            = calibri
+    QMAKE_PKGCONFIG_DESCRIPTION     = "Calibri Library"
+    QMAKE_PKGCONFIG_LIBDIR          = $$target.path
+    QMAKE_PKGCONFIG_INCDIR          = $$headers.path
+    QMAKE_PKGCONFIG_DESTDIR         = pkgconfig
 
-    INSTALLS += target headers
+    INSTALLS       += target headers
 
-    QMAKE_CXXFLAGS_RELEASE     -= -O2
-    QMAKE_CXXFLAGS_RELEASE     += -O3 \
+    QMAKE_CXXFLAGS_RELEASE     += \
+        -O3 \
         -march=native \
         -mtune=native \
         -funroll-loops
