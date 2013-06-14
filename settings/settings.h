@@ -33,7 +33,7 @@ public:
 
     settings_properties_tree &propertiesTree();
     settings_arrays_tree &arraysTree();
-	
+
 private:
     C_DISABLE_COPY(CSettings)
 
@@ -57,32 +57,32 @@ inline bool settings_value(CSettings &settings, const std::string &key, T &data,
 {
     if (!str_contains('/', key))
         return false;
-	
+
     std::string section = str_left('/', key);
 
     bool array = is_settings_array(section);
     bool group = is_settings_group(section);
 
     if (!group && !array)
-		return false;
+        return false;
     
-	if (group) {
+    if (group) {
         const std::string &value = settings.propertiesTree()[section][str_right('/', key)];
 
-		std::stringstream stream;
-		stream.str(value);
-		stream >> data;
-		return true;
-	}
-	
+        std::stringstream stream;
+        stream.str(value);
+        stream >> data;
+        return true;
+    }
+
     if (array) {
         const std::string &value = settings.arraysTree()[section][index][str_right('/', key)];
 
-		std::stringstream stream;
-		stream.str(value);
-		stream >> data;
-		return true;
-	}
+        std::stringstream stream;
+        stream.str(value);
+        stream >> data;
+        return true;
+    }
 
     return false;
 }
@@ -101,23 +101,23 @@ inline bool set_settings_value(CSettings &settings, const std::string &key, T da
     if (!array && !group)
         return false;
 
-	if (group) {
-		std::stringstream stream;
-		stream << data;
+    if (group) {
+        std::stringstream stream;
+        stream << data;
 
         settings.propertiesTree()[section][str_right('/', key)] = stream.str();
-		return true;
-	}
+        return true;
+    }
 
     if (array) {
-		std::stringstream stream;
-		stream << data;
+        std::stringstream stream;
+        stream << data;
 
-		if (index >= settings.arraysTree()[section].size())
-			settings.arraysTree()[section].resize(index + 1);
+        if (index >= settings.arraysTree()[section].size())
+            settings.arraysTree()[section].resize(index + 1);
 
         settings.arraysTree()[section][index][str_right('/', key)] = stream.str();
-		return true;
+        return true;
     }
     
     return false;

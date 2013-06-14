@@ -1,5 +1,5 @@
-#ifndef UUID_H
-#define UUID_H
+#ifndef UNUQUEID_H
+#define UNUQUEID_H
 
 //! Platform Includes
 #if defined(_WIN32)
@@ -19,4 +19,4 @@ bool uniqueid_compare(const uniqueid &src, const uniqueid &dst);
 
 c_platform_string uniqueid_to_string(const uniqueid &uid);
 
-#endif // UUID_H
+#endif // UNUQUEID_H
