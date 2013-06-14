@@ -23,10 +23,10 @@ typedef std::map<std::string, settings_properties>      settings_properties_tree
 typedef std::vector<settings_properties>                settings_array;
 typedef std::map<std::string, settings_array>           settings_arrays_tree;
 
-class Settings
+class CSettings
 {
 public:
-    Settings(const std::string &fileName);
+    CSettings(const std::string &fileName);
     
     void save();
     void load();
@@ -35,7 +35,7 @@ public:
     settings_arrays_tree &arraysTree();
 	
 private:
-    C_DISABLE_COPY(Settings)
+    C_DISABLE_COPY(CSettings)
 
 	void eraseArray(const std::string &section);
 	void eraseSection(const std::string &section);
@@ -50,10 +50,10 @@ private:
 inline bool is_settings_group(const std::string &line);
 inline bool is_settings_array(const std::string &line);
 
-size_t settings_array_size(Settings &settings, const std::string &section);
+size_t settings_array_size(CSettings &settings, const std::string &section);
 
 template<typename T>
-inline bool settings_value(Settings &settings, const std::string &key, T &data, size_t index = 0)
+inline bool settings_value(CSettings &settings, const std::string &key, T &data, size_t index = 0)
 {
     if (!str_contains('/', key))
         return false;
@@ -88,7 +88,7 @@ inline bool settings_value(Settings &settings, const std::string &key, T &data, 
 }
 
 template<typename T>
-inline bool set_settings_value(Settings &settings, const std::string &key, T data, size_t index = 0)
+inline bool set_settings_value(CSettings &settings, const std::string &key, T data, size_t index = 0)
 {
     if (!str_contains('/', key))
         return false;

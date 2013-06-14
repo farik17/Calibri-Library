@@ -5,13 +5,13 @@
 #include <iostream>
 #include <ios>
 
-Settings::Settings(const std::string &fileName)
+CSettings::CSettings(const std::string &fileName)
     : m_fileName(fileName)
 {
 
 }
 
-void Settings::save()
+void CSettings::save()
 {
     m_file.open(m_fileName.c_str(), std::ios::out | std::ios::trunc);
     if (!m_file.is_open()) {
@@ -97,7 +97,7 @@ void Settings::save()
     m_file.close();
 }
 
-void Settings::load()
+void CSettings::load()
 {
     m_file.open(m_fileName.c_str(), std::ios::in);
     if (!m_file.is_open()) {
@@ -180,24 +180,24 @@ ProcessArrayLine:
     m_file.close();
 }
 
-settings_properties_tree &Settings::propertiesTree()
+settings_properties_tree &CSettings::propertiesTree()
 {
     return m_properties;
 }
 
-settings_arrays_tree &Settings::arraysTree()
+settings_arrays_tree &CSettings::arraysTree()
 {
     return m_arrays;
 }
 
-void Settings::eraseArray(const std::string &section)
+void CSettings::eraseArray(const std::string &section)
 {
     auto it = m_arrays.find(section);
     if (it != m_arrays.cend())
         m_arrays.erase(it);
 }
 
-void Settings::eraseSection(const std::string &section)
+void CSettings::eraseSection(const std::string &section)
 {
     auto it = m_properties.find(section);
     if (it != m_properties.cend())
@@ -220,7 +220,7 @@ bool is_settings_array(const std::string &line)
     return line.at(0) == '<' && line.at(line.size() - 1) == '>';
 }
 
-size_t settings_array_size(Settings &settings, const std::string &section)
+size_t settings_array_size(CSettings &settings, const std::string &section)
 {
     auto it = settings.arraysTree().find(section);
     if (it == settings.arraysTree().cend())
