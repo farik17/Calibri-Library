@@ -74,8 +74,8 @@ sslinfo *sslinfo_new()
     sslinfo *ssl_info = new sslinfo;
     ssl_info->ssl_ctx = nullptr;
     ssl_info->ssl_protocol = SSLv3_0;
-    ssl_info->ssl_mode = SSLClientMode;
-    ssl_info->ssl_peer_verify_mode = SSLVerifyPeer;
+    ssl_info->ssl_mode = ClientMode;
+    ssl_info->ssl_peer_verify_mode = VerifyPeer;
     ssl_info->encrypted_handler = nullptr;
     ssl_info->ssl_error_handler = nullptr;
     return ssl_info;

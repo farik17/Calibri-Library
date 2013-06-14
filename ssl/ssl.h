@@ -16,20 +16,25 @@ enum SSLProtocol : c_uint8 {
 };
 
 enum SSLMode : c_uint8 {
-    SSLClientMode   = 1,
-    SSLServerMode   = 2
+    ClientMode      = 1,
+    ServerMode      = 2
 };
 
 enum SSLPeerVerifyMode : c_uint8 {
-    SSLVerifyNone   = 1,
-    SSLVerifyPeer   = 2
+    VerifyNone      = 1,
+    VerifyPeer      = 2
+};
+
+enum SSLFileType : c_uint8 {
+    PEM             = 1,
+    ASN1            = 2
 };
 
 SSL_CTX *SSL_CTX_create(SSLProtocol sslProtocol, SSLMode sslMode, SSLPeerVerifyMode sslPeerVerifyMode);
 
 void SSL_init();
-void SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificate);
-void SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKey);
+void SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath, SSLFileType fileType);
+void SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath, SSLFileType fileType);
 void SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, SSLProtocol sslProtocol, SSLMode sslMode);
 void SSL_CTX_set_peer_verify_mode(SSL_CTX *ssl_ctx, SSLPeerVerifyMode sslPeerVerifyMode);
 

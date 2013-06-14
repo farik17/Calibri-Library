@@ -63,7 +63,7 @@ inline bool settings_value(Settings &settings, const std::string &key, T &data, 
     bool array = is_settings_array(section);
     bool group = is_settings_group(section);
 
-    if (!group && !array) 
+    if (!group && !array)
 		return false;
     
 	if (group) {
@@ -98,8 +98,8 @@ inline bool set_settings_value(Settings &settings, const std::string &key, T dat
     bool array = is_settings_array(section);
     bool group = is_settings_group(section);
 
-    if (!array && !group) 
-		return false;    
+    if (!array && !group)
+        return false;
 
 	if (group) {
 		std::stringstream stream;
@@ -118,7 +118,7 @@ inline bool set_settings_value(Settings &settings, const std::string &key, T dat
 
         settings.arraysTree()[section][index][str_right('/', key)] = stream.str();
 		return true;
-	}	
+    }
     
     return false;
 }

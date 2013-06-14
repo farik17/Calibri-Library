@@ -75,14 +75,14 @@ void CSslSocket::setSslPeerVerifyMode(SSLPeerVerifyMode sslPeerVerifyMode)
     SSL_CTX_set_peer_verify_mode(sslinfo_get_ssl_ctx(ssl_info), sslinfo_get_ssl_peer_verify_mode(ssl_info));
 }
 
-void CSslSocket::setSslCertificate(const std::string &certificate)
+void CSslSocket::setSslCertificate(const std::string &certificatePath, SSLFileType fileType)
 {
-    SSL_CTX_set_certificate(sslinfo_get_ssl_ctx(socketinfo_get_sslinfo(m_socketinfo)), certificate);
+    SSL_CTX_set_certificate(sslinfo_get_ssl_ctx(socketinfo_get_sslinfo(m_socketinfo)), certificatePath, fileType);
 }
 
-void CSslSocket::setSslPrivateKey(const std::string &privateKey)
+void CSslSocket::setSslPrivateKey(const std::string &privateKeyPath, SSLFileType fileType)
 {
-    SSL_CTX_set_private_key(sslinfo_get_ssl_ctx(socketinfo_get_sslinfo(m_socketinfo)), privateKey);
+    SSL_CTX_set_private_key(sslinfo_get_ssl_ctx(socketinfo_get_sslinfo(m_socketinfo)), privateKeyPath, fileType);
 }
 
 std::string CSslSocket::sslErrorString() const

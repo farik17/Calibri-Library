@@ -5,7 +5,6 @@
 #include "defines.h"
 
 //! Std Includes
-#include <string>
 #include <vector>
 #include <list>
 #include <set>

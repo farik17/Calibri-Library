@@ -17,8 +17,8 @@ public:
     void setSslProtocol(SSLProtocol sslProtocol);
     void setSslMode(SSLMode sslMode);
     void setSslPeerVerifyMode(SSLPeerVerifyMode sslPeerVerifyMode);
-    void setSslCertificate(const std::string &certificate);
-    void setSslPrivateKey(const std::string &privateKey);
+    void setSslCertificate(const std::string &certificatePath, SSLFileType fileType);
+    void setSslPrivateKey(const std::string &privateKeyPath, SSLFileType fileType);
 
     std::string sslErrorString() const;
 
