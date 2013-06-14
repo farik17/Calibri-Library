@@ -37,8 +37,8 @@ public:
 private:
     C_DISABLE_COPY(CSettings)
 
-	void eraseArray(const std::string &section);
-	void eraseSection(const std::string &section);
+    void eraseArray(const std::string &section);
+    void eraseSection(const std::string &section);
 
     settings_properties_tree m_properties;
     settings_arrays_tree m_arrays;
