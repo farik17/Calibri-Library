@@ -7,9 +7,6 @@
 #include <vector>
 #include <sstream>
 
-//! Project Includes
-#include "cdefines.h"
-
 //! CUtils Includes
 #include "cutils/cutils.h"
 
