@@ -2,7 +2,7 @@
 #define CTCPSOCKET_H
 
 //! CEventDispatcher Includes
-#include "ceventdispatcher.h"
+#include "ceventdispatcher/ceventdispatcher.h"
 
 class CTcpSocket
 {

@@ -11,7 +11,7 @@
 #include "cdefines.h"
 
 //! CUtils Includes
-#include "cutils.h"
+#include "cutils/cutils.h"
 
 #if _MSC_VER
 #pragma warning(disable:4503)
