@@ -5,6 +5,251 @@
 #include <sstream>
 #include <iomanip>
 
+bool lexical_cast(const std::string &data, c_int8 &out)
+{
+    if (data.empty())
+        return false;
+
+    out = static_cast<c_int8>(std::stoi(data));
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, c_int16 &out)
+{
+    if (data.empty())
+        return false;
+
+    out = static_cast<c_int16>(std::stoi(data));
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, c_int32 &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stoi(data);
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, c_int64 &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stoll(data);
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, c_long &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stol(data);
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, c_uint8 &out)
+{
+    if (data.empty())
+        return false;
+
+    out = static_cast<c_uint8>(std::stoul(data));
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, c_uint16 &out)
+{
+    if (data.empty())
+        return false;
+
+    out = static_cast<c_uint16>(std::stoul(data));
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, c_uint32 &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stoul(data);
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, c_uint64 &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stoull(data);
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, c_ulong &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stoul(data);
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, bool &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stoi(data) != 0;
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, float &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stof(data);
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, double &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stod(data);
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, long double &out)
+{
+    if (data.empty())
+        return false;
+
+    out = std::stold(data);
+
+    return true;
+}
+
+bool lexical_cast(c_int8 data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(c_int16 data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(c_int32 data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(c_int64 data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(c_long data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(c_uint8 data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(c_uint16 data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(c_uint32 data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(c_uint64 data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(c_ulong data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(bool data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(float data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(double data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(long double data, std::string &out)
+{
+    out = std::to_string(data);
+
+    return true;
+}
+
+bool lexical_cast(const std::string &data, std::string &out)
+{
+    out = data;
+
+    return true;
+}
+
 std::string to_hex(const unsigned char *data, size_t len)
 {
     std::stringstream stream;

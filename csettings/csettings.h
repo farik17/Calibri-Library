@@ -31,8 +31,67 @@ public:
     void save();
     void load();
 
-    csettings_properties_tree &propertiesTree();
-    csettings_arrays_tree &arraysTree();
+    template<typename T>
+    bool value(const std::string &key, T &data, size_t index = 0)
+    {
+        if (!str_contains('/', key))
+            return false;
+
+        std::string section = str_left('/', key);
+
+        bool array = isArray(section);
+        bool group = isGroup(section);
+
+        if (!group && !array)
+            return false;
+
+        if (group) {
+            std::string name = str_right('/', key);
+            if (!isPropertiesTreeContains(section, name))
+                return false;
+
+            return lexical_cast(m_propertiesTree[section][name], data);
+        }
+
+        if (array) {
+            std::string name = str_right('/', key);
+            if (!isArraysTreeContains(section, index, name))
+                return false;
+
+            return lexical_cast(m_arraysTree[section][index][name], data);
+        }
+
+        return false;
+    }
+
+    template<typename T>
+    bool setValue(const std::string &key, const T &data, size_t index = 0)
+    {
+        if (!str_contains('/', key))
+            return false;
+
+        std::string section = str_left('/', key);
+
+        bool array = isArray(section);
+        bool group = isGroup(section);
+
+        if (!array && !group)
+            return false;
+
+        if (group)
+            return lexical_cast(data, m_propertiesTree[section][str_right('/', key)]);
+
+        if (array) {
+            if (index >= m_arraysTree[section].size())
+                m_arraysTree[section].resize(index + 1);
+
+            return lexical_cast(data, m_arraysTree[section][index][str_right('/', key)]);
+        }
+
+        return false;
+    }
+
+    size_t arraySize(const std::string &section);
 
 private:
     C_DISABLE_COPY(CSettings)
@@ -40,88 +99,17 @@ private:
     void eraseArray(const std::string &section);
     void eraseSection(const std::string &section);
 
-    csettings_properties_tree m_properties;
-    csettings_arrays_tree m_arrays;
+    bool isGroup(const std::string &line);
+    bool isArray(const std::string &line);
+    bool isPropertiesTreeContains(const std::string &section, const std::string &name);
+    bool isArraysTreeContains(const std::string &section, size_t index, const std::string &name);
+
+    csettings_properties_tree m_propertiesTree;
+    csettings_arrays_tree m_arraysTree;
 
     std::string m_fileName;
     std::fstream m_file;
 };
-
-inline bool is_csettings_group(const std::string &line);
-inline bool is_csettings_array(const std::string &line);
-
-size_t csettings_array_size(CSettings &settings, const std::string &section);
-
-template<typename T>
-inline bool csettings_value(CSettings &settings, const std::string &key, T &data, size_t index = 0)
-{
-    if (!str_contains('/', key))
-        return false;
-
-    std::string section = str_left('/', key);
-
-    bool array = is_csettings_array(section);
-    bool group = is_csettings_group(section);
-
-    if (!group && !array)
-        return false;
-    
-    if (group) {
-        const std::string &value = settings.propertiesTree()[section][str_right('/', key)];
-
-        std::stringstream stream;
-        stream.str(value);
-        stream >> data;
-        return true;
-    }
-
-    if (array) {
-        const std::string &value = settings.arraysTree()[section][index][str_right('/', key)];
-
-        std::stringstream stream;
-        stream.str(value);
-        stream >> data;
-        return true;
-    }
-
-    return false;
-}
-
-template<typename T>
-inline bool set_csettings_value(CSettings &settings, const std::string &key, T data, size_t index = 0)
-{
-    if (!str_contains('/', key))
-        return false;
-
-    std::string section = str_left('/', key);
-
-    bool array = is_csettings_array(section);
-    bool group = is_csettings_group(section);
-
-    if (!array && !group)
-        return false;
-
-    if (group) {
-        std::stringstream stream;
-        stream << data;
-
-        settings.propertiesTree()[section][str_right('/', key)] = stream.str();
-        return true;
-    }
-
-    if (array) {
-        std::stringstream stream;
-        stream << data;
-
-        if (index >= settings.arraysTree()[section].size())
-            settings.arraysTree()[section].resize(index + 1);
-
-        settings.arraysTree()[section][index][str_right('/', key)] = stream.str();
-        return true;
-    }
-    
-    return false;
-}
 
 #endif // CSETTINGS_H
 
