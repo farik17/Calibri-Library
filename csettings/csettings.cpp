@@ -16,10 +16,10 @@ void CSettings::save()
     m_file.open(m_fileName.c_str(), std::ios::out | std::ios::trunc);
     if (!m_file.is_open()) {
         if (m_fileName.empty()) {
-            std::cout << "Settings::save error: invalid file name" << std::endl;
+            std::cout << "CSettings::save error: invalid file name" << std::endl;
             return;
         }
-        std::cout << "Settings::save error: can not open file with name " << m_fileName << std::endl;
+        std::cout << "CSettings::save error: can not open file with name " << m_fileName << std::endl;
         return;
     }
 
@@ -102,10 +102,10 @@ void CSettings::load()
     m_file.open(m_fileName.c_str(), std::ios::in);
     if (!m_file.is_open()) {
         if (m_fileName.empty()) {
-            std::cout << "Settings::load error: invalid file name" << std::endl;
+            std::cout << "CSettings::load error: invalid file name" << std::endl;
             return;
         }
-        std::cout << "Settings::load error: can not open file with name " << m_fileName << std::endl;
+        std::cout << "CSettings::load error: can not open file with name " << m_fileName << std::endl;
         return;
     }
 

@@ -9,7 +9,7 @@ CEventDispatcherConfig::CEventDispatcherConfig()
 {
     m_event_config = event_config_new();
     if (!m_event_config)
-        std::cout << "EventDispatcherConfig::EventDispatcherConfig error: failed to initialize config" << std::endl;
+        std::cout << "CEventDispatcherConfig::CEventDispatcherConfig error: failed to initialize config" << std::endl;
 }
 
 CEventDispatcherConfig::~CEventDispatcherConfig()
@@ -29,7 +29,7 @@ void CEventDispatcherConfig::setFeatures(c_uint16 features)
         result |= EV_FEATURE_FDS;
 
     if (event_config_require_features(m_event_config, result) != 0)
-        std::cout << "EventDispatcherConfig::setFeatures error: invalid or platform specific features" << std::endl;
+        std::cout << "CEventDispatcherConfig::setFeatures error: invalid or platform specific features" << std::endl;
 }
 
 void CEventDispatcherConfig::setFlags(c_uint16 flags)
@@ -48,11 +48,11 @@ void CEventDispatcherConfig::setFlags(c_uint16 flags)
         result |= EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST;
 
     if (event_config_set_flag(m_event_config, result) != 0)
-        std::cout << "EventDispatcherConfig::setFlags error: invalid or platform specific flags" << std::endl;
+        std::cout << "CEventDispatcherConfig::setFlags error: invalid or platform specific flags" << std::endl;
 }
 
 void CEventDispatcherConfig::avoidMethod(const std::string &method)
 {
     if (event_config_avoid_method(m_event_config, method.c_str()) != 0)
-        std::cout << "EventDispatcherConfig::avoidMethod error: invalid method" << std::endl;
+        std::cout << "CEventDispatcherConfig::avoidMethod error: invalid method" << std::endl;
 }
