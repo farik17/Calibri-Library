@@ -4,6 +4,7 @@
 //! Std Includes
 #include <sstream>
 #include <iomanip>
+#include <locale>
 
 bool lexical_cast(const std::string &data, c_int8 &out)
 {
@@ -145,6 +146,13 @@ bool lexical_cast(const std::string &data, long double &out)
     return true;
 }
 
+bool lexical_cast(const std::string &data, std::wstring &out)
+{
+    out = to_wstring(data);
+
+    return true;
+}
+
 bool lexical_cast(c_int8 data, std::string &out)
 {
     out = std::to_string(data);
@@ -248,6 +256,53 @@ bool lexical_cast(const std::string &data, std::string &out)
     out = data;
 
     return true;
+}
+
+bool lexical_cast(const std::wstring &data, std::string &out)
+{
+    out = to_string(data);
+
+    return true;
+}
+
+std::string to_string(const std::wstring &data)
+{
+    char buffer[sizeof(data)];
+    std::use_facet<std::ctype<wchar_t> >(std::locale()).narrow(data.c_str(), data.c_str() + sizeof(data), '?', buffer);
+
+    return buffer;
+}
+
+std::string to_string(const wchar_t *data)
+{
+    char *buffer = new char[std::char_traits<wchar_t>::length(data) + 1];
+    std::use_facet<std::ctype<wchar_t> >(std::locale()).narrow(data, data + std::char_traits<wchar_t>::length(data) + 1, '?', buffer);
+
+    std::string result = buffer;
+
+    delete[] buffer;
+
+    return result;
+}
+
+std::wstring to_wstring(const std::string &data)
+{
+    wchar_t buffer[sizeof(data)];
+    std::use_facet<std::ctype<wchar_t> >(std::locale()).widen(data.c_str(), data.c_str() + sizeof(data), buffer);
+
+    return buffer;
+}
+
+std::wstring to_wstring(const char *data)
+{
+    wchar_t *buffer = new wchar_t[std::char_traits<char>::length(data) + 1];
+    std::use_facet<std::ctype<wchar_t> >(std::locale()).widen(data, data + std::char_traits<char>::length(data) + 1, buffer);
+
+    std::wstring result = buffer;
+
+    delete[] buffer;
+
+    return result;
 }
 
 std::string to_hex(const unsigned char *data, size_t len)

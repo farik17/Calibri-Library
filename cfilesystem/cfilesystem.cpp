@@ -1,6 +1,9 @@
 //! Self Includes
 #include "cfilesystem.h"
 
+//! CUtils Includes
+#include "cutils.h"
+
 //! Platform Includes
 #if defined(_WIN32)
 #   include <Windows.h>
@@ -11,28 +14,19 @@
 #endif
 
 //! CFilesystem defines
-#if defined(_WIN32) && defined(UNICODE)
-#   define PATH_SEPARATOR_PATTERN       L"\\/"
-#   define PATH_SEPARATOR               L"/"
-#   define DOT_DOT                      L".."
-#   define DOT                          "."
-#   define PARENT_DIR                   L"../"
-#   define CURRENT_DIR                  L"./"
-#else
-#   define PATH_SEPARATOR_PATTERN       "\\/"
-#   define PATH_SEPARATOR               "/"
-#   define DOT_DOT                      ".."
-#   define DOT                          "."
-#   define PARENT_DIR                   "../"
-#   define CURRENT_DIR                  "./"
-#endif
+#define PATH_SEPARATOR_PATTERN       "\\/"
+#define PATH_SEPARATOR               "/"
+#define DOT_DOT                      ".."
+#define DOT                          "."
+#define PARENT_DIR                   "../"
+#define CURRENT_DIR                  "./"
 
-int cfilesystem_create_path(const c_platform_string &path)
+int cfilesystem_create_path(const std::string &path)
 {
     cfilesystem_path_tree path_tree = cfilesystem_parse_path(path);
     cfilesystem_normalize_path_tree(path_tree);
 
-    c_platform_string current_path;
+    std::string current_path;
 
     auto it = path_tree.begin();
     while (it != path_tree.cend()) {
@@ -44,7 +38,11 @@ int cfilesystem_create_path(const c_platform_string &path)
         }
 
 #if defined(_WIN32)
+#   if defined(UNICODE)
+        if (CreateDirectory(to_wstring(current_path).c_str(), nullptr) == 0) {
+#   else
         if (CreateDirectory(current_path.c_str(), nullptr) == 0) {
+#   endif
             switch (GetLastError()) {
             case ERROR_ALREADY_EXISTS:
                 break;
@@ -73,12 +71,12 @@ int cfilesystem_create_path(const c_platform_string &path)
     return 0;
 }
 
-int cfilesystem_remove_path(const c_platform_string &path)
+int cfilesystem_remove_path(const std::string &path)
 {
     cfilesystem_path_tree path_tree = cfilesystem_parse_path(path);
     cfilesystem_normalize_path_tree(path_tree);
 
-    c_platform_string current_path;
+    std::string current_path;
 
     auto it = path_tree.rbegin();
     while (it != path_tree.crend()) {
@@ -90,7 +88,11 @@ int cfilesystem_remove_path(const c_platform_string &path)
         }
 
 #if defined(_WIN32)
+#   if defined(UNICODE)
+        if (RemoveDirectory(to_wstring(current_path).c_str()) == 0)
+#   else
         if (RemoveDirectory(current_path.c_str()) == 0)
+#   endif
             return GetLastError();
 #elif defined(__unix__) || defined(__linux__)
         if (rmdir(current_path.c_str()) != 0)
@@ -105,7 +107,7 @@ int cfilesystem_remove_path(const c_platform_string &path)
     return 0;
 }
 
-cfilesystem_path_tree cfilesystem_parse_path(const c_platform_string &path)
+cfilesystem_path_tree cfilesystem_parse_path(const std::string &path)
 {
     cfilesystem_path_tree path_tree;
 
@@ -127,9 +129,9 @@ cfilesystem_path_tree cfilesystem_parse_path(const c_platform_string &path)
     return path_tree;
 }
 
-c_platform_string cfilesystem_path_tree_to_string(const cfilesystem_path_tree &path_tree)
+std::string cfilesystem_path_tree_to_string(const cfilesystem_path_tree &path_tree)
 {
-    c_platform_string path;
+    std::string path;
 
     for (size_t ix = 0; ix < path_tree.size(); ++ix)
         path += path_tree[ix] + PATH_SEPARATOR;

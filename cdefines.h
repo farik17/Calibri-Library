@@ -26,12 +26,6 @@ typedef c_intptr                        c_fdptr;
 typedef c_int32                         c_fdptr;
 #endif
 
-#if defined(_WIN32) && defined(UNICODE)
-typedef std::wstring                    c_platform_string;
-#else
-typedef std::string                     c_platform_string;
-#endif
-
 //! Defines
 #define C_UNUSED(expr)                  (void)expr
 #if __GNUC__ > 4 || (__GNUC__ == 4 && (__GNUC_MINOR__ > 4 || (__GNUC_MINOR__ == 4 && (__GNUC_PATCHLEVEL__ == 0 || __GNUC_PATCHLEVEL__ > 0))))

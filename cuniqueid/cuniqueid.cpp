@@ -1,12 +1,17 @@
 //! Self Includes
 #include "cuniqueid.h"
 
+//! CUtils Includes
+#include "cutils.h"
+
 void cuniqueid_generate(cuniqueid &uid)
 {
 #if defined(_WIN32)
     UuidCreate(&uid);
 #elif defined(__unix__) || defined(__linux__)
     uuid_generate(uid);
+#else
+#   error platform not supported
 #endif
 }
 
@@ -16,27 +21,31 @@ bool cuniqueid_compare(const cuniqueid &src, const cuniqueid &dst)
     return !memcmp(&src, &dst, sizeof(cuniqueid));
 #elif defined(__unix__) || defined(__linux__)
     return !uuid_compare(src, dst);
+#else
+#   error platform not supported
 #endif
 }
 
-c_platform_string cuniqueid_to_string(const cuniqueid &uid)
+std::string cuniqueid_to_string(const cuniqueid &uid)
 {
 #if defined(_WIN32)
 #   if defined(UNICODE)
-    RPC_WSTR buffer[1];
-    UuidToString(&uid, buffer);
+    c_uint16 *buffer;
+    UuidToString(&uid, &buffer);
 
-    return reinterpret_cast<wchar_t *>(buffer[0]);
+    return to_string(reinterpret_cast<wchar_t *>(buffer));
 #   else
-    RPC_CSTR buffer[1];
-    UuidToString(&uid, buffer);
+    c_uint8 *buffer;
+    UuidToString(&uid, &buffer);
 
-    return reinterpret_cast<char *>(buffer[0]);
+    return reinterpret_cast<char *>(buffer);
 #   endif
 #elif defined(__unix__) || defined(__linux__)
     char buffer[128];
     uuid_unparse(uid, buffer);
 
-    return reinterpret_cast<char *>(buffer);
+    return buffer;
+#else
+#   error platform not supported
 #endif
 }
