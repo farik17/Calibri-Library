@@ -23,27 +23,6 @@ inline void cdatastream_write(std::string &dest, const char *source, size_t &pos
     pos += dest.length() - length;
 }
 
-inline void cdatastream_write(std::wstring &dest, const wchar_t *source, size_t &pos, size_t len)
-{
-    size_t length = dest.length();
-    dest.insert(pos, source, len);
-    pos += dest.length() - length;
-}
-
-inline void cdatastream_write(std::u16string &dest, const char16_t *source, size_t &pos, size_t len)
-{
-    size_t length = dest.length();
-    dest.insert(pos, source, len);
-    pos += dest.length() - length;
-}
-
-inline void cdatastream_write(std::u32string &dest, const char32_t *source, size_t &pos, size_t len)
-{
-    size_t length = dest.length();
-    dest.insert(pos, source, len);
-    pos += dest.length() - length;
-}
-
 inline void cdatastream_write(CTcpSocket &dest, const char *source, size_t &pos, size_t len)
 {
     C_UNUSED(pos);
@@ -51,21 +30,6 @@ inline void cdatastream_write(CTcpSocket &dest, const char *source, size_t &pos,
 }
 
 inline void cdatastream_read(std::string &source, char *dest, size_t &pos, size_t len)
-{
-    pos += source.copy(dest, len, pos);
-}
-
-inline void cdatastream_read(std::wstring &source, wchar_t *dest, size_t &pos, size_t len)
-{
-    pos += source.copy(dest, len, pos);
-}
-
-inline void cdatastream_read(std::u16string &source, char16_t *dest, size_t &pos, size_t len)
-{
-    pos += source.copy(dest, len, pos);
-}
-
-inline void cdatastream_read(std::u32string &source, char32_t *dest, size_t &pos, size_t len)
 {
     pos += source.copy(dest, len, pos);
 }
@@ -181,12 +145,6 @@ public:
         return *this;
     }
 
-    CDataStream<T> &operator <<(wchar_t value)
-    {
-        cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(wchar_t));
-        return *this;
-    }
-
     CDataStream<T> &operator <<(const char *value)
     {
         c_uint64 size = std::char_traits<char>::length(value);
@@ -200,85 +158,7 @@ public:
         return *this;
     }
 
-    CDataStream<T> &operator <<(const wchar_t *value)
-    {
-        c_uint64 size = std::char_traits<wchar_t>::length(value);
-
-        if (size == 0)
-            return *this;
-
-        cdatastream_write(m_data, reinterpret_cast<const char *>(&size), m_pos, sizeof(c_uint64));
-        cdatastream_write(m_data, value, m_pos, size);
-
-        return *this;
-    }
-
-    CDataStream<T> &operator <<(const char16_t *value)
-    {
-        c_uint64 size = std::char_traits<char16_t>::length(value);
-
-        if (size == 0)
-            return *this;
-
-        cdatastream_write(m_data, reinterpret_cast<const char *>(&size), m_pos, sizeof(c_uint64));
-        cdatastream_write(m_data, value, m_pos, size);
-
-        return *this;
-    }
-
-    CDataStream<T> &operator <<(const char32_t *value)
-    {
-        c_uint64 size = std::char_traits<char32_t>::length(value);
-
-        if (size == 0)
-            return *this;
-
-        cdatastream_write(m_data, reinterpret_cast<const char *>(&size), m_pos, sizeof(c_uint64));
-        cdatastream_write(m_data, value, m_pos, size);
-
-        return *this;
-    }
-
     CDataStream<T> &operator <<(const std::string &value)
-    {
-        c_uint64 size = value.size();
-
-        if (size == 0)
-            return *this;
-
-        cdatastream_write(m_data, reinterpret_cast<const char *>(&size), m_pos, sizeof(c_uint64));
-        cdatastream_write(m_data, value.c_str(), m_pos, size);
-
-        return *this;
-    }
-
-    CDataStream<T> &operator <<(const std::wstring &value)
-    {
-        c_uint64 size = value.size();
-
-        if (size == 0)
-            return *this;
-
-        cdatastream_write(m_data, reinterpret_cast<const char *>(&size), m_pos, sizeof(c_uint64));
-        cdatastream_write(m_data, value.c_str(), m_pos, size);
-
-        return *this;
-    }
-
-    CDataStream<T> &operator <<(const std::u16string &value)
-    {
-        c_uint64 size = value.size();
-
-        if (size == 0)
-            return *this;
-
-        cdatastream_write(m_data, reinterpret_cast<const char *>(&size), m_pos, sizeof(c_uint64));
-        cdatastream_write(m_data, value.c_str(), m_pos, size);
-
-        return *this;
-    }
-
-    CDataStream<T> &operator <<(const std::u32string &value)
     {
         c_uint64 size = value.size();
 
@@ -375,12 +255,6 @@ public:
         return *this;
     }
 
-    CDataStream<T> &operator >>(wchar_t &value)
-    {
-        cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(wchar_t));
-        return *this;
-    }
-
     CDataStream<T> &operator >>(char *value)
     {
         c_uint64 size = 0;
@@ -394,103 +268,7 @@ public:
         return *this;
     }
 
-    CDataStream<T> &operator >>(wchar_t *value)
-    {
-        c_uint64 size = 0;
-        cdatastream_read(m_data, reinterpret_cast<char *>(&size), m_pos, sizeof(c_uint64));
-
-        if (size == 0)
-            return *this;
-
-        cdatastream_read(m_data, value, m_pos, size);
-
-        return *this;
-    }
-
-    CDataStream<T> &operator >>(char16_t *value)
-    {
-        c_uint64 size = 0;
-        cdatastream_read(m_data, reinterpret_cast<char *>(&size), m_pos, sizeof(c_uint64));
-
-        if (size == 0)
-            return *this;
-
-        cdatastream_read(m_data, value, m_pos, size);
-
-        return *this;
-    }
-
-    CDataStream<T> &operator >>(char32_t *value)
-    {
-        c_uint64 size = 0;
-        cdatastream_read(m_data, reinterpret_cast<char *>(&size), m_pos, sizeof(c_uint64));
-
-        if (size == 0)
-            return *this;
-
-        cdatastream_read(m_data, value, m_pos, size);
-
-        return *this;
-    }
-
     CDataStream<T> &operator >>(std::string &value)
-    {
-        c_uint64 size = 0;
-        cdatastream_read(m_data, reinterpret_cast<char *>(&size), m_pos, sizeof(c_uint64));
-
-        if (size == 0)
-            return *this;
-
-        char *data = new char[size];
-        cdatastream_read(m_data, data, m_pos, size);
-
-        value.reserve(size);
-        value.assign(data, size);
-
-        delete[] data;
-
-        return *this;
-    }
-
-    CDataStream<T> &operator >>(std::wstring &value)
-    {
-        c_uint64 size = 0;
-        cdatastream_read(m_data, reinterpret_cast<char *>(&size), m_pos, sizeof(c_uint64));
-
-        if (size == 0)
-            return *this;
-
-        char *data = new char[size];
-        cdatastream_read(m_data, data, m_pos, size);
-
-        value.reserve(size);
-        value.assign(data, size);
-
-        delete[] data;
-
-        return *this;
-    }
-
-    CDataStream<T> &operator >>(std::u16string &value)
-    {
-        c_uint64 size = 0;
-        cdatastream_read(m_data, reinterpret_cast<char *>(&size), m_pos, sizeof(c_uint64));
-
-        if (size == 0)
-            return *this;
-
-        char *data = new char[size];
-        cdatastream_read(m_data, data, m_pos, size);
-
-        value.reserve(size);
-        value.assign(data, size);
-
-        delete[] data;
-
-        return *this;
-    }
-
-    CDataStream<T> &operator >>(std::u32string &value)
     {
         c_uint64 size = 0;
         cdatastream_read(m_data, reinterpret_cast<char *>(&size), m_pos, sizeof(c_uint64));
