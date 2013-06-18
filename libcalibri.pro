@@ -39,6 +39,10 @@ win32 {
         -Lc:/libevent -llibevent_extras \
         -Lc:/libevent -llibevent_openssl
 } else:unix {
+    CONFIG         += \
+        create_pc \
+        create_prl
+
     LIBS           += \
         -luuid \
         -levent_core \
@@ -50,21 +54,21 @@ win32 {
     target.path     = /usr/lib/calibri
     headers.path    = /usr/include/calibri
     headers.files  += \
-        ceventdispatcher/ceventdispatcher.h \
-        ceventdispatcher/ceventdispatcher_config.h \
-        ceventdispatcher/ceventdispatcher_types.h \
-        ctcpserver/ctcpserver.h \
-        csocket/ctcpsocket.h \
-        csocket/csslsocket.h \
-        cssl/cssl.h \
-        ccrypto/ccrypto.h \
-        csettings/csettings.h \
-        cdatetime/cdatetime.h \
-        cuniqueid/cuniqueid.h \
-        cfilesystem/cfilesystem.h \
-        cutils/cutils.h \
-        cdatastream.h \
-        cdefines.h
+        include/calibri/ceventdispatcher.h \
+        include/calibri/ceventdispatcher_config.h \
+        include/calibri/ceventdispatcher_types.h \
+        include/calibri/ctcpserver.h \
+        include/calibri/ctcpsocket.h \
+        include/calibri/csslsocket.h \
+        include/calibri/cssl.h \
+        include/calibri/ccrypto.h \
+        include/calibri/csettings.h \
+        include/calibri/cdatetime.h \
+        include/calibri/cuniqueid.h \
+        include/calibri/cfilesystem.h \
+        include/calibri/cutils.h \
+        include/calibri/cdatastream.h \
+        include/calibri/cdefines.h
 
     QMAKE_PKGCONFIG_NAME            = calibri
     QMAKE_PKGCONFIG_DESCRIPTION     = "Calibri Library"
