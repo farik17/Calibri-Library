@@ -2,11 +2,17 @@
 #include "ccrypto.h"
 
 //! OpenSSL Includes
+#include <openssl/md4.h>
+#include <openssl/md5.h>
+#include <openssl/sha.h>
 #include <openssl/aes.h>
 #include <openssl/evp.h>
 
 //! Project Includes
 #include "cdefines.h"
+
+//! SHA1 Length
+#define SHA1_DIGEST_LENGTH              20
 
 void MD4_hash(const std::string &data, unsigned char *hash)
 {
