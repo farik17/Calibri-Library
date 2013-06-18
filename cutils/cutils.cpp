@@ -4,7 +4,11 @@
 //! Std Includes
 #include <sstream>
 #include <iomanip>
-#include <locale>
+#include <cstdlib>
+
+#if _MSC_VER
+#pragma warning(disable:4996)
+#endif
 
 bool lexical_cast(const std::string &data, c_int8 &out)
 {
@@ -267,18 +271,28 @@ bool lexical_cast(const std::wstring &data, std::string &out)
 
 std::string to_string(const std::wstring &data)
 {
-    char buffer[sizeof(data)];
-    std::use_facet<std::ctype<wchar_t> >(std::locale()).narrow(data.c_str(), data.c_str() + sizeof(data), '?', buffer);
+    size_t in_len = data.length();
+    size_t out_len = 0;
+    char *buffer = new char[in_len];
 
-    return buffer;
+    out_len = wcstombs(buffer, data.c_str(), in_len);
+
+    std::string result(buffer, out_len);
+
+    delete[] buffer;
+
+    return result;
 }
 
 std::string to_string(const wchar_t *data)
 {
-    char *buffer = new char[std::char_traits<wchar_t>::length(data) + 1];
-    std::use_facet<std::ctype<wchar_t> >(std::locale()).narrow(data, data + std::char_traits<wchar_t>::length(data) + 1, '?', buffer);
+    size_t in_len = std::char_traits<wchar_t>::length(data);
+    size_t out_len = 0;
+    char *buffer = new char[in_len];
 
-    std::string result = buffer;
+    out_len = wcstombs(buffer, data, in_len);
+
+    std::string result(buffer, out_len);
 
     delete[] buffer;
 
@@ -287,18 +301,28 @@ std::string to_string(const wchar_t *data)
 
 std::wstring to_wstring(const std::string &data)
 {
-    wchar_t buffer[sizeof(data)];
-    std::use_facet<std::ctype<wchar_t> >(std::locale()).widen(data.c_str(), data.c_str() + sizeof(data), buffer);
+    size_t in_len = data.length();
+    size_t out_len = 0;
+    wchar_t *buffer = new wchar_t[in_len];
 
-    return buffer;
+    out_len = mbstowcs(buffer, data.c_str(), in_len);
+
+    std::wstring result(buffer, out_len);
+
+    delete[] buffer;
+
+    return result;
 }
 
 std::wstring to_wstring(const char *data)
 {
-    wchar_t *buffer = new wchar_t[std::char_traits<char>::length(data) + 1];
-    std::use_facet<std::ctype<wchar_t> >(std::locale()).widen(data, data + std::char_traits<char>::length(data) + 1, buffer);
+    size_t in_len = std::char_traits<char>::length(data);
+    size_t out_len = 0;
+    wchar_t *buffer = new wchar_t[in_len];
 
-    std::wstring result = buffer;
+    out_len = mbstowcs(buffer, data, in_len);
+
+    std::wstring result(buffer, out_len);
 
     delete[] buffer;
 
