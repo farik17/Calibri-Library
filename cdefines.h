@@ -4,7 +4,6 @@
 //! Std Includes
 #include <cstdlib>
 #include <cstdint>
-#include <string>
 
 //! Typedefs
 typedef char                            c_int8;

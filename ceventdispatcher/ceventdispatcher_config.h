@@ -1,6 +1,9 @@
 #ifndef CEVENTDISPATCHER_CONFIG_H
 #define CEVENTDISPATCHER_CONFIG_H
 
+//! Std Includes
+#include <string>
+
 //! LibEvent Includes
 #include <event2/event.h>
 

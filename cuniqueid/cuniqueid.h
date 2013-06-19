@@ -8,6 +8,9 @@
 #   include <uuid/uuid.h>
 #endif
 
+//! Std Includes
+#include <string>
+
 //! Project Includes
 #include "cdefines.h"
 

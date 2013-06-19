@@ -1,6 +1,9 @@
 #ifndef CUTILS_H
 #define CUTILS_H
 
+//! Std Includes
+#include <string>
+
 //! Project Includes
 #include "cdefines.h"
 

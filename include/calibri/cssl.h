@@ -1,6 +1,9 @@
 #ifndef CSSL_H
 #define CSSL_H
 
+//! Std Includes
+#include <string>
+
 //! OpenSSL Includes
 #include <openssl/ssl.h>
 #include <openssl/err.h>
