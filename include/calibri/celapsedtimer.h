@@ -22,48 +22,46 @@
 **
 ****************************************************************************/
 
-#ifndef CEVENTDISPATCHER_CONFIG_H
-#define CEVENTDISPATCHER_CONFIG_H
+#ifndef CELAPSEDTIMER_H
+#define CELAPSEDTIMER_H
 
 //! Std Includes
-#include <string>
-
-//! LibEvent Includes
-#include <event2/event.h>
+#include <chrono>
 
 //! Project Includes
 #include "cdefines.h"
 
-class CEventDispatcherConfig
+class CElapsedTimer
 {
 public:
-    CEventDispatcherConfig();
-    virtual ~CEventDispatcherConfig();
+    CElapsedTimer();
 
-    enum MethodFeature : c_uint8 {
-        ET      = 1,
-        O1      = 2,
-        FDs     = 3
+    enum Metrics : c_uint8 {
+        Hours           = 1,
+        Minutes         = 2,
+        Seconds         = 3,
+        Miliseconds     = 4,
+        Microseconds    = 5,
+        Nanoseconds     = 6
     };
 
-    enum ConfigFlag : c_uint8 {
-        NoLock              = 1,
-        IgnoreEnvironment   = 2,
-        StartupIOCP         = 3,
-        NoCacheTime         = 4,
-        EPollChangelist     = 5
-    };
+    void start();
+    void reset();
 
-    void setFeatures(c_uint16 features);
-    void setFlags(c_uint16 flags);
-    void avoidMethod(const std::string &method);
+    c_uint64 restart(Metrics metrics = Miliseconds);
+    c_uint64 elapsed(Metrics metrics = Miliseconds);
+
+    bool isStarted();
+    bool hasExpired(c_uint64 timeout, Metrics metrics = Miliseconds);
 
 private:
-    C_DISABLE_COPY(CEventDispatcherConfig)
+    C_DISABLE_COPY(CElapsedTimer)
 
-    event_config *m_event_config;
+    c_uint64 calculateElapsed(Metrics metrics = Miliseconds);
 
-    friend class CEventDispatcher;
+    std::chrono::steady_clock::time_point m_startPoint;
+
+    bool m_started;
 };
 
-#endif // CEVENTDISPATCHER_CONFIG_H
+#endif // CELAPSEDTIMER_H

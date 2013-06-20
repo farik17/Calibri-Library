@@ -20,6 +20,7 @@ include(cdatetime/cdatetime.pri)
 include(cuniqueid/cuniqueid.pri)
 include(cfilesystem/cfilesystem.pri)
 include(cutils/cutils.pri)
+include(celapsedtimer/celapsedtimer.pri)
 
 win32 {
     INCLUDEPATH    += \
@@ -68,7 +69,8 @@ win32 {
         include/calibri/cfilesystem.h \
         include/calibri/cutils.h \
         include/calibri/cdatastream.h \
-        include/calibri/cdefines.h
+        include/calibri/cdefines.h \
+        include/calibri/celapsedtimer.h
 
     QMAKE_PKGCONFIG_NAME            = calibri
     QMAKE_PKGCONFIG_DESCRIPTION     = "Calibri Library"
