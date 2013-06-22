@@ -43,6 +43,10 @@
 #include "ceventdispatcher_types.h"
 #include "ceventdispatcher_config.h"
 
+//! Defines
+#define AF_INET_LENGTH          16
+#define AF_INET6_LENGTH         48
+
 CEventDispatcher::~CEventDispatcher()
 {
 #if defined(_WIN32)
@@ -222,9 +226,6 @@ void CEventDispatcher::closeSocket(socketinfo *socket_info, bool force)
 
 void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &address, c_uint16 port, c_int32 backlog)
 {
-    char port_cstr[6];
-    evutil_snprintf(port_cstr, 6, "%d", static_cast<c_int32>(port));
-
     evutil_addrinfo hints;
     memset(&hints, 0, sizeof(evutil_addrinfo));
     hints.ai_family = AF_UNSPEC;
@@ -233,7 +234,7 @@ void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &ad
 
     evutil_addrinfo *addr_info = nullptr;
 
-    if (evutil_getaddrinfo(address.c_str(), port_cstr, &hints, &addr_info) != 0) {
+    if (evutil_getaddrinfo(address.c_str(), std::to_string(port).c_str(), &hints, &addr_info) != 0) {
         std::cout << "CEventDispatcher::bindServer error: invalid address or port" << std::endl;
         return;
     }
@@ -325,14 +326,14 @@ std::string CEventDispatcher::socketAddress(c_fdptr fd) const
 
     switch (sock_addr_stor.ss_family) {
     case AF_INET: {
-        char addr[16];
-        evutil_inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in *>(&sock_addr_stor)->sin_addr, addr, 16);
+        char addr[AF_INET_LENGTH];
+        evutil_inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in *>(&sock_addr_stor)->sin_addr, addr, AF_INET_LENGTH);
         return addr;
     }
 
     case AF_INET6: {
-        char addr[48];
-        evutil_inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in6 *>(&sock_addr_stor)->sin6_addr, addr, 48);
+        char addr[AF_INET6_LENGTH];
+        evutil_inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in6 *>(&sock_addr_stor)->sin6_addr, addr, AF_INET6_LENGTH);
         return addr;
     }
 

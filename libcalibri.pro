@@ -1,10 +1,14 @@
 TEMPLATE    = lib
-CONFIG     += c++11 staticlib
+CONFIG     += c++11 staticlib build_all
 CONFIG     -= app_bundle qt
-TARGET      = calibri
+TARGET      = $$qtLibraryTarget(calibri)
 DESTDIR     = lib
 
-OBJECTS_DIR = obj
+CONFIG(debug, debug|release) {
+    OBJECTS_DIR = obj/debug
+} else {
+    OBJECTS_DIR = obj/release
+}
 
 HEADERS    += \
     cdatastream.h \

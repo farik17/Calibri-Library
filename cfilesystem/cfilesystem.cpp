@@ -37,7 +37,7 @@
 //! CUtils Includes
 #include "cutils.h"
 
-//! CFilesystem defines
+//! Defines
 #define PATH_SEPARATOR_PATTERN       "\\/"
 #define PATH_SEPARATOR               "/"
 #define DOT_DOT                      ".."

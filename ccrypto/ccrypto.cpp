@@ -35,7 +35,7 @@
 //! Project Includes
 #include "cdefines.h"
 
-//! SHA1 Length
+//! Defines
 #define SHA1_DIGEST_LENGTH              20
 
 void MD4_hash(const std::string &data, unsigned char *hash)
