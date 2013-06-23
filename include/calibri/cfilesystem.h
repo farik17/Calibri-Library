@@ -26,6 +26,7 @@
 #define CFILESYSTEM_H
 
 //! Std Includes
+#include <string>
 #include <vector>
 
 //! Project Includes
