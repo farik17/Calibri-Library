@@ -39,12 +39,12 @@ void cuniqueid_generate(cuniqueid &uid)
 #endif
 }
 
-bool cuniqueid_compare(const cuniqueid &src, const cuniqueid &dst)
+bool cuniqueid_compare(const cuniqueid &src, const cuniqueid &dest)
 {
 #if defined(_WIN32)
-    return !memcmp(&src, &dst, sizeof(cuniqueid));
+    return !memcmp(&src, &dest, sizeof(cuniqueid));
 #elif defined(__unix__) || defined(__linux__)
-    return !uuid_compare(src, dst);
+    return !uuid_compare(src, dest);
 #else
 #   error platform not supported
 #endif

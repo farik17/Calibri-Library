@@ -42,7 +42,7 @@
 typedef uuid_t          cuniqueid;
 
 void cuniqueid_generate(cuniqueid &uid);
-bool cuniqueid_compare(const cuniqueid &src, const cuniqueid &dst);
+bool cuniqueid_compare(const cuniqueid &src, const cuniqueid &dest);
 
 std::string cuniqueid_to_string(const cuniqueid &uid);
 

@@ -137,22 +137,22 @@ void cdatetime_add_years(c_int32 years, time_t &_time, bool utc)
     _time = cdatetime_to_time_t(_tm);
 }
 
-bool operator ==(tm &src, tm &dst)
+bool operator ==(tm &src, tm &dest)
 {
-    return cdatetime_to_time_t(src) == cdatetime_to_time_t(dst);
+    return cdatetime_to_time_t(src) == cdatetime_to_time_t(dest);
 }
 
-bool operator <(tm &src, tm &dst)
+bool operator <(tm &src, tm &dest)
 {
-    return cdatetime_to_time_t(src) < cdatetime_to_time_t(dst);
+    return cdatetime_to_time_t(src) < cdatetime_to_time_t(dest);
 }
 
-bool operator >(tm &src, tm &dst)
+bool operator >(tm &src, tm &dest)
 {
-    return cdatetime_to_time_t(src) > cdatetime_to_time_t(dst);
+    return cdatetime_to_time_t(src) > cdatetime_to_time_t(dest);
 }
 
-bool operator !=(tm &src, tm &dst)
+bool operator !=(tm &src, tm &dest)
 {
-    return cdatetime_to_time_t(src) != cdatetime_to_time_t(dst);
+    return cdatetime_to_time_t(src) != cdatetime_to_time_t(dest);
 }

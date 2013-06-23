@@ -57,9 +57,9 @@ void cdatetime_add_days(c_int32 days, time_t &_time, bool utc = true);
 void cdatetime_add_months(c_int32 months, time_t &_time, bool utc = true);
 void cdatetime_add_years(c_int32 years, time_t &_time, bool utc = true);
 
-bool operator ==(tm &src, tm &dst);
-bool operator <(tm &src, tm &dst);
-bool operator >(tm &src, tm &dst);
-bool operator !=(tm &src, tm &dst);
+bool operator ==(tm &src, tm &dest);
+bool operator <(tm &src, tm &dest);
+bool operator >(tm &src, tm &dest);
+bool operator !=(tm &src, tm &dest);
 
 #endif // CDATETIME_H
