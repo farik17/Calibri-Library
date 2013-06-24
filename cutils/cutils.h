@@ -63,17 +63,19 @@ bool lexical_cast(long double data, std::string &out);
 bool lexical_cast(const std::string &data, std::string &out);
 bool lexical_cast(const std::wstring &data, std::string &out);
 
-std::string to_string(const std::wstring &data);
-std::string to_string(const wchar_t *data);
-std::wstring to_wstring(const std::string &data);
-std::wstring to_wstring(const char *data);
-
-std::string to_hex(const unsigned char *data, size_t len);
+bool str_contains(char c, const std::string &str);
 
 std::string str_left(char c, const std::string &str);
 std::string str_right(char c, const std::string &str);
 std::string str_take_left(char c, std::string &str);
 std::string str_take_right(char c, std::string &str);
-bool str_contains(char c, const std::string &str);
+
+std::string to_hex(const unsigned char *data, size_t len);
+
+std::string to_string(const std::wstring &data);
+std::string to_string(const wchar_t *data);
+
+std::wstring to_wstring(const std::string &data);
+std::wstring to_wstring(const char *data);
 
 #endif // CUTILS_H

@@ -27,7 +27,7 @@
 
 //! Std Includes
 #include <fstream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <sstream>
 
@@ -39,10 +39,10 @@
 #endif
 
 //! Typedefs
-typedef std::map<std::string, std::string>                  csettings_properties;
-typedef std::map<std::string, csettings_properties>         csettings_properties_tree;
-typedef std::vector<csettings_properties>                   csettings_array;
-typedef std::map<std::string, csettings_array>              csettings_arrays_tree;
+typedef std::unordered_map<std::string, std::string>                    csettings_properties;
+typedef std::unordered_map<std::string, csettings_properties>           csettings_properties_tree;
+typedef std::vector<csettings_properties>                               csettings_array;
+typedef std::unordered_map<std::string, csettings_array>                csettings_arrays_tree;
 
 class CSettings
 {
