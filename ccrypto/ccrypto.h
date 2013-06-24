@@ -28,6 +28,11 @@
 //! Std Includes
 #include <string>
 
+//! OpenSSL Includes
+#include <openssl/md4.h>
+#include <openssl/md5.h>
+#include <openssl/sha.h>
+
 void MD4_hash(const std::string &data, unsigned char *hash);
 void MD5_hash(const std::string &data, unsigned char *hash);
 void SHA1_hash(const std::string &data, unsigned char *hash);
