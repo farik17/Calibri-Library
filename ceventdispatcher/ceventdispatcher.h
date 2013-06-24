@@ -42,7 +42,7 @@ public:
 
     enum EventLoopFlag : c_uint8 {
         Once            = 1,
-        Nonblock        = 2,
+        NonBlock        = 2,
         NoExitOnEmpty   = 3
     };
 

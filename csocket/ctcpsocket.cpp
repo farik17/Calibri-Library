@@ -214,16 +214,16 @@ bool CTcpSocket::setKeepAlive(c_uint32 flag, c_uint32 idle, c_uint32 interval, c
 
     return false;
 #elif defined(__unix__) || defined(__linux__)
-    if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &flag, 4) != 0)
+    if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &flag, sizeof(c_uint32)) != 0)
         return false;
 
-    if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, 4) != 0)
+    if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(c_uint32)) != 0)
         return false;
 
-    if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, 4) != 0)
+    if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(c_uint32)) != 0)
         return false;
 
-    if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &count, 4) != 0)
+    if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &count, sizeof(c_uint32)) != 0)
         return false;
 
     return true;

@@ -89,7 +89,7 @@ void CEventDispatcher::execute(EventLoopFlag flag)
         result = EVLOOP_ONCE;
         break;
 
-    case Nonblock:
+    case NonBlock:
         result = EVLOOP_NONBLOCK;
         break;
 
@@ -120,20 +120,20 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, c_fdptr fd)
     if (ssl_info) {
         SSL *ssl = SSL_new(sslinfo_get_ssl_ctx(ssl_info));
         if (!ssl) {
-            std::cout << "CEventDispatcher::dispatchSocket error: failed to initialize ssl" << std::endl;
+            std::cout << "CEventDispatcher::acceptSocket error: failed to initialize ssl" << std::endl;
             return;
         }
 
         buffer_event = bufferevent_openssl_socket_new(m_event_base, fd, ssl, BUFFEREVENT_SSL_ACCEPTING, BEV_OPT_CLOSE_ON_FREE);
         if (!buffer_event) {
             SSL_free(ssl);
-            std::cout << "CEventDispatcher::dispatchSocket error: failed to initialize events" << std::endl;
+            std::cout << "CEventDispatcher::acceptSocket error: failed to initialize events" << std::endl;
             return;
         }
     } else {
         buffer_event = bufferevent_socket_new(m_event_base, fd, BEV_OPT_CLOSE_ON_FREE);
         if (!buffer_event) {
-            std::cout << "CEventDispatcher::dispatchSocket error: failed to initialize events" << std::endl;
+            std::cout << "CEventDispatcher::acceptSocket error: failed to initialize events" << std::endl;
             return;
         }
     }
@@ -148,7 +148,7 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, c_fdptr fd)
 
     if (bufferevent_enable(buffer_event, events) != 0) {
         bufferevent_free(buffer_event);
-        std::cout << "CEventDispatcher::dispatchSocket error: failed to enable events" << std::endl;
+        std::cout << "CEventDispatcher::acceptSocket error: failed to enable events" << std::endl;
         return;
     }
 
@@ -164,20 +164,20 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
     if (ssl_info) {
         SSL *ssl = SSL_new(sslinfo_get_ssl_ctx(ssl_info));
         if (!ssl) {
-            std::cout << "CEventDispatcher::dispatchSocket error: failed to initialize ssl" << std::endl;
+            std::cout << "CEventDispatcher::connectSocket error: failed to initialize ssl" << std::endl;
             return;
         }
 
         buffer_event = bufferevent_openssl_socket_new(m_event_base, -1, ssl, BUFFEREVENT_SSL_CONNECTING, BEV_OPT_CLOSE_ON_FREE);
         if (!buffer_event) {
             SSL_free(ssl);
-            std::cout << "CEventDispatcher::dispatchSocket error: failed to initialize events" << std::endl;
+            std::cout << "CEventDispatcher::connectSocket error: failed to initialize events" << std::endl;
             return;
         }
     } else {
         buffer_event = bufferevent_socket_new(m_event_base, -1, BEV_OPT_CLOSE_ON_FREE);
         if (!buffer_event) {
-            std::cout << "CEventDispatcher::dispatchSocket error: failed to initialize events" << std::endl;
+            std::cout << "CEventDispatcher::connectSocket error: failed to initialize events" << std::endl;
             return;
         }
     }
@@ -192,13 +192,13 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
 
     if (bufferevent_enable(buffer_event, events) != 0) {
         bufferevent_free(buffer_event);
-        std::cout << "CEventDispatcher::dispatchSocket error: failed to enable events" << std::endl;
+        std::cout << "CEventDispatcher::connectSocket error: failed to enable events" << std::endl;
         return;
     }
 
     if (bufferevent_socket_connect_hostname(buffer_event, m_evdns_base, AF_UNSPEC, address.c_str(), port) != 0) {
         bufferevent_free(buffer_event);
-        std::cout << "CEventDispatcher::dispatchSocket error: failed to connect" << std::endl;
+        std::cout << "CEventDispatcher::connectSocket error: failed to connect" << std::endl;
         return;
     }
 
@@ -257,7 +257,7 @@ void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &ad
 
     if (!ev_conn_listener) {
         evutil_freeaddrinfo(addr_info);
-        std::cout << "CEventDispatcher::bindListener error: failed to bind listener" << std::endl;
+        std::cout << "CEventDispatcher::bindServer error: failed to bind listener" << std::endl;
         return;
     }
 
@@ -333,7 +333,7 @@ std::string CEventDispatcher::socketAddress(c_fdptr fd) const
 
     case AF_INET6: {
         char addr[AF_INET6_LENGTH];
-        evutil_inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in6 *>(&sock_addr_stor)->sin6_addr, addr, AF_INET6_LENGTH);
+        evutil_inet_ntop(AF_INET6, &reinterpret_cast<sockaddr_in6 *>(&sock_addr_stor)->sin6_addr, addr, AF_INET6_LENGTH);
         return addr;
     }
 
