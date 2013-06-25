@@ -68,7 +68,7 @@ c_uint64 CElapsedTimer::elapsed(Metrics metrics)
     return calculateElapsed(metrics);
 }
 
-bool CElapsedTimer::isStarted()
+bool CElapsedTimer::isStarted() const
 {
     return m_started;
 }

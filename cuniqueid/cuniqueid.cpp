@@ -25,13 +25,28 @@
 //! Self Includes
 #include "cuniqueid.h"
 
+//! Std Includes
+#include <iostream>
+
 //! CUtils Includes
 #include "cutils.h"
 
 void cuniqueid_generate(cuniqueid &uid)
 {
 #if defined(_WIN32)
-    UuidCreate(&uid);
+    switch (UuidCreate(&uid)) {
+    case RPC_S_UUID_LOCAL_ONLY:
+        std::cout << "cuniqueid_generate warning: cuniqueid is guaranteed to be unique to this computer only" << std::endl;
+        break;
+
+    case RPC_S_UUID_NO_ADDRESS:
+        std::cout << "cuniqueid_generate error: cannot get Ethernet or token-ring hardware address for this computer" << std::endl;
+        break;
+
+    default:
+        break;
+    }
+
 #elif defined(__unix__) || defined(__linux__)
     uuid_generate(uid);
 #else
@@ -54,13 +69,29 @@ std::string cuniqueid_to_string(const cuniqueid &uid)
 {
 #if defined(_WIN32)
 #   if defined(UNICODE)
-    c_uint16 *buffer;
-    UuidToString(&uid, &buffer);
+    c_uint16 *buffer = nullptr;
+
+    switch (UuidToString(&uid, &buffer)) {
+    case RPC_S_OUT_OF_MEMORY:
+        std::cout << "cuniqueid_to_string error: needed memory is not available" << std::endl;
+        return std::string();
+
+    default:
+        break;
+    }
 
     return to_string(reinterpret_cast<wchar_t *>(buffer));
 #   else
-    c_uint8 *buffer;
-    UuidToString(&uid, &buffer);
+    c_uint8 *buffer = nullptr;
+
+    switch (UuidToString(&uid, &buffer)) {
+    case RPC_S_OUT_OF_MEMORY:
+        std::cout << "cuniqueid_to_string error: needed memory is not available" << std::endl;
+        return std::string();
+
+    default:
+        break;
+    }
 
     return reinterpret_cast<char *>(buffer);
 #   endif

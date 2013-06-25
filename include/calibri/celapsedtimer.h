@@ -51,7 +51,7 @@ public:
     c_uint64 restart(Metrics metrics = Miliseconds);
     c_uint64 elapsed(Metrics metrics = Miliseconds);
 
-    bool isStarted();
+    bool isStarted() const;
     bool hasExpired(c_uint64 timeout, Metrics metrics = Miliseconds);
 
 private:
