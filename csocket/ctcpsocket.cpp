@@ -191,9 +191,9 @@ bool CTcpSocket::setNoDelay(c_uint32 flag)
         return false;
 
 #if defined(_WIN32)
-    if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<const char *>(&flag), 4) != 0)
+    if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<const char *>(&flag), sizeof(c_uint32)) != 0)
 #elif defined(__unix__) || defined(__linux__)
-    if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &flag, 4) != 0)
+    if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(c_uint32)) != 0)
 #endif
         return false;
 
