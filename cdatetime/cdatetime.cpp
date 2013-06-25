@@ -35,22 +35,12 @@ std::string cdatetime_to_string(const time_t &_time, const std::string &format, 
     return date_buffer;
 }
 
-std::string cdatetime_to_string(const time_t &_time)
-{
-    return ctime(&_time);
-}
-
 std::string cdatetime_to_string(const tm &_tm, const std::string &format)
 {
     char date_buffer[80];
     strftime(date_buffer, 80, format.c_str(), &_tm);
 
     return date_buffer;
-}
-
-std::string cdatetime_to_string(const tm &_tm)
-{
-    return asctime(&_tm);
 }
 
 time_t cdatetime_to_time_t(tm &_tm)

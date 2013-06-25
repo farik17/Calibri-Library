@@ -37,9 +37,7 @@
 #endif
 
 std::string cdatetime_to_string(const time_t &_time, const std::string &format, bool utc = true);
-std::string cdatetime_to_string(const time_t &_time);
 std::string cdatetime_to_string(const tm &_tm, const std::string &format);
-std::string cdatetime_to_string(const tm &_tm);
 
 time_t cdatetime_to_time_t(tm &_tm);
 tm cdatetime_to_tm(const time_t &_time, bool utc = true);
