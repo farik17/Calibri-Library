@@ -35,7 +35,7 @@ public:
     virtual ~CSslSocket();
 
     void setEncryptedHandler(const std::function<void (socketinfo *)> &handler);
-    void setSslErrorHandler(const std::function<void (socketinfo *, c_int32)> &handler);
+    void setSslErrorHandler(const std::function<void (socketinfo *, c_ulong)> &handler);
     void unsetEncryptedHandler();
     void unsetSslErrorHandler();
     void setSslProtocol(CSSLProtocol sslProtocol);

@@ -48,7 +48,7 @@ void CSslSocket::setEncryptedHandler(const std::function<void (socketinfo *)> &h
     sslinfo_set_encrypted_handler(socketinfo_get_sslinfo(m_socketinfo), handler);
 }
 
-void CSslSocket::setSslErrorHandler(const std::function<void (socketinfo *, c_int32)> &handler)
+void CSslSocket::setSslErrorHandler(const std::function<void (socketinfo *, c_ulong)> &handler)
 {
     sslinfo_set_ssl_error_handler(socketinfo_get_sslinfo(m_socketinfo), handler);
 }

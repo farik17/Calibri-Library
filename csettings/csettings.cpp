@@ -146,7 +146,7 @@ void CSettings::load()
         }
 
         if (isArray(line)) {
-            m_arraysTree[line] = std::vector<csettings_properties>();
+            m_arraysTree[line] = csettings_array();
             currentSection = line;
             continue;
         }
