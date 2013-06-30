@@ -324,11 +324,11 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::vector<D> 
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto it = data.cbegin();
-    auto end = data.cend();
-    while (it != end) {
-        stream << (*it);
-        ++it;
+    auto dataIt = data.cbegin();
+    auto dataEnd = data.cend();
+    while (dataIt != dataEnd) {
+        stream << (*dataIt);
+        ++dataIt;
     }
 
     return stream;
@@ -339,11 +339,11 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::list<D> &d
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto it = data.cbegin();
-    auto end = data.cend();
-    while (it != end) {
-        stream << (*it);
-        ++it;
+    auto dataIt = data.cbegin();
+    auto dataEnd = data.cend();
+    while (dataIt != dataEnd) {
+        stream << (*dataIt);
+        ++dataIt;
     }
 
     return stream;
@@ -354,11 +354,11 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::set<D> &da
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto it = data.cbegin();
-    auto end = data.cend();
-    while (it != end) {
-        stream << (*it);
-        ++it;
+    auto dataIt = data.cbegin();
+    auto dataEnd = data.cend();
+    while (dataIt != dataEnd) {
+        stream << (*dataIt);
+        ++dataIt;
     }
 
     return stream;
@@ -369,12 +369,12 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::map<D, C> 
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto it = data.cbegin();
-    auto end = data.cend();
-    while (it != end) {
-        stream << (*it).first;
-        stream << (*it).second;
-        ++it;
+    auto dataIt = data.cbegin();
+    auto dataEnd = data.cend();
+    while (dataIt != dataEnd) {
+        stream << (*dataIt).first;
+        stream << (*dataIt).second;
+        ++dataIt;
     }
 
     return stream;
@@ -385,12 +385,12 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::unordered_
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto it = data.cbegin();
-    auto end = data.cend();
-    while (it != end) {
-        stream << (*it).first;
-        stream << (*it).second;
-        ++it;
+    auto dataIt = data.cbegin();
+    auto dataEnd = data.cend();
+    while (dataIt != dataEnd) {
+        stream << (*dataIt).first;
+        stream << (*dataIt).second;
+        ++dataIt;
     }
 
     return stream;
@@ -401,11 +401,11 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::unordered_
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto it = data.cbegin();
-    auto end = data.cend();
-    while (it != end) {
-        stream << (*it);
-        ++it;
+    auto dataIt = data.cbegin();
+    auto dataEnd = data.cend();
+    while (dataIt != dataEnd) {
+        stream << (*dataIt);
+        ++dataIt;
     }
 
     return stream;

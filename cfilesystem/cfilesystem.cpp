@@ -52,12 +52,12 @@ int cfilesystem_create_path(const std::string &path)
 
     std::string current_path;
 
-    auto it = path_tree.begin();
-    while (it != path_tree.cend()) {
-        current_path += (*it) + PATH_SEPARATOR;
+    auto path_tree_it = path_tree.begin();
+    while (path_tree_it != path_tree.cend()) {
+        current_path += (*path_tree_it) + PATH_SEPARATOR;
 
         if (current_path == PARENT_DIR) {
-            it = path_tree.erase(it);
+            path_tree_it = path_tree.erase(path_tree_it);
             continue;
         }
 
@@ -89,7 +89,7 @@ int cfilesystem_create_path(const std::string &path)
 #   error platform not supported
 #endif
 
-        it = path_tree.erase(it);
+        path_tree_it = path_tree.erase(path_tree_it);
     }
 
     return 0;
@@ -102,12 +102,12 @@ int cfilesystem_remove_path(const std::string &path)
 
     std::string current_path;
 
-    auto it = path_tree.rbegin();
-    while (it != path_tree.crend()) {
+    auto path_tree_it = path_tree.rbegin();
+    while (path_tree_it != path_tree.crend()) {
         current_path = cfilesystem_path_tree_to_string(path_tree);
 
         if (current_path == PARENT_DIR) {
-            it = decltype(it)(path_tree.erase(it.base() - 1));
+            path_tree_it = decltype(path_tree_it)(path_tree.erase(path_tree_it.base() - 1));
             continue;
         }
 
@@ -125,7 +125,7 @@ int cfilesystem_remove_path(const std::string &path)
 #   error platform not supported
 #endif
 
-        it = decltype(it)(path_tree.erase(it.base() - 1));
+        path_tree_it = decltype(path_tree_it)(path_tree.erase(path_tree_it.base() - 1));
     }
 
     return 0;
@@ -168,15 +168,15 @@ void cfilesystem_normalize_path_tree(cfilesystem_path_tree &path_tree)
     if (path_tree.size() < 2)
         return;
 
-    auto it = path_tree.begin() + 1;
-    while (it != path_tree.end()) {
-        if ((*it) == DOT_DOT) {
-            auto prev_it = it - 1;
-            if ((*prev_it) != DOT_DOT) {
-                it = path_tree.erase(prev_it, it + 1);
+    auto path_tree_it = path_tree.begin() + 1;
+    while (path_tree_it != path_tree.end()) {
+        if ((*path_tree_it) == DOT_DOT) {
+            auto prev_path_tree_it = path_tree_it - 1;
+            if ((*prev_path_tree_it) != DOT_DOT) {
+                path_tree_it = path_tree.erase(prev_path_tree_it, path_tree_it + 1);
                 continue;
             }
         }
-        ++it;
+        ++path_tree_it;
     }
 }

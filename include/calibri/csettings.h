@@ -61,7 +61,7 @@ public:
         std::string section = str_left('/', key);
 
         bool array = isArray(section);
-        bool group = isGroup(section);
+        bool group = isProperties(section);
 
         if (!group && !array)
             return false;
@@ -76,7 +76,7 @@ public:
 
         if (array) {
             std::string name = str_right('/', key);
-            if (!isArraysTreeContains(section, index, name))
+            if (!isArrayTreeContains(section, index, name))
                 return false;
 
             return lexical_cast(m_arraysTree[section][index][name], data);
@@ -94,7 +94,7 @@ public:
         std::string section = str_left('/', key);
 
         bool array = isArray(section);
-        bool group = isGroup(section);
+        bool group = isProperties(section);
 
         if (!array && !group)
             return false;
@@ -118,12 +118,12 @@ private:
     C_DISABLE_COPY(CSettings)
 
     void eraseArray(const std::string &section);
-    void eraseSection(const std::string &section);
+    void eraseProperties(const std::string &section);
 
     bool isPropertiesTreeContains(const std::string &section, const std::string &name);
-    bool isArraysTreeContains(const std::string &section, size_t index, const std::string &name);
+    bool isArrayTreeContains(const std::string &section, size_t index, const std::string &name);
 
-    static bool isGroup(const std::string &line);
+    static bool isProperties(const std::string &line);
     static bool isArray(const std::string &line);
 
     csettings_properties_tree m_propertiesTree;

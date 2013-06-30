@@ -47,26 +47,23 @@ void CSettings::save()
         return;
     }
 
-    auto sectionIt = m_propertiesTree.crbegin();
-    auto sectionEnd = m_propertiesTree.crend();
-    
-    while(sectionIt != sectionEnd) {
-        const std::string &section = (*sectionIt).first;
-
-        if (!isGroup(section)) {
-            eraseSection(section);
-            ++sectionIt;
+    auto propertySectionIt = m_propertiesTree.crbegin();
+    auto propertySectionEnd = m_propertiesTree.crend();
+    while(propertySectionIt != propertySectionEnd) {
+        const std::string &section = (*propertySectionIt).first;
+        if (!isProperties(section)) {
+            eraseProperties(section);
+            ++propertySectionIt;
             continue;
         }
 
         m_file << section;
         m_file << std::endl;
 
-        const csettings_properties &group = (*sectionIt).second;
+        const csettings_properties &properties = (*propertySectionIt).second;
 
-        auto propertyIt = group.cbegin();
-        auto propertyEnd = group.cend();
-
+        auto propertyIt = properties.cbegin();
+        auto propertyEnd = properties.cend();
         while(propertyIt != propertyEnd) {
             m_file << (*propertyIt).first;
             m_file << "=";
@@ -78,28 +75,29 @@ void CSettings::save()
 
         m_file << std::endl;
 
-        ++sectionIt;
+        ++propertySectionIt;
     }
 
-    auto arrayIt = m_arraysTree.crbegin();
-    auto arrayEnd = m_arraysTree.crend();
-    while (arrayIt != arrayEnd) {
-        const std::string &section = (*arrayIt).first;
-
+    auto arraySectionIt = m_arraysTree.crbegin();
+    auto arraySectionEnd = m_arraysTree.crend();
+    while (arraySectionIt != arraySectionEnd) {
+        const std::string &section = (*arraySectionIt).first;
         if (!isArray(section)) {
             eraseArray(section);
-            ++arrayIt;
+            ++arraySectionIt;
             continue;
         }
 
         m_file << section;
         m_file << std::endl;
 
-        const csettings_array &array = (*arrayIt).second;
+        const csettings_array &array = (*arraySectionIt).second;
 
         for (size_t ix = 0; ix < array.size(); ++ix) {
-            auto propertyIt = array[ix].cbegin();
-            auto propertyEnd = array[ix].cend();
+            const csettings_properties &properties = array[ix];
+
+            auto propertyIt = properties.cbegin();
+            auto propertyEnd = properties.cend();
             while(propertyIt != propertyEnd) {
                 m_file << ix;
                 m_file << '/';
@@ -114,7 +112,7 @@ void CSettings::save()
 
         m_file << std::endl;
 
-        ++arrayIt;
+        ++arraySectionIt;
     }
 
     m_file.flush();
@@ -142,7 +140,7 @@ void CSettings::load()
         if (line.empty())
             continue;
 
-        if (isGroup(line)) {
+        if (isProperties(line)) {
             m_propertiesTree[line] = csettings_properties();
             currentSection = line;
             continue;
@@ -157,7 +155,7 @@ void CSettings::load()
         if (!str_contains('=', line))
             continue;
 
-        if (isGroup(currentSection)) {
+        if (isProperties(currentSection)) {
             m_propertiesTree[currentSection][str_left('=', line)] = str_right('=', line);
             continue;
         }
@@ -179,7 +177,7 @@ void CSettings::load()
                 if (line.empty())
                     break;
 
-                if (isGroup(line)) {
+                if (isProperties(line)) {
                     if (m_arraysTree[currentSection].empty())
                         eraseArray(currentSection);
 
@@ -209,25 +207,25 @@ void CSettings::load()
 
 size_t CSettings::arraySize(const std::string &section)
 {
-    auto it = m_arraysTree.find(section);
-    if (it == m_arraysTree.cend())
+    auto arraySectionIt = m_arraysTree.find(section);
+    if (arraySectionIt == m_arraysTree.cend())
         return 0;
 
-    return (*it).second.size();
+    return (*arraySectionIt).second.size();
 }
 
 void CSettings::eraseArray(const std::string &section)
 {
-    auto it = m_arraysTree.find(section);
-    if (it != m_arraysTree.cend())
-        m_arraysTree.erase(it);
+    auto arraySectionIt = m_arraysTree.find(section);
+    if (arraySectionIt != m_arraysTree.cend())
+        m_arraysTree.erase(arraySectionIt);
 }
 
-void CSettings::eraseSection(const std::string &section)
+void CSettings::eraseProperties(const std::string &section)
 {
-    auto it = m_propertiesTree.find(section);
-    if (it != m_propertiesTree.cend())
-        m_propertiesTree.erase(it);
+    auto propertiesSectionIt = m_propertiesTree.find(section);
+    if (propertiesSectionIt != m_propertiesTree.cend())
+        m_propertiesTree.erase(propertiesSectionIt);
 }
 
 bool CSettings::isPropertiesTreeContains(const std::string &section, const std::string &name)
@@ -242,7 +240,7 @@ bool CSettings::isPropertiesTreeContains(const std::string &section, const std::
     return true;
 }
 
-bool CSettings::isArraysTreeContains(const std::string &section, size_t index, const std::string &name)
+bool CSettings::isArrayTreeContains(const std::string &section, size_t index, const std::string &name)
 {
     if (m_arraysTree.find(section) == m_arraysTree.cend())
         return false;
@@ -258,7 +256,7 @@ bool CSettings::isArraysTreeContains(const std::string &section, size_t index, c
     return true;
 }
 
-bool CSettings::isGroup(const std::string &line)
+bool CSettings::isProperties(const std::string &line)
 {
     if (line.size() == 0)
         return false;
