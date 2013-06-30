@@ -51,16 +51,6 @@ void CTcpServer::setAcceptErrorHandler(const std::function<void (serverinfo *, c
     serverinfo_set_accept_error_handler(m_serverinfo, handler);
 }
 
-void CTcpServer::resetAcceptHandler()
-{
-    serverinfo_reset_accept_handler(m_serverinfo);
-}
-
-void CTcpServer::resetAcceptErrorHandler()
-{
-    serverinfo_reset_accept_error_handler(m_serverinfo);
-}
-
 void CTcpServer::setEnable(bool enable)
 {
     if (!isListening())

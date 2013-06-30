@@ -66,26 +66,6 @@ void CTcpSocket::setErrorHandler(const std::function<void (socketinfo *, c_int32
     socketinfo_set_error_handler(m_socketinfo, handler);
 }
 
-void CTcpSocket::resetConnectedHandler()
-{
-    socketinfo_reset_connected_handler(m_socketinfo);
-}
-
-void CTcpSocket::resetDisconnectedHandler()
-{
-    socketinfo_reset_disconnected_handler(m_socketinfo);
-}
-
-void CTcpSocket::resetReadHandler()
-{
-    socketinfo_reset_read_handler(m_socketinfo);
-}
-
-void CTcpSocket::resetErrorHandler()
-{
-    socketinfo_reset_error_handler(m_socketinfo);
-}
-
 void CTcpSocket::connectToHost(const std::string &address, c_uint16 port)
 {
     if (state() != Unconnected)

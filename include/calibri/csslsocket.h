@@ -36,8 +36,6 @@ public:
 
     void setEncryptedHandler(const std::function<void (socketinfo *)> &handler);
     void setSslErrorHandler(const std::function<void (socketinfo *, c_ulong)> &handler);
-    void resetEncryptedHandler();
-    void resetSslErrorHandler();
     void setSslProtocol(CSSLProtocol sslProtocol);
     void setSslMode(CSSLMode sslMode);
     void setSslPeerVerifyMode(CSSLPeerVerifyMode sslPeerVerifyMode);
