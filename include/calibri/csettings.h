@@ -120,10 +120,11 @@ private:
     void eraseArray(const std::string &section);
     void eraseSection(const std::string &section);
 
-    bool isGroup(const std::string &line);
-    bool isArray(const std::string &line);
     bool isPropertiesTreeContains(const std::string &section, const std::string &name);
     bool isArraysTreeContains(const std::string &section, size_t index, const std::string &name);
+
+    static bool isGroup(const std::string &line);
+    static bool isArray(const std::string &line);
 
     csettings_properties_tree m_propertiesTree;
     csettings_arrays_tree m_arraysTree;

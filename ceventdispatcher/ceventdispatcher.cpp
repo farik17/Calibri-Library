@@ -47,6 +47,8 @@
 #define AF_INET_LENGTH          16
 #define AF_INET6_LENGTH         48
 
+CEventDispatcher *CEventDispatcher::m_eventDispatcher = nullptr;
+
 CEventDispatcher::~CEventDispatcher()
 {
 #if defined(_WIN32)
@@ -58,20 +60,6 @@ CEventDispatcher::~CEventDispatcher()
 
     if (m_evdns_base)
         evdns_base_free(m_evdns_base, 1);
-}
-
-void CEventDispatcher::initialize(CEventDispatcherConfig *config)
-{
-    if (!m_eventDispatcher)
-        m_eventDispatcher = new CEventDispatcher(config);
-}
-
-CEventDispatcher *CEventDispatcher::instance()
-{
-    if (!m_eventDispatcher)
-        m_eventDispatcher = new CEventDispatcher();
-
-    return m_eventDispatcher;
 }
 
 void CEventDispatcher::execute()
@@ -311,7 +299,13 @@ void CEventDispatcher::killTimer(timerinfo *timer_info)
     timerinfo_set_event(timer_info, nullptr);
 }
 
-std::string CEventDispatcher::socketAddress(c_fdptr fd) const
+void CEventDispatcher::initialize(CEventDispatcherConfig *config)
+{
+    if (!m_eventDispatcher)
+        m_eventDispatcher = new CEventDispatcher(config);
+}
+
+std::string CEventDispatcher::socketAddress(c_fdptr fd)
 {
     sockaddr_storage sock_addr_stor;
     size_t sock_addr_stor_len = sizeof(sockaddr_storage);
@@ -344,7 +338,15 @@ std::string CEventDispatcher::socketAddress(c_fdptr fd) const
     return std::string();
 }
 
-c_uint16 CEventDispatcher::socketPort(c_fdptr fd) const
+CEventDispatcher *CEventDispatcher::instance()
+{
+    if (!m_eventDispatcher)
+        m_eventDispatcher = new CEventDispatcher();
+
+    return m_eventDispatcher;
+}
+
+c_uint16 CEventDispatcher::socketPort(c_fdptr fd)
 {
     sockaddr_storage sock_addr_stor;
     size_t sock_addr_stor_len = sizeof(sockaddr_storage);
@@ -424,8 +426,6 @@ void CEventDispatcher::initializeWSA()
     }
 }
 #endif
-
-CEventDispatcher *CEventDispatcher::m_eventDispatcher = nullptr;
 
 void CEventDispatcher::acceptNotification(evconnlistener *listener, c_fdptr fd, sockaddr *address, c_int32 socklen, void *ctx)
 {

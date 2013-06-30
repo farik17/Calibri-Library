@@ -36,8 +36,8 @@ public:
 
     void setAcceptHandler(const std::function<void (serverinfo *, c_fdptr)> &handler);
     void setAcceptErrorHandler(const std::function<void (serverinfo *, c_int32)> &handler);
-    void unsetAcceptHandler();
-    void unsetAcceptErrorHandler();
+    void resetAcceptHandler();
+    void resetAcceptErrorHandler();
     void setEnable(bool enable = true);
     void close();
 

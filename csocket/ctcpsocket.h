@@ -38,10 +38,10 @@ public:
     void setDisconnectedHandler(const std::function<void (socketinfo *)> &handler);
     void setReadHandler(const std::function<void (socketinfo *)> &handler);
     void setErrorHandler(const std::function<void (socketinfo *, c_int32)> &handler);
-    void unsetConnectedHandler();
-    void unsetDisconnectedHandler();
-    void unsetReadHandler();
-    void unsetErrorHandler();
+    void resetConnectedHandler();
+    void resetDisconnectedHandler();
+    void resetReadHandler();
+    void resetErrorHandler();
     void connectToHost(const std::string &address, c_uint16 port);
     void close(bool force = false);
 

@@ -41,7 +41,7 @@ CTcpSocket::CTcpSocket()
 
 CTcpSocket::~CTcpSocket()
 {
-    close();
+    close(true);
 
     socketinfo_free(m_socketinfo);
 }
@@ -66,24 +66,24 @@ void CTcpSocket::setErrorHandler(const std::function<void (socketinfo *, c_int32
     socketinfo_set_error_handler(m_socketinfo, handler);
 }
 
-void CTcpSocket::unsetConnectedHandler()
+void CTcpSocket::resetConnectedHandler()
 {
-    socketinfo_unset_connected_handler(m_socketinfo);
+    socketinfo_reset_connected_handler(m_socketinfo);
 }
 
-void CTcpSocket::unsetDisconnectedHandler()
+void CTcpSocket::resetDisconnectedHandler()
 {
-    socketinfo_unset_disconnected_handler(m_socketinfo);
+    socketinfo_reset_disconnected_handler(m_socketinfo);
 }
 
-void CTcpSocket::unsetReadHandler()
+void CTcpSocket::resetReadHandler()
 {
-    socketinfo_unset_read_handler(m_socketinfo);
+    socketinfo_reset_read_handler(m_socketinfo);
 }
 
-void CTcpSocket::unsetErrorHandler()
+void CTcpSocket::resetErrorHandler()
 {
-    socketinfo_unset_error_handler(m_socketinfo);
+    socketinfo_reset_error_handler(m_socketinfo);
 }
 
 void CTcpSocket::connectToHost(const std::string &address, c_uint16 port)
@@ -104,7 +104,7 @@ void CTcpSocket::close(bool force)
 
 std::string CTcpSocket::address() const
 {
-    return CEventDispatcher::instance()->socketAddress(socketDescriptor());
+    return CEventDispatcher::socketAddress(socketDescriptor());
 }
 
 std::string CTcpSocket::errorString() const
@@ -158,7 +158,7 @@ c_int32 CTcpSocket::error() const
 
 c_uint16 CTcpSocket::port() const
 {
-    return CEventDispatcher::instance()->socketPort(socketDescriptor());
+    return CEventDispatcher::socketPort(socketDescriptor());
 }
 
 CSocketState CTcpSocket::state() const

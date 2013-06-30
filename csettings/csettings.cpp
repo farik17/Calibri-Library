@@ -139,6 +139,9 @@ void CSettings::load()
         std::string line;
         getline(m_file, line);
 
+        if (line.empty())
+            continue;
+
         if (isGroup(line)) {
             m_propertiesTree[line] = csettings_properties();
             currentSection = line;
@@ -160,44 +163,43 @@ void CSettings::load()
         }
 
         if (isArray(currentSection)) {
-            if (!str_contains('=', line)) {
-                eraseArray(currentSection);
-                continue;
-            }
+            do {
+                size_t index;
+                if (lexical_cast(str_take_left('/', line), index)) {
+                    if (index >= m_arraysTree[currentSection].size())
+                        m_arraysTree[currentSection].resize(index + 1);
 
-ProcessArrayLine:
-            if (isGroup(line)) {
-                if (m_arraysTree[currentSection].empty())
-                    eraseArray(currentSection);
+                    m_arraysTree[currentSection][index][str_left('=', line)] = str_right('=', line);
+                }
 
-                m_propertiesTree[line] = csettings_properties();
-                currentSection = line;
-                break;
-            }
+                if (!m_file.good())
+                    break;
 
-            if (isArray(line)) {
-                if (m_arraysTree[currentSection].empty())
-                    eraseArray(currentSection);
-
-                m_arraysTree[line] = csettings_array();
-                currentSection = line;
-                break;
-            }
-
-            size_t index;
-            if (lexical_cast(str_take_left('/', line), index)) {
-                if (index >= m_arraysTree[currentSection].size())
-                    m_arraysTree[currentSection].resize(index + 1);
-
-                m_arraysTree[currentSection][index][str_left('=', line)] = str_right('=', line);
-            }
-
-            while (m_file.good()) {
                 getline(m_file, line);
                 if (line.empty())
-                    continue;
-                goto ProcessArrayLine;
-            }
+                    break;
+
+                if (isGroup(line)) {
+                    if (m_arraysTree[currentSection].empty())
+                        eraseArray(currentSection);
+
+                    m_propertiesTree[line] = csettings_properties();
+                    currentSection = line;
+                    break;
+                }
+
+                if (isArray(line)) {
+                    if (m_arraysTree[currentSection].empty())
+                        eraseArray(currentSection);
+
+                    m_arraysTree[line] = csettings_array();
+                    currentSection = line;
+                    break;
+                }
+
+                if (!str_contains('=', line))
+                    break;
+            } while(true);
             continue;
         }
     }
@@ -228,22 +230,6 @@ void CSettings::eraseSection(const std::string &section)
         m_propertiesTree.erase(it);
 }
 
-bool CSettings::isGroup(const std::string &line)
-{
-    if (line.size() == 0)
-        return false;
-
-    return line.at(0) == '[' && line.at(line.size() - 1) == ']';
-}
-
-bool CSettings::isArray(const std::string &line)
-{
-    if (line.size() == 0)
-        return false;
-
-    return line.at(0) == '<' && line.at(line.size() - 1) == '>';
-}
-
 bool CSettings::isPropertiesTreeContains(const std::string &section, const std::string &name)
 {
     if (m_propertiesTree.find(section) == m_propertiesTree.cend())
@@ -270,4 +256,20 @@ bool CSettings::isArraysTreeContains(const std::string &section, size_t index, c
         return false;
 
     return true;
+}
+
+bool CSettings::isGroup(const std::string &line)
+{
+    if (line.size() == 0)
+        return false;
+
+    return line.at(0) == '[' && line.at(line.size() - 1) == ']';
+}
+
+bool CSettings::isArray(const std::string &line)
+{
+    if (line.size() == 0)
+        return false;
+
+    return line.at(0) == '<' && line.at(line.size() - 1) == '>';
 }

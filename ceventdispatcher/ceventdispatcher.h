@@ -46,10 +46,6 @@ public:
         NoExitOnEmpty   = 3
     };
 
-    static void initialize(CEventDispatcherConfig *config);
-
-    static CEventDispatcher *instance();
-
     void execute();
     void execute(EventLoopFlag flag);
     void terminate();
@@ -62,9 +58,13 @@ public:
     void restartTimer(timerinfo *timer_info, c_uint32 msec, bool repeat = true);
     void killTimer(timerinfo *timer_info);
 
-    std::string socketAddress(c_fdptr fd) const;
+    static void initialize(CEventDispatcherConfig *config);
 
-    c_uint16 socketPort(c_fdptr fd) const;
+    static std::string socketAddress(c_fdptr fd);
+
+    static CEventDispatcher *instance();
+
+    static c_uint16 socketPort(c_fdptr fd);
 
 private:
     C_DISABLE_COPY(CEventDispatcher)
@@ -76,17 +76,17 @@ private:
     void initializeWSA();
 #endif
 
-    event_base *m_event_base;
-    evdns_base *m_evdns_base;
-
-    static CEventDispatcher *m_eventDispatcher;
-
     static void acceptNotification(evconnlistener *listener, c_fdptr fd, sockaddr *address, c_int32 socklen, void *ctx);
     static void acceptErrorNotification(evconnlistener *listener, void *ctx);
     static void readNotification(bufferevent *buffer_event, void *ctx);
     static void eventNotification(bufferevent *buffer_event, c_int16 events, void *ctx);
     static void timerNotification(c_fdptr fd, c_int16 events, void *ctx);
     static void outputBufferNotification(evbuffer *buffer, const evbuffer_cb_info *info, void *ctx);
+
+    event_base *m_event_base;
+    evdns_base *m_evdns_base;
+
+    static CEventDispatcher *m_eventDispatcher;
 };
 
 #endif // CEVENTDISPATCHER_H

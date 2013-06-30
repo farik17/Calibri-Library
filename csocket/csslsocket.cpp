@@ -53,14 +53,14 @@ void CSslSocket::setSslErrorHandler(const std::function<void (socketinfo *, c_ul
     sslinfo_set_ssl_error_handler(socketinfo_get_sslinfo(m_socketinfo), handler);
 }
 
-void CSslSocket::unsetEncryptedHandler()
+void CSslSocket::resetEncryptedHandler()
 {
-    sslinfo_unset_encrypted_handler(socketinfo_get_sslinfo(m_socketinfo));
+    sslinfo_reset_encrypted_handler(socketinfo_get_sslinfo(m_socketinfo));
 }
 
-void CSslSocket::unsetSslErrorHandler()
+void CSslSocket::resetSslErrorHandler()
 {
-    sslinfo_unset_ssl_error_handler(socketinfo_get_sslinfo(m_socketinfo));
+    sslinfo_reset_ssl_error_handler(socketinfo_get_sslinfo(m_socketinfo));
 }
 
 void CSslSocket::setSslProtocol(CSSLProtocol sslProtocol)
