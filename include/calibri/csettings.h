@@ -49,8 +49,8 @@ class CSettings
 public:
     CSettings(const std::string &fileName);
     
-    void save();
-    void load();
+    bool save();
+    bool load();
 
     template<typename T>
     bool value(const std::string &key, T &data, size_t index = 0)

@@ -35,16 +35,16 @@ CSettings::CSettings(const std::string &fileName)
 
 }
 
-void CSettings::save()
+bool CSettings::save()
 {
     m_file.open(m_fileName.c_str(), std::ios::out | std::ios::trunc);
     if (!m_file.is_open()) {
         if (m_fileName.empty()) {
             std::cout << "CSettings::save error: invalid file name" << std::endl;
-            return;
+            return false;
         }
         std::cout << "CSettings::save error: can not open file with name " << m_fileName << std::endl;
-        return;
+        return false;
     }
 
     auto propertySectionIt = m_propertiesTree.crbegin();
@@ -117,18 +117,20 @@ void CSettings::save()
 
     m_file.flush();
     m_file.close();
+
+    return true;
 }
 
-void CSettings::load()
+bool CSettings::load()
 {
     m_file.open(m_fileName.c_str(), std::ios::in);
     if (!m_file.is_open()) {
         if (m_fileName.empty()) {
             std::cout << "CSettings::load error: invalid file name" << std::endl;
-            return;
+            return false;
         }
         std::cout << "CSettings::load error: can not open file with name " << m_fileName << std::endl;
-        return;
+        return false;
     }
 
     std::string currentSection;
@@ -203,6 +205,8 @@ void CSettings::load()
     }
 
     m_file.close();
+
+    return true;
 }
 
 size_t CSettings::arraySize(const std::string &section)
