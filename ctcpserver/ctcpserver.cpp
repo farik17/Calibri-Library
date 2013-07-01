@@ -62,17 +62,9 @@ void CTcpServer::setEnable(bool enable)
         evconnlistener_disable(serverinfo_get_evconnlistener(m_serverinfo));
 }
 
-void CTcpServer::close()
-{
-    if (!isListening())
-        return;
-
-    CEventDispatcher::instance()->closeServer(m_serverinfo);
-}
-
 bool CTcpServer::isListening() const
 {
-    return serverinfo_get_evconnlistener(m_serverinfo) ? true : false;
+    return serverinfo_get_evconnlistener(m_serverinfo) != nullptr;
 }
 
 bool CTcpServer::listen(const std::string &address, c_uint16 port, c_int32 backlog)
@@ -81,6 +73,16 @@ bool CTcpServer::listen(const std::string &address, c_uint16 port, c_int32 backl
         return false;
 
     CEventDispatcher::instance()->bindServer(m_serverinfo, address, port, backlog);
+
+    return isListening();
+}
+
+bool CTcpServer::close()
+{
+    if (!isListening())
+        return false;
+
+    CEventDispatcher::instance()->closeServer(m_serverinfo);
 
     return isListening();
 }

@@ -37,10 +37,10 @@ public:
     void setAcceptHandler(const std::function<void (serverinfo *, c_fdptr)> &handler);
     void setAcceptErrorHandler(const std::function<void (serverinfo *, c_int32)> &handler);
     void setEnable(bool enable = true);
-    void close();
 
     bool isListening() const;
     bool listen(const std::string &address, c_uint16 port, c_int32 backlog = -1);
+    bool close();
 
     std::string address() const;
     std::string errorString() const;
