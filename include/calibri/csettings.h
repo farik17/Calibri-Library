@@ -61,12 +61,12 @@ public:
         std::string section = str_left('/', key);
 
         bool array = isArray(section);
-        bool group = isProperties(section);
+        bool properties = isProperties(section);
 
-        if (!group && !array)
+        if (!properties && !array)
             return false;
 
-        if (group) {
+        if (properties) {
             std::string name = str_right('/', key);
             if (!isPropertiesTreeContains(section, name))
                 return false;
@@ -76,7 +76,7 @@ public:
 
         if (array) {
             std::string name = str_right('/', key);
-            if (!isArrayTreeContains(section, index, name))
+            if (!isArraysTreeContains(section, index, name))
                 return false;
 
             return lexical_cast(m_arraysTree[section][index][name], data);
@@ -94,12 +94,12 @@ public:
         std::string section = str_left('/', key);
 
         bool array = isArray(section);
-        bool group = isProperties(section);
+        bool properties = isProperties(section);
 
-        if (!array && !group)
+        if (!array && !properties)
             return false;
 
-        if (group)
+        if (properties)
             return lexical_cast(data, m_propertiesTree[section][str_right('/', key)]);
 
         if (array) {
@@ -121,7 +121,7 @@ private:
     void eraseProperties(const std::string &section);
 
     bool isPropertiesTreeContains(const std::string &section, const std::string &name);
-    bool isArrayTreeContains(const std::string &section, size_t index, const std::string &name);
+    bool isArraysTreeContains(const std::string &section, size_t index, const std::string &name);
 
     static bool isProperties(const std::string &line);
     static bool isArray(const std::string &line);

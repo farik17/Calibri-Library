@@ -240,7 +240,7 @@ bool CSettings::isPropertiesTreeContains(const std::string &section, const std::
     return true;
 }
 
-bool CSettings::isArrayTreeContains(const std::string &section, size_t index, const std::string &name)
+bool CSettings::isArraysTreeContains(const std::string &section, size_t index, const std::string &name)
 {
     if (m_arraysTree.find(section) == m_arraysTree.cend())
         return false;
@@ -258,7 +258,7 @@ bool CSettings::isArrayTreeContains(const std::string &section, size_t index, co
 
 bool CSettings::isProperties(const std::string &line)
 {
-    if (line.size() == 0)
+    if (line.empty())
         return false;
 
     return line.at(0) == '[' && line.at(line.size() - 1) == ']';
@@ -266,7 +266,7 @@ bool CSettings::isProperties(const std::string &line)
 
 bool CSettings::isArray(const std::string &line)
 {
-    if (line.size() == 0)
+    if (line.empty())
         return false;
 
     return line.at(0) == '<' && line.at(line.size() - 1) == '>';
