@@ -42,9 +42,8 @@
 
 inline void cdatastream_write(std::string &dest, const char *source, size_t &pos, size_t len)
 {
-    size_t length = dest.length();
-    dest.insert(pos, source, len);
-    pos += dest.length() - length;
+    dest.replace(pos, len, source, len);
+    pos += len;
 }
 
 inline void cdatastream_write(CTcpSocket &dest, const char *source, size_t &pos, size_t len)
