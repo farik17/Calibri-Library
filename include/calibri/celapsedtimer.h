@@ -37,12 +37,12 @@ public:
     CElapsedTimer();
 
     enum Metrics : c_uint8 {
-        Hours           = 1,
-        Minutes         = 2,
-        Seconds         = 3,
-        Miliseconds     = 4,
-        Microseconds    = 5,
-        Nanoseconds     = 6
+        Hours = 1,
+        Minutes,
+        Seconds,
+        Miliseconds,
+        Microseconds,
+        Nanoseconds
     };
 
     void start();

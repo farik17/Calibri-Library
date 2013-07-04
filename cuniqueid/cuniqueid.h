@@ -39,11 +39,11 @@
 #include "cdefines.h"
 
 //! Typedefs
-typedef uuid_t          cuniqueid;
+typedef uuid_t          c_uniqueid;
 
-void cuniqueid_generate(cuniqueid &uid);
-bool cuniqueid_compare(const cuniqueid &src, const cuniqueid &dest);
+void cuniqueid_generate(c_uniqueid &uid);
+bool cuniqueid_compare(const c_uniqueid &src, const c_uniqueid &dest);
 
-std::string cuniqueid_to_string(const cuniqueid &uid);
+std::string cuniqueid_to_string(const c_uniqueid &uid);
 
 #endif // CUNUQUEID_H

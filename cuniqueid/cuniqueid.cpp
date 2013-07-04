@@ -31,12 +31,12 @@
 //! CUtils Includes
 #include "cutils.h"
 
-void cuniqueid_generate(cuniqueid &uid)
+void cuniqueid_generate(c_uniqueid &uid)
 {
 #if defined(_WIN32)
     switch (UuidCreate(&uid)) {
     case RPC_S_UUID_LOCAL_ONLY:
-        std::cout << "cuniqueid_generate warning: cuniqueid is guaranteed to be unique to this computer only" << std::endl;
+        std::cout << "cuniqueid_generate warning: c_uniqueid is guaranteed to be unique to this computer only" << std::endl;
         break;
 
     case RPC_S_UUID_NO_ADDRESS:
@@ -54,10 +54,10 @@ void cuniqueid_generate(cuniqueid &uid)
 #endif
 }
 
-bool cuniqueid_compare(const cuniqueid &src, const cuniqueid &dest)
+bool cuniqueid_compare(const c_uniqueid &src, const c_uniqueid &dest)
 {
 #if defined(_WIN32)
-    return !memcmp(&src, &dest, sizeof(cuniqueid));
+    return !memcmp(&src, &dest, sizeof(c_uniqueid));
 #elif defined(__unix__) || defined(__linux__)
     return !uuid_compare(src, dest);
 #else
@@ -65,7 +65,7 @@ bool cuniqueid_compare(const cuniqueid &src, const cuniqueid &dest)
 #endif
 }
 
-std::string cuniqueid_to_string(const cuniqueid &uid)
+std::string cuniqueid_to_string(const c_uniqueid &uid)
 {
 #if defined(_WIN32)
 #   if defined(UNICODE)

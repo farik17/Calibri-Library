@@ -41,17 +41,17 @@ public:
     virtual ~CEventDispatcherConfig();
 
     enum MethodFeature : c_uint8 {
-        ET      = 1,
-        O1      = 2,
-        FDs     = 3
+        ET = 1,
+        O1,
+        FDs
     };
 
     enum ConfigFlag : c_uint8 {
-        NoLock              = 1,
-        IgnoreEnvironment   = 2,
-        StartupIOCP         = 3,
-        NoCacheTime         = 4,
-        EPollChangelist     = 5
+        NoLock = 1,
+        IgnoreEnvironment,
+        StartupIOCP,
+        NoCacheTime,
+        EPollChangelist
     };
 
     void setFeatures(c_uint16 features);

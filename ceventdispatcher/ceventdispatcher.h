@@ -41,9 +41,9 @@ public:
     virtual ~CEventDispatcher();
 
     enum EventLoopFlag : c_uint8 {
-        Once            = 1,
-        NonBlock        = 2,
-        NoExitOnEmpty   = 3
+        Once = 1,
+        NonBlock,
+        NoExitOnEmpty
     };
 
     void execute();

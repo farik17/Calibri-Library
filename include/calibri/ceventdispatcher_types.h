@@ -77,10 +77,10 @@ const std::function<void (socketinfo *, c_ulong)> &sslinfo_get_ssl_error_handler
 
 /*! socketinfo */
 enum CSocketState : c_uint8 {
-    Unconnected     = 1,
-    Connecting      = 2,
-    Connected       = 3,
-    Closing         = 4
+    Unconnected = 1,
+    Connecting,
+    Connected,
+    Closing
 };
 
 socketinfo *socketinfo_new();

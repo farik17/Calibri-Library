@@ -36,25 +36,25 @@
 #include "cdefines.h"
 
 enum CSSLProtocol : c_uint8 {
-    SSLv3_0         = 1,
-    TLSv1_0         = 2,
-    TLSv1_1         = 3,
-    TLSv1_2         = 4
+    SSLv3_0 = 1,
+    TLSv1_0,
+    TLSv1_1,
+    TLSv1_2
 };
 
 enum CSSLMode : c_uint8 {
-    ClientMode      = 1,
-    ServerMode      = 2
+    ClientMode = 1,
+    ServerMode
 };
 
 enum CSSLPeerVerifyMode : c_uint8 {
-    VerifyNone      = 1,
-    VerifyPeer      = 2
+    VerifyNone = 1,
+    VerifyPeer
 };
 
 enum CSSLFileType : c_uint8 {
-    PEM             = 1,
-    ASN1            = 2
+    PEM = 1,
+    ASN1
 };
 
 SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVerifyMode sslPeerVerifyMode);
