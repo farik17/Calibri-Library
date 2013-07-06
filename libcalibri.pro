@@ -27,6 +27,8 @@ include(cutils/cutils.pri)
 include(celapsedtimer/celapsedtimer.pri)
 
 win32 {
+    DEFINES        += NOMINMAX
+
     INCLUDEPATH    += \
         c:/openssl/include \
         c:/libevent/WIN32-Code \

@@ -32,6 +32,7 @@
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
+#include <algorithm>
 
 //! CSocket Includes
 #include "ctcpsocket.h"
@@ -40,27 +41,30 @@
 #pragma warning(disable:4996)
 #endif
 
-inline void cdatastream_write(std::string &dest, const char *source, size_t &pos, size_t len)
+inline size_t cdatastream_write(std::string &dest, const char *source, size_t &pos, size_t len)
 {
     dest.replace(pos, len, source, len);
     pos += len;
+    return len;
 }
 
-inline void cdatastream_write(CTcpSocket &dest, const char *source, size_t &pos, size_t len)
+inline size_t cdatastream_write(CTcpSocket &dest, const char *source, size_t &pos, size_t len)
 {
     C_UNUSED(pos);
-    dest.write(source, len);
+    return dest.write(source, len);
 }
 
-inline void cdatastream_read(std::string &source, char *dest, size_t &pos, size_t len)
+inline size_t cdatastream_read(std::string &source, char *dest, size_t &pos, size_t len)
 {
-    pos += source.copy(dest, len, pos);
+    size_t bytes = source.copy(dest, len, pos);
+    pos += bytes;
+    return bytes;
 }
 
-inline void cdatastream_read(CTcpSocket &source, char *dest, size_t &pos, size_t len)
+inline size_t cdatastream_read(CTcpSocket &source, char *dest, size_t &pos, size_t len)
 {
     C_UNUSED(pos);
-    source.read(dest, len);
+    return source.read(dest, len);
 }
 
 template<class T>
@@ -175,7 +179,8 @@ public:
         if (size == 0)
             return *this;
 
-        cdatastream_write(m_data, reinterpret_cast<const char *>(&size), m_pos, sizeof(c_uint64));
+        *this << size;
+
         cdatastream_write(m_data, value, m_pos, size);
 
         return *this;
@@ -188,7 +193,8 @@ public:
         if (size == 0)
             return *this;
 
-        cdatastream_write(m_data, reinterpret_cast<const char *>(&size), m_pos, sizeof(c_uint64));
+        *this << size;
+
         cdatastream_write(m_data, value.c_str(), m_pos, size);
 
         return *this;
@@ -281,7 +287,7 @@ public:
     CDataStream<T> &operator >>(char *value)
     {
         c_uint64 size = 0;
-        cdatastream_read(m_data, reinterpret_cast<char *>(&size), m_pos, sizeof(c_uint64));
+        *this >> size;
 
         if (size == 0)
             return *this;
@@ -293,19 +299,26 @@ public:
 
     CDataStream<T> &operator >>(std::string &value)
     {
+        value.clear();
+
         c_uint64 size = 0;
-        cdatastream_read(m_data, reinterpret_cast<char *>(&size), m_pos, sizeof(c_uint64));
+        *this >> size;
 
         if (size == 0)
             return *this;
 
-        char *data = new char[size];
-        cdatastream_read(m_data, data, m_pos, size);
+        char data[1024];
+        size_t bytes = 0;
 
-        value.reserve(size);
-        value.assign(data, size);
+        do {
+            bytes = cdatastream_read(m_data, data, m_pos, std::min<c_uint64>(size, 1024));
+            if (bytes == 0)
+                break;
 
-        delete[] data;
+            size -= bytes;
+
+            value.append(data, bytes);
+        } while (size > 0);
 
         return *this;
     }
