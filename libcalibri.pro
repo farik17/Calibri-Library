@@ -5,9 +5,9 @@ TARGET      = $$qtLibraryTarget(calibri)
 DESTDIR     = lib
 
 CONFIG(debug, debug|release) {
-    OBJECTS_DIR = obj/debug
+    OBJECTS_DIR     = obj/debug
 } else {
-    OBJECTS_DIR = obj/release
+    OBJECTS_DIR     = obj/release
 }
 
 HEADERS    += \
@@ -27,7 +27,8 @@ include(cutils/cutils.pri)
 include(celapsedtimer/celapsedtimer.pri)
 
 win32 {
-    DEFINES        += NOMINMAX
+    DEFINES        += \
+        NOMINMAX
 
     INCLUDEPATH    += \
         c:/openssl/include \
@@ -84,7 +85,9 @@ win32 {
     QMAKE_PKGCONFIG_INCDIR          = $$headers.path
     QMAKE_PKGCONFIG_DESTDIR         = pkgconfig
 
-    INSTALLS       += target headers
+    INSTALLS       += \
+        target \
+        headers
 
     QMAKE_CXXFLAGS_RELEASE     += \
         -O3 \

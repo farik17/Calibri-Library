@@ -208,6 +208,8 @@ void CEventDispatcher::closeSocket(socketinfo *socket_info, bool force)
         if (disconnected_handler)
             disconnected_handler(socket_info);
     } else {
+        evbuffer_add_cb(bufferevent_get_output(buffer_event), CEventDispatcher::outputBufferNotification, socket_info);
+
         socketinfo_set_socket_state(socket_info, Closing);
     }
 }
@@ -467,8 +469,6 @@ void CEventDispatcher::eventNotification(bufferevent *buffer_event, c_int16 even
     socketinfo *socket_info = reinterpret_cast<socketinfo *>(ctx);
 
     if (events & BEV_EVENT_CONNECTED) {
-        evbuffer_add_cb(bufferevent_get_output(socketinfo_get_bufferevent(socket_info)), CEventDispatcher::outputBufferNotification, socket_info);
-
         socketinfo_set_socket_state(socket_info, Connected);
 
         sslinfo *ssl_info = socketinfo_get_sslinfo(socket_info);
@@ -484,33 +484,26 @@ void CEventDispatcher::eventNotification(bufferevent *buffer_event, c_int16 even
         return;
     }
 
-    bool finished = false;
-
-    if (events & BEV_EVENT_EOF)
-        finished = true;
-
     if (events & BEV_EVENT_ERROR) {
-        finished = true;
-
         c_int32 error = evutil_socket_geterror(bufferevent_getfd(buffer_event));
         if (error != 0) {
             const auto &error_handler = socketinfo_get_error_handler(socket_info);
             if (error_handler)
                 error_handler(socket_info, error);
-        } else {
-            sslinfo *ssl_info = socketinfo_get_sslinfo(socket_info);
-            if (ssl_info) {
-                c_ulong ssl_error = bufferevent_get_openssl_error(buffer_event);
-                if (ssl_error != 0) {
-                    const auto &ssl_error_handler = sslinfo_get_ssl_error_handler(ssl_info);
-                    if (ssl_error_handler)
-                        ssl_error_handler(socket_info, ssl_error);
-                }
+        }
+
+        sslinfo *ssl_info = socketinfo_get_sslinfo(socket_info);
+        if (ssl_info) {
+            c_ulong ssl_error = bufferevent_get_openssl_error(buffer_event);
+            if (ssl_error != 0) {
+                const auto &ssl_error_handler = sslinfo_get_ssl_error_handler(ssl_info);
+                if (ssl_error_handler)
+                    ssl_error_handler(socket_info, ssl_error);
             }
         }
     }
 
-    if (finished) {
+    if (events & BEV_EVENT_EOF) {
         bufferevent_free(buffer_event);
 
         socketinfo_set_bufferevent(socket_info, nullptr);
