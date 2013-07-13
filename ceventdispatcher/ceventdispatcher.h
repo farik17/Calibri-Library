@@ -46,9 +46,6 @@ public:
         NoExitOnEmpty
     };
 
-    void execute();
-    void execute(EventLoopFlag flag);
-    void terminate();
     void acceptSocket(socketinfo *socket_info, c_fdptr fd);
     void connectSocket(socketinfo *socket_info, const std::string &address, c_uint16 port);
     void closeSocket(socketinfo *socket_info, bool force = false);
@@ -57,6 +54,10 @@ public:
     void startTimer(timerinfo *timer_info, c_uint32 msec, bool repeat = true);
     void restartTimer(timerinfo *timer_info, c_uint32 msec, bool repeat = true);
     void killTimer(timerinfo *timer_info);
+
+    int execute();
+    int execute(EventLoopFlag eventLoopFlag);
+    int terminate();
 
     static void initialize(CEventDispatcherConfig *config);
 

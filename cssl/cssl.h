@@ -59,10 +59,10 @@ enum CSSLFileType : c_uint8 {
 
 SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVerifyMode sslPeerVerifyMode);
 
-void SSL_init();
-void SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath, CSSLFileType fileType);
-void SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath, CSSLFileType fileType);
-void SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode sslMode);
+int SSL_init();
+int SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath, CSSLFileType fileType);
+int SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath, CSSLFileType fileType);
+int SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode sslMode);
 void SSL_CTX_set_peer_verify_mode(SSL_CTX *ssl_ctx, CSSLPeerVerifyMode sslPeerVerifyMode);
 
 #endif // CSSL_H

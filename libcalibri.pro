@@ -5,6 +5,9 @@ TARGET      = $$qtLibraryTarget(calibri)
 DESTDIR     = lib
 
 CONFIG(debug, debug|release) {
+    DEFINES        += \
+        DEBUG
+
     OBJECTS_DIR     = obj/debug
 } else {
     OBJECTS_DIR     = obj/release
@@ -61,23 +64,7 @@ win32 {
 
     target.path     = /usr/lib/calibri
     headers.path    = /usr/include/calibri
-    headers.files  += \
-        include/calibri/ceventdispatcher.h \
-        include/calibri/ceventdispatcher_config.h \
-        include/calibri/ceventdispatcher_types.h \
-        include/calibri/ctcpserver.h \
-        include/calibri/ctcpsocket.h \
-        include/calibri/csslsocket.h \
-        include/calibri/cssl.h \
-        include/calibri/ccrypto.h \
-        include/calibri/csettings.h \
-        include/calibri/cdatetime.h \
-        include/calibri/cuniqueid.h \
-        include/calibri/cfilesystem.h \
-        include/calibri/cutils.h \
-        include/calibri/cdatastream.h \
-        include/calibri/cdefines.h \
-        include/calibri/celapsedtimer.h
+    headers.files   = include/calibri/*.h
 
     QMAKE_PKGCONFIG_NAME            = calibri
     QMAKE_PKGCONFIG_DESCRIPTION     = "Calibri Library"

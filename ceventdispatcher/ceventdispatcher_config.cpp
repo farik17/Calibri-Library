@@ -32,8 +32,10 @@ CEventDispatcherConfig::CEventDispatcherConfig()
     : m_event_config(nullptr)
 {
     m_event_config = event_config_new();
+#if defined(DEBUG)
     if (!m_event_config)
-        std::cout << "CEventDispatcherConfig::CEventDispatcherConfig error: failed to initialize config" << std::endl;
+        C_DEBUG("failed to initialize config");
+#endif
 }
 
 CEventDispatcherConfig::~CEventDispatcherConfig()
@@ -41,42 +43,60 @@ CEventDispatcherConfig::~CEventDispatcherConfig()
     event_config_free(m_event_config);
 }
 
-void CEventDispatcherConfig::setFeatures(c_uint16 features)
+int CEventDispatcherConfig::setFeatures(c_uint16 methodFeatures)
 {
-    c_uint16 result = 0;
+    c_uint16 features = 0;
 
-    if (features & CEventDispatcherConfig::ET)
-        result |= EV_FEATURE_ET;
-    if (features & CEventDispatcherConfig::O1)
-        result |= EV_FEATURE_O1;
-    if (features & CEventDispatcherConfig::FDs)
-        result |= EV_FEATURE_FDS;
+    if (methodFeatures & CEventDispatcherConfig::ET)
+        features |= EV_FEATURE_ET;
+    if (methodFeatures & CEventDispatcherConfig::O1)
+        features |= EV_FEATURE_O1;
+    if (methodFeatures & CEventDispatcherConfig::FDs)
+        features |= EV_FEATURE_FDS;
 
-    if (event_config_require_features(m_event_config, result) != 0)
-        std::cout << "CEventDispatcherConfig::setFeatures error: invalid or platform specific features" << std::endl;
+#if defined(DEBUG)
+    int result = event_config_require_features(m_event_config, features);
+    if (result != 0)
+        C_DEBUG("invalid or platform specific features");
+    return result;
+#else
+    return event_config_require_features(m_event_config, features);
+#endif
 }
 
-void CEventDispatcherConfig::setFlags(c_uint16 flags)
+int CEventDispatcherConfig::setFlags(c_uint16 configFlags)
 {
-    c_uint16 result = 0;
+    c_uint16 flags = 0;
 
-    if (flags & CEventDispatcherConfig::NoLock)
-        result |= EVENT_BASE_FLAG_NOLOCK;
-    if (flags & CEventDispatcherConfig::IgnoreEnvironment)
-        result |= EVENT_BASE_FLAG_IGNORE_ENV;
-    if (flags & CEventDispatcherConfig::StartupIOCP)
-        result |= EVENT_BASE_FLAG_STARTUP_IOCP;
-    if (flags & CEventDispatcherConfig::NoCacheTime)
-        result |= EVENT_BASE_FLAG_NO_CACHE_TIME;
-    if (flags & CEventDispatcherConfig::EPollChangelist)
-        result |= EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST;
+    if (configFlags & CEventDispatcherConfig::NoLock)
+        flags |= EVENT_BASE_FLAG_NOLOCK;
+    if (configFlags & CEventDispatcherConfig::IgnoreEnvironment)
+        flags |= EVENT_BASE_FLAG_IGNORE_ENV;
+    if (configFlags & CEventDispatcherConfig::StartupIOCP)
+        flags |= EVENT_BASE_FLAG_STARTUP_IOCP;
+    if (configFlags & CEventDispatcherConfig::NoCacheTime)
+        flags |= EVENT_BASE_FLAG_NO_CACHE_TIME;
+    if (configFlags & CEventDispatcherConfig::EPollChangelist)
+        flags |= EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST;
 
-    if (event_config_set_flag(m_event_config, result) != 0)
-        std::cout << "CEventDispatcherConfig::setFlags error: invalid or platform specific flags" << std::endl;
+#if defined(DEBUG)
+    int result = event_config_set_flag(m_event_config, flags);
+    if (result != 0)
+        C_DEBUG("invalid or platform specific flags");
+    return result;
+#else
+    return event_config_set_flag(m_event_config, flags);
+#endif
 }
 
-void CEventDispatcherConfig::avoidMethod(const std::string &method)
+int CEventDispatcherConfig::avoidMethod(const std::string &method)
 {
-    if (event_config_avoid_method(m_event_config, method.c_str()) != 0)
-        std::cout << "CEventDispatcherConfig::avoidMethod error: invalid method" << std::endl;
+#if defined(DEBUG)
+    int result = event_config_avoid_method(m_event_config, method.c_str());
+    if (result != 0)
+        C_DEBUG("invalid method");
+    return result;
+#else
+    return event_config_avoid_method(m_event_config, method.c_str());
+#endif
 }

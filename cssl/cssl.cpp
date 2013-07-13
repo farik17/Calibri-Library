@@ -47,10 +47,11 @@ SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVeri
             break;
 
         default:
-            std::cout << "SSL_CTX_create error: invalid ssl mode" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("invalid ssl mode");
+#endif
             return nullptr;
         }
-
         break;
 
     case TLSv1_0:
@@ -64,10 +65,11 @@ SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVeri
             break;
 
         default:
-            std::cout << "SSL_CTX_create error: invalid ssl mode" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("invalid ssl mode");
+#endif
             return nullptr;
         }
-
         break;
 
     case TLSv1_1:
@@ -81,10 +83,11 @@ SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVeri
             break;
 
         default:
-            std::cout << "SSL_CTX_create error: invalid ssl mode" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("invalid ssl mode");
+#endif
             return nullptr;
         }
-
         break;
 
     case TLSv1_2:
@@ -98,19 +101,24 @@ SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVeri
             break;
 
         default:
-            std::cout << "SSL_CTX_create error: invalid ssl mode" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("invalid ssl mode");
+#endif
             return nullptr;
         }
-
         break;
 
     default:
-        std::cout << "SSL_CTX_create error: invalid ssl protocol" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("invalid ssl protocol");
+#endif
         return nullptr;
     }
 
     if (!ssl_ctx) {
-        std::cout << "SSL_CTX_create error: failed to initialize ssl context" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("failed to initialize ssl context");
+#endif
         return nullptr;
     }
 
@@ -119,137 +127,234 @@ SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVeri
     return ssl_ctx;
 }
 
-void SSL_init()
+int SSL_init()
 {
     SSL_load_error_strings();
     SSL_library_init();
 
-    if (RAND_poll() != 1)
-        std::cout << "initialize error: failed ssl rand poll" << std::endl;
+#if defined(DEBUG)
+    int result = RAND_poll();
+    if (result != 1)
+        C_DEBUG("failed ssl rand poll");
+    return result;
+#else
+    return RAND_poll();
+#endif
 }
 
-void SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath, CSSLFileType fileType)
+int SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath, CSSLFileType fileType)
 {
     switch (fileType) {
-    case PEM:
-        if (SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_PEM) != 1)
-            std::cout << "SSL_CTX_set_certificate error: invalid certificate path" << std::endl;
-        break;
+    case PEM: {
+#if defined(DEBUG)
+        int result = SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_PEM);
+        if (result != 1)
+            C_DEBUG("invalid certificate path");
+        return result;
+#else
+        return SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_PEM);
+#endif
+    }
 
-    case ASN1:
-        if (SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_ASN1) != 1)
-            std::cout << "SSL_CTX_set_certificate error: invalid certificate path" << std::endl;
-        break;
+    case ASN1: {
+#if defined(DEBUG)
+        int result = SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_ASN1);
+        if (result != 1)
+            C_DEBUG("invalid certificate path");
+        return result;
+#else
+        return SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_ASN1);
+#endif
+    }
 
-    default:
-        std::cout << "SSL_CTX_set_certificate error: invalid file type" << std::endl;
+    default: {
+#if defined(DEBUG)
+        C_DEBUG("invalid file type");
+#endif
         break;
     }
+    }
+    return 0;
 }
 
-void SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath, CSSLFileType fileType)
+int SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath, CSSLFileType fileType)
 {
     switch (fileType) {
-    case PEM:
-        if (SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_PEM) != 1)
-            std::cout << "SSL_CTX_set_private_key error: invalid private key path" << std::endl;
-        break;
-
-    case ASN1:
-        if (SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_ASN1) != 1)
-            std::cout << "SSL_CTX_set_private_key error: invalid private key path" << std::endl;
-        break;
-
-    default:
-        std::cout << "SSL_CTX_set_private_key error: invalid file type" << std::endl;
-        break;
+    case PEM: {
+#if defined(DEBUG)
+        int result = SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_PEM);
+        if (result != 1)
+            C_DEBUG("invalid private key path");
+        return result;
+#else
+        return SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_PEM);
+#endif
     }
 
+    case ASN1: {
+#if defined(DEBUG)
+        int result = SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_ASN1);
+        if (result != 1)
+            C_DEBUG("invalid private key path");
+        return result;
+#else
+        return SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_ASN1);
+#endif
+    }
+
+    default: {
+#if defined(DEBUG)
+        C_DEBUG("invalid file type");
+#endif
+        break;
+    }
+    }
+    return 0;
 }
 
-void SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode sslMode)
+int SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode sslMode)
 {
     switch (sslProtocol) {
     case SSLv3_0:
         switch (sslMode) {
-        case ServerMode:
-            if (SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_server_method()) != 1)
-                std::cout << "SSL_CTX_set_protocol error: failed to set ssl context protocol" << std::endl;
-            break;
-
-        case ClientMode:
-            if (SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_client_method()) != 1)
-                std::cout << "SSL_CTX_set_protocol error: failed to set ssl context protocol" << std::endl;
-            break;
-
-        default:
-            std::cout << "SSL_CTX_set_protocol error: invalid ssl mode" << std::endl;
-            break;
+        case ServerMode: {
+#if defined(DEBUG)
+            int result = SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_server_method());
+            if (result != 1)
+                C_DEBUG("failed to set ssl context protocol");
+            return result;
+#else
+            return SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_server_method());
+#endif
         }
 
+        case ClientMode: {
+#if defined(DEBUG)
+            int result = SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_client_method());
+            if (result != 1)
+                C_DEBUG("failed to set ssl context protocol");
+            return result;
+#else
+            return SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_client_method());
+#endif
+        }
+
+        default: {
+#if defined(DEBUG)
+            C_DEBUG("invalid ssl mode");
+#endif
+            break;
+        }
+        }
         break;
 
     case TLSv1_0:
         switch (sslMode) {
-        case ServerMode:
-            if (SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_server_method()) != 1)
-                std::cout << "SSL_CTX_set_protocol error: failed to set ssl context protocol" << std::endl;
-            break;
-
-        case ClientMode:
-            if (SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_client_method()) != 1)
-                std::cout << "SSL_CTX_set_protocol error: failed to set ssl context protocol" << std::endl;
-            break;
-
-        default:
-            std::cout << "SSL_CTX_set_protocol error: invalid ssl mode" << std::endl;
-            break;
+        case ServerMode: {
+#if defined(DEBUG)
+            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_server_method());
+            if (result != 1)
+                C_DEBUG("failed to set ssl context protocol");
+            return result;
+#else
+            return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_server_method());
+#endif
         }
 
+        case ClientMode: {
+#if defined(DEBUG)
+            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_client_method());
+            if (result != 1)
+                C_DEBUG("failed to set ssl context protocol");
+            return result;
+#else
+            return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_client_method());
+#endif
+        }
+
+        default: {
+#if defined(DEBUG)
+            C_DEBUG("invalid ssl mode");
+#endif
+            break;
+        }
+        }
         break;
 
     case TLSv1_1:
         switch (sslMode) {
-        case ServerMode:
-            if (SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_server_method()) != 1)
-                std::cout << "SSL_CTX_set_protocol error: failed to set ssl context protocol" << std::endl;
-            break;
-
-        case ClientMode:
-            if (SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_client_method()) != 1)
-                std::cout << "SSL_CTX_set_protocol error: failed to set ssl context protocol" << std::endl;
-            break;
-
-        default:
-            std::cout << "SSL_CTX_set_protocol error: invalid ssl mode" << std::endl;
-            break;
+        case ServerMode: {
+#if defined(DEBUG)
+            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_server_method());
+            if (result != 1)
+                C_DEBUG("failed to set ssl context protocol");
+            return result;
+#else
+            return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_server_method());
+#endif
         }
 
+        case ClientMode: {
+#if defined(DEBUG)
+            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_client_method());
+            if (result != 1)
+                C_DEBUG("failed to set ssl context protocol");
+            return result;
+#else
+            return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_client_method());
+#endif
+        }
+
+        default: {
+#if defined(DEBUG)
+            C_DEBUG("invalid ssl mode");
+#endif
+            break;
+        }
+        }
         break;
 
     case TLSv1_2:
         switch (sslMode) {
-        case ServerMode:
-            if (SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_server_method()) != 1)
-                std::cout << "SSL_CTX_set_protocol error: failed to set ssl context protocol" << std::endl;
-            break;
-
-        case ClientMode:
-            if (SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_client_method()) != 1)
-                std::cout << "SSL_CTX_set_protocol error: failed to set ssl context protocol" << std::endl;
-            break;
-
-        default:
-            std::cout << "SSL_CTX_set_protocol error: invalid ssl mode" << std::endl;
-            break;
+        case ServerMode: {
+#if defined(DEBUG)
+            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_server_method());
+            if (result != 1)
+                C_DEBUG("failed to set ssl context protocol");
+            return result;
+#else
+            return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_server_method());
+#endif
         }
 
+        case ClientMode: {
+#if defined(DEBUG)
+            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_client_method());
+            if (result != 1)
+                C_DEBUG("failed to set ssl context protocol");
+            return result;
+#else
+            return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_client_method());
+#endif
+        }
+
+        default: {
+#if defined(DEBUG)
+            C_DEBUG("invalid ssl mode");
+#endif
+            break;
+        }
+        }
         break;
 
-    default:
-        std::cout << "SSL_CTX_set_protocol error: invalid ssl protocol" << std::endl;
+    default: {
+#if defined(DEBUG)
+        C_DEBUG("invalid ssl protocol");
+#endif
         break;
     }
+    }
+    return 0;
 }
 
 void SSL_CTX_set_peer_verify_mode(SSL_CTX *ssl_ctx, CSSLPeerVerifyMode sslPeerVerifyMode)
@@ -264,7 +369,9 @@ void SSL_CTX_set_peer_verify_mode(SSL_CTX *ssl_ctx, CSSLPeerVerifyMode sslPeerVe
         break;
 
     default:
-        std::cout << "SSL_CTX_set_peer_verify_mode error: invalid ssl peer verify mode" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("invalid ssl peer verify mode");
+#endif
         break;
     }
 }

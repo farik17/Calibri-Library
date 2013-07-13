@@ -54,9 +54,9 @@ public:
         EPollChangelist
     };
 
-    void setFeatures(c_uint16 features);
-    void setFlags(c_uint16 flags);
-    void avoidMethod(const std::string &method);
+    int setFeatures(c_uint16 methodFeatures);
+    int setFlags(c_uint16 configFlags);
+    int avoidMethod(const std::string &method);
 
 private:
     C_DISABLE_COPY(CEventDispatcherConfig)

@@ -57,10 +57,12 @@ typedef c_int32                         c_fdptr;
 #   else
 #       define C_CONSTEXPR
 #   endif
+#   define C_DEBUG(expr)                std::cout  << __FILE__ << '(' << __LINE__ << ')' << " " << __PRETTY_FUNCTION__ << " : " << expr << std::endl
 #   define C_DISABLE_COPY(expr)         expr(const expr &other) = delete;\
     expr &operator =(const expr &other) = delete;
 #else
 #   define C_CONSTEXPR
+#   define C_DEBUG(expr)                std::cout  << __FILE__ << '(' << __LINE__ << ')' << " " << __FUNCTION__ << " : " << expr << std::endl
 #   define C_DISABLE_COPY(expr)         expr(const expr &other) { C_UNUSED(other); }\
     expr &operator =(const expr &other) { C_UNUSED(other); return *this; }
 #endif

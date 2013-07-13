@@ -62,44 +62,6 @@ CEventDispatcher::~CEventDispatcher()
         evdns_base_free(m_evdns_base, 1);
 }
 
-void CEventDispatcher::execute()
-{
-    if (event_base_dispatch(m_event_base) != 0)
-        std::cout << "CEventDispatcher::execute error: internal error" << std::endl;
-}
-
-void CEventDispatcher::execute(EventLoopFlag flag)
-{
-    c_int32 result = 0;
-
-    switch (flag) {
-    case Once:
-        result = EVLOOP_ONCE;
-        break;
-
-    case NonBlock:
-        result = EVLOOP_NONBLOCK;
-        break;
-
-    case NoExitOnEmpty:
-        result = EVLOOP_NO_EXIT_ON_EMPTY;
-        break;
-
-    default:
-        std::cout << "CEventDispatcher::execute error: invalid event loop flag" << std::endl;
-        return;
-    }
-
-    if (event_base_loop(m_event_base, result) != 0)
-        std::cout << "CEventDispatcher::execute error: internal error" << std::endl;
-}
-
-void CEventDispatcher::terminate()
-{
-    if (event_base_loopbreak(m_event_base) != 0)
-        std::cout << "CEventDispatcher::terminate error: internal error" << std::endl;
-}
-
 void CEventDispatcher::acceptSocket(socketinfo *socket_info, c_fdptr fd)
 {
     bufferevent *buffer_event = nullptr;
@@ -108,20 +70,26 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, c_fdptr fd)
     if (ssl_info) {
         SSL *ssl = SSL_new(sslinfo_get_ssl_ctx(ssl_info));
         if (!ssl) {
-            std::cout << "CEventDispatcher::acceptSocket error: failed to initialize ssl" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("failed to initialize ssl");
+#endif
             return;
         }
 
         buffer_event = bufferevent_openssl_socket_new(m_event_base, fd, ssl, BUFFEREVENT_SSL_ACCEPTING, BEV_OPT_CLOSE_ON_FREE);
         if (!buffer_event) {
             SSL_free(ssl);
-            std::cout << "CEventDispatcher::acceptSocket error: failed to initialize events" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("failed to initialize events");
+#endif
             return;
         }
     } else {
         buffer_event = bufferevent_socket_new(m_event_base, fd, BEV_OPT_CLOSE_ON_FREE);
         if (!buffer_event) {
-            std::cout << "CEventDispatcher::acceptSocket error: failed to initialize events" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("failed to initialize events");
+#endif
             return;
         }
     }
@@ -136,7 +104,9 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, c_fdptr fd)
 
     if (bufferevent_enable(buffer_event, events) != 0) {
         bufferevent_free(buffer_event);
-        std::cout << "CEventDispatcher::acceptSocket error: failed to enable events" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("failed to enable events");
+#endif
         return;
     }
 
@@ -152,20 +122,26 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
     if (ssl_info) {
         SSL *ssl = SSL_new(sslinfo_get_ssl_ctx(ssl_info));
         if (!ssl) {
-            std::cout << "CEventDispatcher::connectSocket error: failed to initialize ssl" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("failed to initialize ssl");
+#endif
             return;
         }
 
         buffer_event = bufferevent_openssl_socket_new(m_event_base, -1, ssl, BUFFEREVENT_SSL_CONNECTING, BEV_OPT_CLOSE_ON_FREE);
         if (!buffer_event) {
             SSL_free(ssl);
-            std::cout << "CEventDispatcher::connectSocket error: failed to initialize events" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("failed to initialize events");
+#endif
             return;
         }
     } else {
         buffer_event = bufferevent_socket_new(m_event_base, -1, BEV_OPT_CLOSE_ON_FREE);
         if (!buffer_event) {
-            std::cout << "CEventDispatcher::connectSocket error: failed to initialize events" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("failed to initialize events");
+#endif
             return;
         }
     }
@@ -180,13 +156,17 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
 
     if (bufferevent_enable(buffer_event, events) != 0) {
         bufferevent_free(buffer_event);
-        std::cout << "CEventDispatcher::connectSocket error: failed to enable events" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("failed to enable events");
+#endif
         return;
     }
 
     if (bufferevent_socket_connect_hostname(buffer_event, m_evdns_base, AF_UNSPEC, address.c_str(), port) != 0) {
         bufferevent_free(buffer_event);
-        std::cout << "CEventDispatcher::connectSocket error: failed to connect" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("failed to connect");
+#endif
         return;
     }
 
@@ -225,7 +205,9 @@ void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &ad
     evutil_addrinfo *addr_info = nullptr;
 
     if (evutil_getaddrinfo(address.c_str(), std::to_string(port).c_str(), &hints, &addr_info) != 0) {
-        std::cout << "CEventDispatcher::bindServer error: invalid address or port" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("invalid address or port");
+#endif
         return;
     }
 
@@ -247,7 +229,9 @@ void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &ad
 
     if (!ev_conn_listener) {
         evutil_freeaddrinfo(addr_info);
-        std::cout << "CEventDispatcher::bindServer error: failed to bind listener" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("failed to bind listener");
+#endif
         return;
     }
 
@@ -271,7 +255,9 @@ void CEventDispatcher::startTimer(timerinfo *timer_info, c_uint32 msec, bool rep
 
     event *ev = event_new(m_event_base, -1, events, CEventDispatcher::timerNotification, timer_info);
     if (!ev) {
-        std::cout << "CEventDispatcher::startTimer error: failed to initialize timer" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("failed to initialize timer");
+#endif
         return;
     }
 
@@ -281,7 +267,9 @@ void CEventDispatcher::startTimer(timerinfo *timer_info, c_uint32 msec, bool rep
 
     if (event_add(ev, &tv) != 0) {
         event_free(ev);
-        std::cout << "CEventDispatcher::startTimer error: invalid timer interval" << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("invalid timer interval");
+#endif
         return;
     }
 
@@ -299,6 +287,64 @@ void CEventDispatcher::killTimer(timerinfo *timer_info)
     event_free(timerinfo_get_event(timer_info));
 
     timerinfo_set_event(timer_info, nullptr);
+}
+
+int CEventDispatcher::execute()
+{
+#if defined(DEBUG)
+    int result = event_base_dispatch(m_event_base);
+    if (result != 0)
+        C_DEBUG("internal error");
+    return result;
+#else
+    return event_base_dispatch(m_event_base);
+#endif
+}
+
+int CEventDispatcher::execute(EventLoopFlag eventLoopFlag)
+{
+    c_int32 flag = 0;
+
+    switch (eventLoopFlag) {
+    case Once:
+        flag = EVLOOP_ONCE;
+        break;
+
+    case NonBlock:
+        flag = EVLOOP_NONBLOCK;
+        break;
+
+    case NoExitOnEmpty:
+        flag = EVLOOP_NO_EXIT_ON_EMPTY;
+        break;
+
+    default:
+#if defined(DEBUG)
+        C_DEBUG("invalid event loop flag");
+#endif
+        return -1;
+    }
+
+#if defined(DEBUG)
+    int result = event_base_loop(m_event_base, flag);
+    if (result != 0)
+        C_DEBUG("internal error");
+    return result;
+#else
+    return event_base_loop(m_event_base, flag);
+#endif
+}
+
+int CEventDispatcher::terminate()
+{
+#if defined(DEBUG)
+    int result = event_base_loopbreak(m_event_base);
+    if (result != 0)
+        C_DEBUG("internal error");
+    return result;
+#else
+    return event_base_loopbreak(m_event_base);
+#endif
 }
 
 void CEventDispatcher::initialize(CEventDispatcherConfig *config)
@@ -384,15 +430,20 @@ CEventDispatcher::CEventDispatcher()
 #endif
 
     m_event_base = event_base_new();
-    if (!m_event_base)
-        std::cout << "CEventDispatcher::CEventDispatcher error: failed to initialize EventDispatcher" << std::endl;
-    else
+    if (m_event_base) {
         m_evdns_base = evdns_base_new(m_event_base, 1);
-
-    if (!m_evdns_base) {
-        event_base_free(m_event_base);
-        std::cout << "CEventDispatcher::CEventDispatcher error: failed to initialize EventDispatcher" << std::endl;
+        if (!m_evdns_base) {
+            event_base_free(m_event_base);
+#if defined(DEBUG)
+            C_DEBUG("failed to initialize");
+#endif
+        }
     }
+#if defined(DEBUG)
+    else {
+        C_DEBUG("failed to initialize");
+    }
+#endif
 }
 
 CEventDispatcher::CEventDispatcher(CEventDispatcherConfig *config)
@@ -404,15 +455,20 @@ CEventDispatcher::CEventDispatcher(CEventDispatcherConfig *config)
 #endif
 
     m_event_base = event_base_new_with_config(config->m_event_config);
-    if (!m_event_base)
-        std::cout << "CEventDispatcher::CEventDispatcher error: failed to initialize EventDispatcher" << std::endl;
-    else
+    if (m_event_base) {
         m_evdns_base = evdns_base_new(m_event_base, 1);
-
-    if (!m_evdns_base) {
-        event_base_free(m_event_base);
-        std::cout << "CEventDispatcher::CEventDispatcher error: failed to initialize EventDispatcher" << std::endl;
+        if (!m_evdns_base) {
+            event_base_free(m_event_base);
+#if defined(DEBUG)
+            C_DEBUG("failed to initialize");
+#endif
+        }
     }
+#if defined(DEBUG)
+    else {
+        C_DEBUG("failed to initialize");
+    }
+#endif
 }
 
 #if defined(_WIN32)
@@ -424,7 +480,9 @@ void CEventDispatcher::initializeWSA()
     c_int32 error = WSAStartup(version, &wsaData);
     if (error != 0) {
         WSACleanup();
-        std::cout << "CEventDispatcher::initializeWSA error: failed with code " << error << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("failed with code " + std::to_string(error));
+#endif
     }
 }
 #endif

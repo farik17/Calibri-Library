@@ -31,24 +31,30 @@
 //! CUtils Includes
 #include "cutils.h"
 
-void cuniqueid_generate(c_uniqueid &uid)
+int cuniqueid_generate(c_uniqueid &uid)
 {
 #if defined(_WIN32)
-    switch (UuidCreate(&uid)) {
+#   if defined(DEBUG)
+    int result = UuidCreate(&uid);
+    switch (result) {
     case RPC_S_UUID_LOCAL_ONLY:
-        std::cout << "cuniqueid_generate warning: c_uniqueid is guaranteed to be unique to this computer only" << std::endl;
+        C_DEBUG("c_uniqueid is guaranteed to be unique to this computer only");
         break;
 
     case RPC_S_UUID_NO_ADDRESS:
-        std::cout << "cuniqueid_generate error: cannot get Ethernet or token-ring hardware address for this computer" << std::endl;
+        C_DEBUG("cannot get Ethernet or token-ring hardware address for this computer");
         break;
 
     default:
         break;
     }
-
+    return result;
+#   else
+    return UuidCreate(&uid);
+#   endif
 #elif defined(__unix__) || defined(__linux__)
     uuid_generate(uid);
+    return 0;
 #else
 #   error platform not supported
 #endif
@@ -71,28 +77,22 @@ std::string cuniqueid_to_string(const c_uniqueid &uid)
 #   if defined(UNICODE)
     c_uint16 *buffer = nullptr;
 
-    switch (UuidToString(&uid, &buffer)) {
-    case RPC_S_OUT_OF_MEMORY:
-        std::cout << "cuniqueid_to_string error: needed memory is not available" << std::endl;
+    if (UuidToString(&uid, &buffer) == RPC_S_OUT_OF_MEMORY) {
+#       if defined(DEBUG)
+        C_DEBUG("needed memory is not available");
+#       endif
         return std::string();
-
-    default:
-        break;
     }
-
     return to_string(reinterpret_cast<wchar_t *>(buffer));
 #   else
     c_uint8 *buffer = nullptr;
 
-    switch (UuidToString(&uid, &buffer)) {
-    case RPC_S_OUT_OF_MEMORY:
-        std::cout << "cuniqueid_to_string error: needed memory is not available" << std::endl;
+    if (UuidToString(&uid, &buffer) == RPC_S_OUT_OF_MEMORY) {
+#       if defined(DEBUG)
+        C_DEBUG("needed memory is not available");
+#       endif
         return std::string();
-
-    default:
-        break;
     }
-
     return reinterpret_cast<char *>(buffer);
 #   endif
 #elif defined(__unix__) || defined(__linux__)

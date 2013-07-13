@@ -41,7 +41,7 @@
 //! Typedefs
 typedef uuid_t          c_uniqueid;
 
-void cuniqueid_generate(c_uniqueid &uid);
+int cuniqueid_generate(c_uniqueid &uid);
 bool cuniqueid_compare(const c_uniqueid &src, const c_uniqueid &dest);
 
 std::string cuniqueid_to_string(const c_uniqueid &uid);

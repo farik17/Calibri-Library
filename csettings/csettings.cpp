@@ -40,15 +40,19 @@ bool CSettings::save()
     m_file.open(m_fileName.c_str(), std::ios::out | std::ios::trunc);
     if (!m_file.is_open()) {
         if (m_fileName.empty()) {
-            std::cout << "CSettings::save error: invalid file name" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("invalid file name");
+#endif
             return false;
         }
-        std::cout << "CSettings::save error: can not open file with name " << m_fileName << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("can not open file with name " + m_fileName);
+#endif
         return false;
     }
 
-    auto propertySectionIt = m_propertiesTree.crbegin();
-    auto propertySectionEnd = m_propertiesTree.crend();
+    auto propertySectionIt = m_propertiesTree.cbegin();
+    auto propertySectionEnd = m_propertiesTree.cend();
     while(propertySectionIt != propertySectionEnd) {
         const std::string &section = (*propertySectionIt).first;
         if (!isProperties(section)) {
@@ -78,8 +82,8 @@ bool CSettings::save()
         ++propertySectionIt;
     }
 
-    auto arraySectionIt = m_arraysTree.crbegin();
-    auto arraySectionEnd = m_arraysTree.crend();
+    auto arraySectionIt = m_arraysTree.cbegin();
+    auto arraySectionEnd = m_arraysTree.cend();
     while (arraySectionIt != arraySectionEnd) {
         const std::string &section = (*arraySectionIt).first;
         if (!isArray(section)) {
@@ -126,10 +130,14 @@ bool CSettings::load()
     m_file.open(m_fileName.c_str(), std::ios::in);
     if (!m_file.is_open()) {
         if (m_fileName.empty()) {
-            std::cout << "CSettings::load error: invalid file name" << std::endl;
+#if defined(DEBUG)
+            C_DEBUG("invalid file name");
+#endif
             return false;
         }
-        std::cout << "CSettings::load error: can not open file with name " << m_fileName << std::endl;
+#if defined(DEBUG)
+        C_DEBUG("can not open file with name " + m_fileName);
+#endif
         return false;
     }
 
