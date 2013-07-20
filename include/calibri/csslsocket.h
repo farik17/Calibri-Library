@@ -35,20 +35,20 @@ public:
     virtual ~CSslSocket();
 
     void setEncryptedHandler(const std::function<void (socketinfo *)> &handler);
-    void setSslErrorHandler(const std::function<void (socketinfo *, c_ulong)> &handler);
-    void setSslProtocol(CSSLProtocol sslProtocol);
-    void setSslMode(CSSLMode sslMode);
-    void setSslPeerVerifyMode(CSSLPeerVerifyMode sslPeerVerifyMode);
-    void setSslCertificate(const std::string &certificatePath, CSSLFileType fileType);
-    void setSslPrivateKey(const std::string &privateKeyPath, CSSLFileType fileType);
+    void setSslErrorHandler(const std::function<void (socketinfo *, const c_ulong)> &handler);
+    void setSslProtocol(const CSSLProtocol sslProtocol);
+    void setSslMode(const CSSLMode sslMode);
+    void setSslPeerVerifyMode(const CSSLPeerVerifyMode sslPeerVerifyMode);
+    void setSslCertificate(const std::string &certificatePath, const CSSLFileType fileType);
+    void setSslPrivateKey(const std::string &privateKeyPath, const CSSLFileType fileType);
 
-    std::string sslErrorString() const;
+    const std::string sslErrorString() const;
 
-    c_ulong sslError() const;
+    const c_ulong sslError() const;
 
-    CSSLProtocol sslProtocol() const;
-    CSSLMode sslMode() const;
-    CSSLPeerVerifyMode sslPeerVerifyMode() const;
+    const CSSLProtocol sslProtocol() const;
+    const CSSLMode sslMode() const;
+    const CSSLPeerVerifyMode sslPeerVerifyMode() const;
 
 private:
     C_DISABLE_COPY(CSslSocket)

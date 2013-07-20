@@ -35,7 +35,7 @@ CSettings::CSettings(const std::string &fileName)
 
 }
 
-bool CSettings::save()
+const bool CSettings::save()
 {
     m_file.open(m_fileName.c_str(), std::ios::out | std::ios::trunc);
     if (!m_file.is_open()) {
@@ -125,7 +125,7 @@ bool CSettings::save()
     return true;
 }
 
-bool CSettings::load()
+const bool CSettings::load()
 {
     m_file.open(m_fileName.c_str(), std::ios::in);
     if (!m_file.is_open()) {
@@ -217,7 +217,7 @@ bool CSettings::load()
     return true;
 }
 
-size_t CSettings::arraySize(const std::string &section)
+const size_t CSettings::arraySize(const std::string &section)
 {
     auto arraySectionIt = m_arraysTree.find(section);
     if (arraySectionIt == m_arraysTree.cend())
@@ -240,7 +240,7 @@ void CSettings::eraseProperties(const std::string &section)
         m_propertiesTree.erase(propertiesSectionIt);
 }
 
-bool CSettings::isPropertiesTreeContains(const std::string &section, const std::string &name)
+const bool CSettings::isPropertiesTreeContains(const std::string &section, const std::string &name)
 {
     if (m_propertiesTree.find(section) == m_propertiesTree.cend())
         return false;
@@ -252,7 +252,7 @@ bool CSettings::isPropertiesTreeContains(const std::string &section, const std::
     return true;
 }
 
-bool CSettings::isArraysTreeContains(const std::string &section, size_t index, const std::string &name)
+const bool CSettings::isArraysTreeContains(const std::string &section, const size_t index, const std::string &name)
 {
     if (m_arraysTree.find(section) == m_arraysTree.cend())
         return false;
@@ -268,7 +268,7 @@ bool CSettings::isArraysTreeContains(const std::string &section, size_t index, c
     return true;
 }
 
-bool CSettings::isProperties(const std::string &line)
+const bool CSettings::isProperties(const std::string &line)
 {
     if (line.empty())
         return false;
@@ -276,7 +276,7 @@ bool CSettings::isProperties(const std::string &line)
     return line.at(0) == '[' && line.at(line.size() - 1) == ']';
 }
 
-bool CSettings::isArray(const std::string &line)
+const bool CSettings::isArray(const std::string &line)
 {
     if (line.empty())
         return false;

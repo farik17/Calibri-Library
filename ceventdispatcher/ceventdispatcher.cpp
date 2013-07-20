@@ -62,7 +62,7 @@ CEventDispatcher::~CEventDispatcher()
         evdns_base_free(m_evdns_base, 1);
 }
 
-void CEventDispatcher::acceptSocket(socketinfo *socket_info, c_fdptr fd)
+void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
 {
     bufferevent *buffer_event = nullptr;
 
@@ -114,7 +114,7 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, c_fdptr fd)
     socketinfo_set_socket_state(socket_info, Connected);
 }
 
-void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string &address, c_uint16 port)
+void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string &address, const c_uint16 port)
 {
     bufferevent *buffer_event = nullptr;
 
@@ -174,7 +174,7 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
     socketinfo_set_socket_state(socket_info, Connecting);
 }
 
-void CEventDispatcher::closeSocket(socketinfo *socket_info, bool force)
+void CEventDispatcher::closeSocket(socketinfo *socket_info, const bool force)
 {
     bufferevent *buffer_event = socketinfo_get_bufferevent(socket_info);
 
@@ -194,7 +194,7 @@ void CEventDispatcher::closeSocket(socketinfo *socket_info, bool force)
     }
 }
 
-void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &address, c_uint16 port, c_int32 backlog)
+void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &address, const c_uint16 port, const c_int32 backlog)
 {
     evutil_addrinfo hints;
     memset(&hints, 0, sizeof(evutil_addrinfo));
@@ -249,7 +249,7 @@ void CEventDispatcher::closeServer(serverinfo *server_info)
     serverinfo_set_evconnlistener(server_info, nullptr);
 }
 
-void CEventDispatcher::startTimer(timerinfo *timer_info, c_uint32 msec, bool repeat)
+void CEventDispatcher::startTimer(timerinfo *timer_info, const c_uint32 msec, const bool repeat)
 {
     c_int16 events = repeat ? (EV_TIMEOUT | EV_PERSIST) : EV_TIMEOUT;
 
@@ -276,7 +276,7 @@ void CEventDispatcher::startTimer(timerinfo *timer_info, c_uint32 msec, bool rep
     timerinfo_set_event(timer_info, ev);
 }
 
-void CEventDispatcher::restartTimer(timerinfo *timer_info, c_uint32 msec, bool repeat)
+void CEventDispatcher::restartTimer(timerinfo *timer_info, const c_uint32 msec, const bool repeat)
 {
     killTimer(timer_info);
     startTimer(timer_info, msec, repeat);
@@ -289,7 +289,7 @@ void CEventDispatcher::killTimer(timerinfo *timer_info)
     timerinfo_set_event(timer_info, nullptr);
 }
 
-int CEventDispatcher::execute()
+const c_int32 CEventDispatcher::execute()
 {
 #if defined(DEBUG)
     int result = event_base_dispatch(m_event_base);
@@ -301,7 +301,7 @@ int CEventDispatcher::execute()
 #endif
 }
 
-int CEventDispatcher::execute(EventLoopFlag eventLoopFlag)
+const c_int32 CEventDispatcher::execute(const EventLoopFlag eventLoopFlag)
 {
     c_int32 flag = 0;
 
@@ -335,7 +335,7 @@ int CEventDispatcher::execute(EventLoopFlag eventLoopFlag)
 #endif
 }
 
-int CEventDispatcher::terminate()
+const c_int32 CEventDispatcher::terminate()
 {
 #if defined(DEBUG)
     int result = event_base_loopbreak(m_event_base);
@@ -353,29 +353,29 @@ void CEventDispatcher::initialize(CEventDispatcherConfig *config)
         m_eventDispatcher = new CEventDispatcher(config);
 }
 
-std::string CEventDispatcher::socketAddress(c_fdptr fd)
+const std::string CEventDispatcher::socketAddress(const c_fdptr fd)
 {
-    sockaddr_storage sock_addr_stor;
-    size_t sock_addr_stor_len = sizeof(sockaddr_storage);
-    memset(&sock_addr_stor, 0, sock_addr_stor_len);
+    sockaddr_storage sa_stor;
+    size_t sa_stor_len = sizeof(sockaddr_storage);
+    memset(&sa_stor, 0, sa_stor_len);
 
 #if defined(_WIN32)
-    if (getpeername(fd, reinterpret_cast<sockaddr *>(&sock_addr_stor), reinterpret_cast<c_int32 *>(&sock_addr_stor_len)) != 0)
+    if (getpeername(fd, reinterpret_cast<sockaddr *>(&sa_stor), reinterpret_cast<c_int32 *>(&sa_stor_len)) != 0)
 #elif defined(__unix__) || defined(__linux__)
-    if (getpeername(fd, reinterpret_cast<sockaddr *>(&sock_addr_stor), reinterpret_cast<c_uint32 *>(&sock_addr_stor_len)) != 0)
+    if (getpeername(fd, reinterpret_cast<sockaddr *>(&sa_stor), reinterpret_cast<c_uint32 *>(&sa_stor_len)) != 0)
 #endif
         return std::string();
 
-    switch (sock_addr_stor.ss_family) {
+    switch (sa_stor.ss_family) {
     case AF_INET: {
         char addr[AF_INET_LENGTH];
-        evutil_inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in *>(&sock_addr_stor)->sin_addr, addr, AF_INET_LENGTH);
+        evutil_inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in *>(&sa_stor)->sin_addr, addr, AF_INET_LENGTH);
         return addr;
     }
 
     case AF_INET6: {
         char addr[AF_INET6_LENGTH];
-        evutil_inet_ntop(AF_INET6, &reinterpret_cast<sockaddr_in6 *>(&sock_addr_stor)->sin6_addr, addr, AF_INET6_LENGTH);
+        evutil_inet_ntop(AF_INET6, &reinterpret_cast<sockaddr_in6 *>(&sa_stor)->sin6_addr, addr, AF_INET6_LENGTH);
         return addr;
     }
 
@@ -394,25 +394,25 @@ CEventDispatcher *CEventDispatcher::instance()
     return m_eventDispatcher;
 }
 
-c_uint16 CEventDispatcher::socketPort(c_fdptr fd)
+const c_uint16 CEventDispatcher::socketPort(const c_fdptr fd)
 {
-    sockaddr_storage sock_addr_stor;
-    size_t sock_addr_stor_len = sizeof(sockaddr_storage);
-    memset(&sock_addr_stor, 0, sock_addr_stor_len);
+    sockaddr_storage sa_stor;
+    size_t sa_stor_len = sizeof(sockaddr_storage);
+    memset(&sa_stor, 0, sa_stor_len);
 
 #if defined(_WIN32)
-    if (getpeername(fd, reinterpret_cast<sockaddr *>(&sock_addr_stor), reinterpret_cast<c_int32 *>(&sock_addr_stor_len)) != 0)
+    if (getpeername(fd, reinterpret_cast<sockaddr *>(&sa_stor), reinterpret_cast<c_int32 *>(&sa_stor_len)) != 0)
 #elif defined(__unix__) || defined(__linux__)
-    if (getpeername(fd, reinterpret_cast<sockaddr *>(&sock_addr_stor), reinterpret_cast<c_uint32 *>(&sock_addr_stor_len)) != 0)
+    if (getpeername(fd, reinterpret_cast<sockaddr *>(&sa_stor), reinterpret_cast<c_uint32 *>(&sa_stor_len)) != 0)
 #endif
         return 0;
 
-    switch (sock_addr_stor.ss_family) {
+    switch (sa_stor.ss_family) {
     case AF_INET:
-        return ntohs(reinterpret_cast<sockaddr_in *>(&sock_addr_stor)->sin_port);
+        return ntohs(reinterpret_cast<sockaddr_in *>(&sa_stor)->sin_port);
 
     case AF_INET6:
-        return ntohs(reinterpret_cast<sockaddr_in6 *>(&sock_addr_stor)->sin6_port);
+        return ntohs(reinterpret_cast<sockaddr_in6 *>(&sa_stor)->sin6_port);
 
     default:
         break;
@@ -487,7 +487,7 @@ void CEventDispatcher::initializeWSA()
 }
 #endif
 
-void CEventDispatcher::acceptNotification(evconnlistener *listener, c_fdptr fd, sockaddr *address, c_int32 socklen, void *ctx)
+void CEventDispatcher::acceptNotification(evconnlistener *listener, const c_fdptr fd, sockaddr *address, const c_int32 socklen, void *ctx)
 {
     C_UNUSED(listener);
     C_UNUSED(address);
@@ -522,7 +522,7 @@ void CEventDispatcher::readNotification(bufferevent *buffer_event, void *ctx)
         read_handler(socket_info);
 }
 
-void CEventDispatcher::eventNotification(bufferevent *buffer_event, c_int16 events, void *ctx)
+void CEventDispatcher::eventNotification(bufferevent *buffer_event, const c_int16 events, void *ctx)
 {
     socketinfo *socket_info = reinterpret_cast<socketinfo *>(ctx);
 
@@ -573,7 +573,7 @@ void CEventDispatcher::eventNotification(bufferevent *buffer_event, c_int16 even
     }
 }
 
-void CEventDispatcher::timerNotification(c_fdptr fd, c_int16 events, void *ctx)
+void CEventDispatcher::timerNotification(const c_fdptr fd, const c_int16 events, void *ctx)
 {
     C_UNUSED(fd);
     C_UNUSED(events);

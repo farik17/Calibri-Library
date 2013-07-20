@@ -45,7 +45,7 @@
 #define PARENT_DIR                   "../"
 #define CURRENT_DIR                  "./"
 
-int cfilesystem_create_path(const std::string &path)
+const c_int32 cfilesystem_create_path(const std::string &path)
 {
     cfilesystem_path_tree path_tree = cfilesystem_parse_path(path);
     cfilesystem_normalize_path_tree(path_tree);
@@ -95,7 +95,7 @@ int cfilesystem_create_path(const std::string &path)
     return 0;
 }
 
-int cfilesystem_remove_path(const std::string &path)
+const c_int32 cfilesystem_remove_path(const std::string &path)
 {
     cfilesystem_path_tree path_tree = cfilesystem_parse_path(path);
     cfilesystem_normalize_path_tree(path_tree);
@@ -131,7 +131,7 @@ int cfilesystem_remove_path(const std::string &path)
     return 0;
 }
 
-cfilesystem_path_tree cfilesystem_parse_path(const std::string &path)
+const cfilesystem_path_tree cfilesystem_parse_path(const std::string &path)
 {
     cfilesystem_path_tree path_tree;
 
@@ -153,7 +153,7 @@ cfilesystem_path_tree cfilesystem_parse_path(const std::string &path)
     return path_tree;
 }
 
-std::string cfilesystem_path_tree_to_string(const cfilesystem_path_tree &path_tree)
+const std::string cfilesystem_path_tree_to_string(const cfilesystem_path_tree &path_tree)
 {
     std::string path;
 

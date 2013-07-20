@@ -37,29 +37,29 @@ public:
     void setConnectedHandler(const std::function<void (socketinfo *)> &handler);
     void setDisconnectedHandler(const std::function<void (socketinfo *)> &handler);
     void setReadHandler(const std::function<void (socketinfo *)> &handler);
-    void setErrorHandler(const std::function<void (socketinfo *, c_int32)> &handler);
-    void connectToHost(const std::string &address, c_uint16 port);
-    void close(bool force = false);
+    void setErrorHandler(const std::function<void (socketinfo *, const c_int32)> &handler);
+    void connectToHost(const std::string &address, const c_uint16 port);
+    void close(const bool force = false);
 
-    std::string address() const;
-    std::string errorString() const;
+    const std::string address() const;
+    const std::string errorString() const;
 
-    size_t bytesAvailable() const;
-    size_t write(const char *data, size_t len);
-    size_t read(char *data, size_t len);
+    const size_t bytesAvailable() const;
+    const size_t write(const char *data, const size_t len);
+    const size_t read(char *data, const size_t len);
 
-    c_fdptr socketDescriptor() const;
+    const c_fdptr socketDescriptor() const;
 
-    c_int32 error() const;
+    const c_int32 error() const;
 
-    c_uint16 port() const;
+    const c_uint16 port() const;
 
-    CSocketState state() const;
+    const CSocketState state() const;
 
-    bool atEnd() const;
-    bool setSocketDescriptor(c_fdptr fd);
-    bool setNoDelay(c_uint32 flag);
-    bool setKeepAlive(c_uint32 flag, c_uint32 idle = 0, c_uint32 interval = 0, c_uint32 count = 0);
+    const bool atEnd() const;
+    const bool setSocketDescriptor(const c_fdptr fd);
+    const bool setNoDelay(const c_uint32 flag);
+    const bool setKeepAlive(const c_uint32 flag, const c_uint32 idle = 0, const c_uint32 interval = 0, const c_uint32 count = 0);
 
 protected:
     socketinfo *m_socketinfo;

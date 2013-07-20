@@ -31,47 +31,7 @@
 //! CUtils Includes
 #include "cutils.h"
 
-int cuniqueid_generate(c_uniqueid &uid)
-{
-#if defined(_WIN32)
-#   if defined(DEBUG)
-    int result = UuidCreate(&uid);
-    switch (result) {
-    case RPC_S_UUID_LOCAL_ONLY:
-        C_DEBUG("c_uniqueid is guaranteed to be unique to this computer only");
-        break;
-
-    case RPC_S_UUID_NO_ADDRESS:
-        C_DEBUG("cannot get Ethernet or token-ring hardware address for this computer");
-        break;
-
-    default:
-        break;
-    }
-    return result;
-#   else
-    return UuidCreate(&uid);
-#   endif
-#elif defined(__unix__) || defined(__linux__)
-    uuid_generate(uid);
-    return 0;
-#else
-#   error platform not supported
-#endif
-}
-
-bool cuniqueid_compare(const c_uniqueid &src, const c_uniqueid &dest)
-{
-#if defined(_WIN32)
-    return !memcmp(&src, &dest, sizeof(c_uniqueid));
-#elif defined(__unix__) || defined(__linux__)
-    return !uuid_compare(src, dest);
-#else
-#   error platform not supported
-#endif
-}
-
-std::string cuniqueid_to_string(const c_uniqueid &uid)
+const std::string cuniqueid_to_string(const c_uniqueid &uid)
 {
 #if defined(_WIN32)
 #   if defined(UNICODE)
@@ -100,6 +60,46 @@ std::string cuniqueid_to_string(const c_uniqueid &uid)
     uuid_unparse(uid, buffer);
 
     return buffer;
+#else
+#   error platform not supported
+#endif
+}
+
+const c_int32 cuniqueid_generate(c_uniqueid &uid)
+{
+#if defined(_WIN32)
+#   if defined(DEBUG)
+    int result = UuidCreate(&uid);
+    switch (result) {
+    case RPC_S_UUID_LOCAL_ONLY:
+        C_DEBUG("c_uniqueid is guaranteed to be unique to this computer only");
+        break;
+
+    case RPC_S_UUID_NO_ADDRESS:
+        C_DEBUG("cannot get Ethernet or token-ring hardware address for this computer");
+        break;
+
+    default:
+        break;
+    }
+    return result;
+#   else
+    return UuidCreate(&uid);
+#   endif
+#elif defined(__unix__) || defined(__linux__)
+    uuid_generate(uid);
+    return 0;
+#else
+#   error platform not supported
+#endif
+}
+
+const bool cuniqueid_compare(const c_uniqueid &src, const c_uniqueid &dest)
+{
+#if defined(_WIN32)
+    return !memcmp(&src, &dest, sizeof(c_uniqueid));
+#elif defined(__unix__) || defined(__linux__)
+    return !uuid_compare(src, dest);
 #else
 #   error platform not supported
 #endif

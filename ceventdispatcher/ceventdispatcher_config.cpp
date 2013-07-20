@@ -43,7 +43,7 @@ CEventDispatcherConfig::~CEventDispatcherConfig()
     event_config_free(m_event_config);
 }
 
-int CEventDispatcherConfig::setFeatures(c_uint16 methodFeatures)
+const c_int32 CEventDispatcherConfig::setFeatures(const c_uint16 methodFeatures)
 {
     c_uint16 features = 0;
 
@@ -64,7 +64,7 @@ int CEventDispatcherConfig::setFeatures(c_uint16 methodFeatures)
 #endif
 }
 
-int CEventDispatcherConfig::setFlags(c_uint16 configFlags)
+const c_int32 CEventDispatcherConfig::setFlags(const c_uint16 configFlags)
 {
     c_uint16 flags = 0;
 
@@ -89,7 +89,7 @@ int CEventDispatcherConfig::setFlags(c_uint16 configFlags)
 #endif
 }
 
-int CEventDispatcherConfig::avoidMethod(const std::string &method)
+const c_int32 CEventDispatcherConfig::avoidMethod(const std::string &method)
 {
 #if defined(DEBUG)
     int result = event_config_avoid_method(m_event_config, method.c_str());

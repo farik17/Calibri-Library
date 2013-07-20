@@ -48,7 +48,7 @@ void CElapsedTimer::reset()
     m_started = false;
 }
 
-c_uint64 CElapsedTimer::restart(Metrics metrics)
+const c_uint64 CElapsedTimer::restart(const Metrics metrics)
 {
     if (!m_started)
         return 0;
@@ -60,7 +60,7 @@ c_uint64 CElapsedTimer::restart(Metrics metrics)
     return result;
 }
 
-c_uint64 CElapsedTimer::elapsed(Metrics metrics)
+const c_uint64 CElapsedTimer::elapsed(const Metrics metrics)
 {
     if (!m_started)
         return 0;
@@ -68,17 +68,17 @@ c_uint64 CElapsedTimer::elapsed(Metrics metrics)
     return calculateElapsed(metrics);
 }
 
-bool CElapsedTimer::isStarted() const
+const bool CElapsedTimer::isStarted() const
 {
     return m_started;
 }
 
-bool CElapsedTimer::hasExpired(c_uint64 timeout, Metrics metrics)
+const bool CElapsedTimer::hasExpired(const c_uint64 timeout, const Metrics metrics)
 {
     return timeout < elapsed(metrics);
 }
 
-c_uint64 CElapsedTimer::calculateElapsed(Metrics metrics)
+const c_uint64 CElapsedTimer::calculateElapsed(const Metrics metrics)
 {
     switch (metrics) {
     case Hours:

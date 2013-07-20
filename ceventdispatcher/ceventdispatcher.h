@@ -46,26 +46,26 @@ public:
         NoExitOnEmpty
     };
 
-    void acceptSocket(socketinfo *socket_info, c_fdptr fd);
-    void connectSocket(socketinfo *socket_info, const std::string &address, c_uint16 port);
-    void closeSocket(socketinfo *socket_info, bool force = false);
-    void bindServer(serverinfo *server_info, const std::string &address, c_uint16 port, c_int32 backlog = -1);
+    void acceptSocket(socketinfo *socket_info, const c_fdptr fd);
+    void connectSocket(socketinfo *socket_info, const std::string &address, const c_uint16 port);
+    void closeSocket(socketinfo *socket_info, const bool force = false);
+    void bindServer(serverinfo *server_info, const std::string &address, const c_uint16 port, const c_int32 backlog = -1);
     void closeServer(serverinfo *server_info);
-    void startTimer(timerinfo *timer_info, c_uint32 msec, bool repeat = true);
-    void restartTimer(timerinfo *timer_info, c_uint32 msec, bool repeat = true);
+    void startTimer(timerinfo *timer_info, const c_uint32 msec, const bool repeat = true);
+    void restartTimer(timerinfo *timer_info, const c_uint32 msec, const bool repeat = true);
     void killTimer(timerinfo *timer_info);
 
-    int execute();
-    int execute(EventLoopFlag eventLoopFlag);
-    int terminate();
+    const c_int32 execute();
+    const c_int32 execute(const EventLoopFlag eventLoopFlag);
+    const c_int32 terminate();
 
     static void initialize(CEventDispatcherConfig *config);
 
-    static std::string socketAddress(c_fdptr fd);
+    static const std::string socketAddress(const c_fdptr fd);
 
     static CEventDispatcher *instance();
 
-    static c_uint16 socketPort(c_fdptr fd);
+    static const c_uint16 socketPort(const c_fdptr fd);
 
 private:
     C_DISABLE_COPY(CEventDispatcher)
@@ -74,14 +74,14 @@ private:
     CEventDispatcher(CEventDispatcherConfig *config);
 
 #if defined(_WIN32)
-    void initializeWSA();
+    static void initializeWSA();
 #endif
 
-    static void acceptNotification(evconnlistener *listener, c_fdptr fd, sockaddr *address, c_int32 socklen, void *ctx);
+    static void acceptNotification(evconnlistener *listener, const c_fdptr fd, sockaddr *address, const c_int32 socklen, void *ctx);
     static void acceptErrorNotification(evconnlistener *listener, void *ctx);
     static void readNotification(bufferevent *buffer_event, void *ctx);
-    static void eventNotification(bufferevent *buffer_event, c_int16 events, void *ctx);
-    static void timerNotification(c_fdptr fd, c_int16 events, void *ctx);
+    static void eventNotification(bufferevent *buffer_event, const c_int16 events, void *ctx);
+    static void timerNotification(const c_fdptr fd, const c_int16 events, void *ctx);
     static void outputBufferNotification(evbuffer *buffer, const evbuffer_cb_info *info, void *ctx);
 
     event_base *m_event_base;

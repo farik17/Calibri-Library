@@ -31,7 +31,26 @@
 //! OpenSSL Includes
 #include <openssl/rand.h>
 
-SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVerifyMode sslPeerVerifyMode)
+void SSL_CTX_set_peer_verify_mode(SSL_CTX *ssl_ctx, const CSSLPeerVerifyMode sslPeerVerifyMode)
+{
+    switch (sslPeerVerifyMode) {
+    case VerifyNone:
+        SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_NONE, nullptr);
+        break;
+
+    case VerifyPeer:
+        SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, nullptr);
+        break;
+
+    default:
+#if defined(DEBUG)
+        C_DEBUG("invalid ssl peer verify mode");
+#endif
+        break;
+    }
+}
+
+SSL_CTX *SSL_CTX_create(const CSSLProtocol sslProtocol, const CSSLMode sslMode, const CSSLPeerVerifyMode sslPeerVerifyMode)
 {
     SSL_CTX *ssl_ctx = nullptr;
 
@@ -127,7 +146,7 @@ SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVeri
     return ssl_ctx;
 }
 
-int SSL_init()
+const c_int32 SSL_init()
 {
     SSL_load_error_strings();
     SSL_library_init();
@@ -142,7 +161,7 @@ int SSL_init()
 #endif
 }
 
-int SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath, CSSLFileType fileType)
+const c_int32 SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath, const CSSLFileType fileType)
 {
     switch (fileType) {
     case PEM: {
@@ -167,17 +186,16 @@ int SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath
 #endif
     }
 
-    default: {
+    default:
 #if defined(DEBUG)
         C_DEBUG("invalid file type");
 #endif
         break;
     }
-    }
     return 0;
 }
 
-int SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath, CSSLFileType fileType)
+const c_int32 SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath, const CSSLFileType fileType)
 {
     switch (fileType) {
     case PEM: {
@@ -202,17 +220,16 @@ int SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath,
 #endif
     }
 
-    default: {
+    default:
 #if defined(DEBUG)
         C_DEBUG("invalid file type");
 #endif
         break;
     }
-    }
     return 0;
 }
 
-int SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode sslMode)
+const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProtocol, const CSSLMode sslMode)
 {
     switch (sslProtocol) {
     case SSLv3_0:
@@ -239,12 +256,11 @@ int SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode ss
 #endif
         }
 
-        default: {
+        default:
 #if defined(DEBUG)
             C_DEBUG("invalid ssl mode");
 #endif
             break;
-        }
         }
         break;
 
@@ -272,12 +288,11 @@ int SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode ss
 #endif
         }
 
-        default: {
+        default:
 #if defined(DEBUG)
             C_DEBUG("invalid ssl mode");
 #endif
             break;
-        }
         }
         break;
 
@@ -305,12 +320,11 @@ int SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode ss
 #endif
         }
 
-        default: {
+        default:
 #if defined(DEBUG)
             C_DEBUG("invalid ssl mode");
 #endif
             break;
-        }
         }
         break;
 
@@ -338,40 +352,19 @@ int SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode ss
 #endif
         }
 
-        default: {
+        default:
 #if defined(DEBUG)
             C_DEBUG("invalid ssl mode");
 #endif
             break;
         }
-        }
         break;
 
-    default: {
+    default:
 #if defined(DEBUG)
         C_DEBUG("invalid ssl protocol");
 #endif
         break;
     }
-    }
     return 0;
-}
-
-void SSL_CTX_set_peer_verify_mode(SSL_CTX *ssl_ctx, CSSLPeerVerifyMode sslPeerVerifyMode)
-{
-    switch (sslPeerVerifyMode) {
-    case VerifyNone:
-        SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_NONE, nullptr);
-        break;
-
-    case VerifyPeer:
-        SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, nullptr);
-        break;
-
-    default:
-#if defined(DEBUG)
-        C_DEBUG("invalid ssl peer verify mode");
-#endif
-        break;
-    }
 }

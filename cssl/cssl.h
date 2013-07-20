@@ -57,12 +57,13 @@ enum CSSLFileType : c_uint8 {
     ASN1
 };
 
-SSL_CTX *SSL_CTX_create(CSSLProtocol sslProtocol, CSSLMode sslMode, CSSLPeerVerifyMode sslPeerVerifyMode);
+void SSL_CTX_set_peer_verify_mode(SSL_CTX *ssl_ctx, const CSSLPeerVerifyMode sslPeerVerifyMode);
 
-int SSL_init();
-int SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath, CSSLFileType fileType);
-int SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath, CSSLFileType fileType);
-int SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, CSSLProtocol sslProtocol, CSSLMode sslMode);
-void SSL_CTX_set_peer_verify_mode(SSL_CTX *ssl_ctx, CSSLPeerVerifyMode sslPeerVerifyMode);
+SSL_CTX *SSL_CTX_create(const CSSLProtocol sslProtocol, const CSSLMode sslMode, const CSSLPeerVerifyMode sslPeerVerifyMode);
+
+const c_int32 SSL_init();
+const c_int32 SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certificatePath, const CSSLFileType fileType);
+const c_int32 SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &privateKeyPath, const CSSLFileType fileType);
+const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProtocol, const CSSLMode sslMode);
 
 #endif // CSSL_H

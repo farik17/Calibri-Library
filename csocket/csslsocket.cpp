@@ -48,12 +48,12 @@ void CSslSocket::setEncryptedHandler(const std::function<void (socketinfo *)> &h
     sslinfo_set_encrypted_handler(socketinfo_get_sslinfo(m_socketinfo), handler);
 }
 
-void CSslSocket::setSslErrorHandler(const std::function<void (socketinfo *, c_ulong)> &handler)
+void CSslSocket::setSslErrorHandler(const std::function<void (socketinfo *, const c_ulong)> &handler)
 {
     sslinfo_set_ssl_error_handler(socketinfo_get_sslinfo(m_socketinfo), handler);
 }
 
-void CSslSocket::setSslProtocol(CSSLProtocol sslProtocol)
+void CSslSocket::setSslProtocol(const CSSLProtocol sslProtocol)
 {
     sslinfo *ssl_info = socketinfo_get_sslinfo(m_socketinfo);
 
@@ -65,7 +65,7 @@ void CSslSocket::setSslProtocol(CSSLProtocol sslProtocol)
     SSL_CTX_set_protocol(sslinfo_get_ssl_ctx(ssl_info), sslinfo_get_ssl_protocol(ssl_info), sslinfo_get_ssl_mode(ssl_info));
 }
 
-void CSslSocket::setSslMode(CSSLMode sslMode)
+void CSslSocket::setSslMode(const CSSLMode sslMode)
 {
     sslinfo *ssl_info = socketinfo_get_sslinfo(m_socketinfo);
 
@@ -77,7 +77,7 @@ void CSslSocket::setSslMode(CSSLMode sslMode)
     SSL_CTX_set_protocol(sslinfo_get_ssl_ctx(ssl_info), sslinfo_get_ssl_protocol(ssl_info), sslinfo_get_ssl_mode(ssl_info));
 }
 
-void CSslSocket::setSslPeerVerifyMode(CSSLPeerVerifyMode sslPeerVerifyMode)
+void CSslSocket::setSslPeerVerifyMode(const CSSLPeerVerifyMode sslPeerVerifyMode)
 {
     sslinfo *ssl_info = socketinfo_get_sslinfo(m_socketinfo);
 
@@ -89,22 +89,22 @@ void CSslSocket::setSslPeerVerifyMode(CSSLPeerVerifyMode sslPeerVerifyMode)
     SSL_CTX_set_peer_verify_mode(sslinfo_get_ssl_ctx(ssl_info), sslinfo_get_ssl_peer_verify_mode(ssl_info));
 }
 
-void CSslSocket::setSslCertificate(const std::string &certificatePath, CSSLFileType fileType)
+void CSslSocket::setSslCertificate(const std::string &certificatePath, const CSSLFileType fileType)
 {
     SSL_CTX_set_certificate(sslinfo_get_ssl_ctx(socketinfo_get_sslinfo(m_socketinfo)), certificatePath, fileType);
 }
 
-void CSslSocket::setSslPrivateKey(const std::string &privateKeyPath, CSSLFileType fileType)
+void CSslSocket::setSslPrivateKey(const std::string &privateKeyPath, const CSSLFileType fileType)
 {
     SSL_CTX_set_private_key(sslinfo_get_ssl_ctx(socketinfo_get_sslinfo(m_socketinfo)), privateKeyPath, fileType);
 }
 
-std::string CSslSocket::sslErrorString() const
+const std::string CSslSocket::sslErrorString() const
 {
     return ERR_error_string(sslError(), nullptr);
 }
 
-c_ulong CSslSocket::sslError() const
+const c_ulong CSslSocket::sslError() const
 {
     c_fdptr fd = socketDescriptor();
     if (fd == 0)
@@ -113,17 +113,17 @@ c_ulong CSslSocket::sslError() const
     return bufferevent_get_openssl_error(socketinfo_get_bufferevent(m_socketinfo));
 }
 
-CSSLProtocol CSslSocket::sslProtocol() const
+const CSSLProtocol CSslSocket::sslProtocol() const
 {
     return sslinfo_get_ssl_protocol(socketinfo_get_sslinfo(m_socketinfo));
 }
 
-CSSLMode CSslSocket::sslMode() const
+const CSSLMode CSslSocket::sslMode() const
 {
     return sslinfo_get_ssl_mode(socketinfo_get_sslinfo(m_socketinfo));
 }
 
-CSSLPeerVerifyMode CSslSocket::sslPeerVerifyMode() const
+const CSSLPeerVerifyMode CSslSocket::sslPeerVerifyMode() const
 {
     return sslinfo_get_ssl_peer_verify_mode(socketinfo_get_sslinfo(m_socketinfo));
 }

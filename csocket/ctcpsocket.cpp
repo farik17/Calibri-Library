@@ -61,12 +61,12 @@ void CTcpSocket::setReadHandler(const std::function<void (socketinfo *)> &handle
     socketinfo_set_read_handler(m_socketinfo, handler);
 }
 
-void CTcpSocket::setErrorHandler(const std::function<void (socketinfo *, c_int32)> &handler)
+void CTcpSocket::setErrorHandler(const std::function<void (socketinfo *, const c_int32)> &handler)
 {
     socketinfo_set_error_handler(m_socketinfo, handler);
 }
 
-void CTcpSocket::connectToHost(const std::string &address, c_uint16 port)
+void CTcpSocket::connectToHost(const std::string &address, const c_uint16 port)
 {
     if (state() != Unconnected)
         return;
@@ -74,7 +74,7 @@ void CTcpSocket::connectToHost(const std::string &address, c_uint16 port)
     CEventDispatcher::instance()->connectSocket(m_socketinfo, address, port);
 }
 
-void CTcpSocket::close(bool force)
+void CTcpSocket::close(const bool force)
 {    
     if (state() != Connected)
         return;
@@ -82,17 +82,17 @@ void CTcpSocket::close(bool force)
     CEventDispatcher::instance()->closeSocket(m_socketinfo, force);
 }
 
-std::string CTcpSocket::address() const
+const std::string CTcpSocket::address() const
 {
     return CEventDispatcher::socketAddress(socketDescriptor());
 }
 
-std::string CTcpSocket::errorString() const
+const std::string CTcpSocket::errorString() const
 {
     return evutil_socket_error_to_string(error());
 }
 
-size_t CTcpSocket::bytesAvailable() const
+const size_t CTcpSocket::bytesAvailable() const
 {
     if (state() != Connected)
         return 0;
@@ -100,7 +100,7 @@ size_t CTcpSocket::bytesAvailable() const
     return evbuffer_get_length(bufferevent_get_input(socketinfo_get_bufferevent(m_socketinfo)));
 }
 
-size_t CTcpSocket::write(const char *data, size_t len)
+const size_t CTcpSocket::write(const char *data, const size_t len)
 {
     if (state() != Connected)
         return 0;
@@ -111,7 +111,7 @@ size_t CTcpSocket::write(const char *data, size_t len)
     return len;
 }
 
-size_t CTcpSocket::read(char *data, size_t len)
+const size_t CTcpSocket::read(char *data, const size_t len)
 {
     if (state() != Connected)
         return 0;
@@ -119,7 +119,7 @@ size_t CTcpSocket::read(char *data, size_t len)
     return bufferevent_read(socketinfo_get_bufferevent(m_socketinfo), data, len);
 }
 
-c_fdptr CTcpSocket::socketDescriptor() const
+const c_fdptr CTcpSocket::socketDescriptor() const
 {
     if (state() != Connected)
         return 0;
@@ -127,7 +127,7 @@ c_fdptr CTcpSocket::socketDescriptor() const
     return bufferevent_getfd(socketinfo_get_bufferevent(m_socketinfo));
 }
 
-c_int32 CTcpSocket::error() const
+const c_int32 CTcpSocket::error() const
 {
     c_fdptr fd = socketDescriptor();
     if (fd == 0)
@@ -136,22 +136,22 @@ c_int32 CTcpSocket::error() const
     return evutil_socket_geterror(fd);
 }
 
-c_uint16 CTcpSocket::port() const
+const c_uint16 CTcpSocket::port() const
 {
     return CEventDispatcher::socketPort(socketDescriptor());
 }
 
-CSocketState CTcpSocket::state() const
+const CSocketState CTcpSocket::state() const
 {
     return socketinfo_get_socket_state(m_socketinfo);
 }
 
-bool CTcpSocket::atEnd() const
+const bool CTcpSocket::atEnd() const
 {
     return bytesAvailable() == 0;
 }
 
-bool CTcpSocket::setSocketDescriptor(c_fdptr fd)
+const bool CTcpSocket::setSocketDescriptor(const c_fdptr fd)
 {
     if (state() != Unconnected)
         return false;
@@ -164,7 +164,7 @@ bool CTcpSocket::setSocketDescriptor(c_fdptr fd)
     return true;
 }
 
-bool CTcpSocket::setNoDelay(c_uint32 flag)
+const bool CTcpSocket::setNoDelay(const c_uint32 flag)
 {
     c_fdptr fd = socketDescriptor();
     if (fd == 0)
@@ -180,7 +180,7 @@ bool CTcpSocket::setNoDelay(c_uint32 flag)
     return true;
 }
 
-bool CTcpSocket::setKeepAlive(c_uint32 flag, c_uint32 idle, c_uint32 interval, c_uint32 count)
+const bool CTcpSocket::setKeepAlive(const c_uint32 flag, const c_uint32 idle, const c_uint32 interval, const c_uint32 count)
 {
     c_fdptr fd = socketDescriptor();
     if (fd == 0)

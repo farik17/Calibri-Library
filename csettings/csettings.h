@@ -49,11 +49,11 @@ class CSettings
 public:
     CSettings(const std::string &fileName);
     
-    bool save();
-    bool load();
+    const bool save();
+    const bool load();
 
     template<typename T>
-    bool value(const std::string &key, T &data, size_t index = 0)
+    const bool value(const std::string &key, T &data, const size_t index = 0)
     {
         if (!str_contains('/', key))
             return false;
@@ -86,7 +86,7 @@ public:
     }
 
     template<typename T>
-    bool setValue(const std::string &key, const T &data, size_t index = 0)
+    const bool setValue(const std::string &key, const T &data, const size_t index = 0)
     {
         if (!str_contains('/', key))
             return false;
@@ -112,7 +112,7 @@ public:
         return false;
     }
 
-    size_t arraySize(const std::string &section);
+    const size_t arraySize(const std::string &section);
 
 private:
     C_DISABLE_COPY(CSettings)
@@ -120,11 +120,11 @@ private:
     void eraseArray(const std::string &section);
     void eraseProperties(const std::string &section);
 
-    bool isPropertiesTreeContains(const std::string &section, const std::string &name);
-    bool isArraysTreeContains(const std::string &section, size_t index, const std::string &name);
+    const bool isPropertiesTreeContains(const std::string &section, const std::string &name);
+    const bool isArraysTreeContains(const std::string &section, const size_t index, const std::string &name);
 
-    static bool isProperties(const std::string &line);
-    static bool isArray(const std::string &line);
+    static const bool isProperties(const std::string &line);
+    static const bool isArray(const std::string &line);
 
     csettings_properties_tree m_propertiesTree;
     csettings_arrays_tree m_arraysTree;

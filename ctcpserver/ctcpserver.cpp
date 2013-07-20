@@ -41,17 +41,17 @@ CTcpServer::~CTcpServer()
     serverinfo_free(m_serverinfo);
 }
 
-void CTcpServer::setAcceptHandler(const std::function<void (serverinfo *, c_fdptr)> &handler)
+void CTcpServer::setAcceptHandler(const std::function<void (serverinfo *, const c_fdptr)> &handler)
 {
     serverinfo_set_accept_handler(m_serverinfo, handler);
 }
 
-void CTcpServer::setAcceptErrorHandler(const std::function<void (serverinfo *, c_int32)> &handler)
+void CTcpServer::setAcceptErrorHandler(const std::function<void (serverinfo *, const c_int32)> &handler)
 {
     serverinfo_set_accept_error_handler(m_serverinfo, handler);
 }
 
-void CTcpServer::setEnable(bool enable)
+void CTcpServer::setEnable(const bool enable)
 {
     if (!isListening())
         return;
@@ -62,12 +62,12 @@ void CTcpServer::setEnable(bool enable)
         evconnlistener_disable(serverinfo_get_evconnlistener(m_serverinfo));
 }
 
-bool CTcpServer::isListening() const
+const bool CTcpServer::isListening() const
 {
     return serverinfo_get_evconnlistener(m_serverinfo) != nullptr;
 }
 
-bool CTcpServer::listen(const std::string &address, c_uint16 port, c_int32 backlog)
+const bool CTcpServer::listen(const std::string &address, const c_uint16 port, const c_int32 backlog)
 {
     if (isListening())
         return false;
@@ -77,7 +77,7 @@ bool CTcpServer::listen(const std::string &address, c_uint16 port, c_int32 backl
     return isListening();
 }
 
-bool CTcpServer::close()
+const bool CTcpServer::close()
 {
     if (!isListening())
         return false;
@@ -87,17 +87,17 @@ bool CTcpServer::close()
     return isListening();
 }
 
-std::string CTcpServer::address() const
+const std::string CTcpServer::address() const
 {
     return CEventDispatcher::instance()->socketAddress(socketDescriptor());
 }
 
-std::string CTcpServer::errorString() const
+const std::string CTcpServer::errorString() const
 {
     return evutil_socket_error_to_string(error());
 }
 
-c_fdptr CTcpServer::socketDescriptor() const
+const c_fdptr CTcpServer::socketDescriptor() const
 {
     if (!isListening())
         return 0;
@@ -105,7 +105,7 @@ c_fdptr CTcpServer::socketDescriptor() const
     return evconnlistener_get_fd(serverinfo_get_evconnlistener(m_serverinfo));
 }
 
-c_int32 CTcpServer::error() const
+const c_int32 CTcpServer::error() const
 {
     c_fdptr fd = socketDescriptor();
     if (fd == 0)
@@ -114,7 +114,7 @@ c_int32 CTcpServer::error() const
     return evutil_socket_geterror(fd);
 }
 
-c_uint16 CTcpServer::port() const
+const c_uint16 CTcpServer::port() const
 {
     return CEventDispatcher::instance()->socketPort(socketDescriptor());
 }

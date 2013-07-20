@@ -34,7 +34,7 @@
 #pragma warning(disable:4996)
 #endif
 
-bool lexical_cast(const std::string &data, c_int8 &out)
+const bool lexical_cast(const std::string &data, c_int8 &out)
 {
     if (data.empty())
         return false;
@@ -44,7 +44,7 @@ bool lexical_cast(const std::string &data, c_int8 &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, c_int16 &out)
+const bool lexical_cast(const std::string &data, c_int16 &out)
 {
     if (data.empty())
         return false;
@@ -54,7 +54,7 @@ bool lexical_cast(const std::string &data, c_int16 &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, c_int32 &out)
+const bool lexical_cast(const std::string &data, c_int32 &out)
 {
     if (data.empty())
         return false;
@@ -64,7 +64,7 @@ bool lexical_cast(const std::string &data, c_int32 &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, c_int64 &out)
+const bool lexical_cast(const std::string &data, c_int64 &out)
 {
     if (data.empty())
         return false;
@@ -74,7 +74,7 @@ bool lexical_cast(const std::string &data, c_int64 &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, c_long &out)
+const bool lexical_cast(const std::string &data, c_long &out)
 {
     if (data.empty())
         return false;
@@ -84,7 +84,7 @@ bool lexical_cast(const std::string &data, c_long &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, c_uint8 &out)
+const bool lexical_cast(const std::string &data, c_uint8 &out)
 {
     if (data.empty())
         return false;
@@ -94,7 +94,7 @@ bool lexical_cast(const std::string &data, c_uint8 &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, c_uint16 &out)
+const bool lexical_cast(const std::string &data, c_uint16 &out)
 {
     if (data.empty())
         return false;
@@ -104,7 +104,7 @@ bool lexical_cast(const std::string &data, c_uint16 &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, c_uint32 &out)
+const bool lexical_cast(const std::string &data, c_uint32 &out)
 {
     if (data.empty())
         return false;
@@ -114,7 +114,7 @@ bool lexical_cast(const std::string &data, c_uint32 &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, c_uint64 &out)
+const bool lexical_cast(const std::string &data, c_uint64 &out)
 {
     if (data.empty())
         return false;
@@ -124,7 +124,7 @@ bool lexical_cast(const std::string &data, c_uint64 &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, c_ulong &out)
+const bool lexical_cast(const std::string &data, c_ulong &out)
 {
     if (data.empty())
         return false;
@@ -134,7 +134,7 @@ bool lexical_cast(const std::string &data, c_ulong &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, bool &out)
+const bool lexical_cast(const std::string &data, bool &out)
 {
     if (data.empty())
         return false;
@@ -144,7 +144,7 @@ bool lexical_cast(const std::string &data, bool &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, float &out)
+const bool lexical_cast(const std::string &data, float &out)
 {
     if (data.empty())
         return false;
@@ -154,7 +154,7 @@ bool lexical_cast(const std::string &data, float &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, double &out)
+const bool lexical_cast(const std::string &data, double &out)
 {
     if (data.empty())
         return false;
@@ -164,7 +164,7 @@ bool lexical_cast(const std::string &data, double &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, long double &out)
+const bool lexical_cast(const std::string &data, long double &out)
 {
     if (data.empty())
         return false;
@@ -174,126 +174,126 @@ bool lexical_cast(const std::string &data, long double &out)
     return true;
 }
 
-bool lexical_cast(const std::string &data, std::wstring &out)
+const bool lexical_cast(const std::string &data, std::wstring &out)
 {
     out = to_wstring(data);
 
     return true;
 }
 
-bool lexical_cast(c_int8 data, std::string &out)
+const bool lexical_cast(const c_int8 data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(c_int16 data, std::string &out)
+const bool lexical_cast(const c_int16 data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(c_int32 data, std::string &out)
+const bool lexical_cast(const c_int32 data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(c_int64 data, std::string &out)
+const bool lexical_cast(const c_int64 data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(c_long data, std::string &out)
+const bool lexical_cast(const c_long data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(c_uint8 data, std::string &out)
+const bool lexical_cast(const c_uint8 data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(c_uint16 data, std::string &out)
+const bool lexical_cast(const c_uint16 data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(c_uint32 data, std::string &out)
+const bool lexical_cast(const c_uint32 data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(c_uint64 data, std::string &out)
+const bool lexical_cast(const c_uint64 data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(c_ulong data, std::string &out)
+const bool lexical_cast(const c_ulong data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(bool data, std::string &out)
+const bool lexical_cast(const bool data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(float data, std::string &out)
+const bool lexical_cast(const float data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(double data, std::string &out)
+const bool lexical_cast(const double data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(long double data, std::string &out)
+const bool lexical_cast(const long double data, std::string &out)
 {
     out = std::to_string(data);
 
     return true;
 }
 
-bool lexical_cast(const std::string &data, std::string &out)
+const bool lexical_cast(const std::string &data, std::string &out)
 {
     out = data;
 
     return true;
 }
 
-bool lexical_cast(const std::wstring &data, std::string &out)
+const bool lexical_cast(const std::wstring &data, std::string &out)
 {
     out = to_string(data);
 
     return true;
 }
 
-bool str_contains(char c, const std::string &str)
+const bool str_contains(const char c, const std::string &str)
 {
     size_t pos = str.find(c);
 
@@ -303,7 +303,7 @@ bool str_contains(char c, const std::string &str)
     return true;
 }
 
-std::string str_left(char c, const std::string &str)
+const std::string str_left(const char c, const std::string &str)
 {
     size_t pos = str.find(c);
 
@@ -313,7 +313,7 @@ std::string str_left(char c, const std::string &str)
     return str.substr(0, pos);
 }
 
-std::string str_right(char c, const std::string &str)
+const std::string str_right(const char c, const std::string &str)
 {
     size_t pos = str.find(c);
 
@@ -323,7 +323,7 @@ std::string str_right(char c, const std::string &str)
     return str.substr(pos + 1);
 }
 
-std::string str_take_left(char c, std::string &str)
+const std::string str_take_left(const char c, std::string &str)
 {
     size_t pos = str.find(c);
 
@@ -337,7 +337,7 @@ std::string str_take_left(char c, std::string &str)
     return result;
 }
 
-std::string str_take_right(char c, std::string &str)
+const std::string str_take_right(const char c, std::string &str)
 {
     size_t pos = str.find(c);
 
@@ -351,7 +351,7 @@ std::string str_take_right(char c, std::string &str)
     return result;
 }
 
-std::string to_hex(const unsigned char *data, size_t len)
+const std::string to_hex(const unsigned char *data, const size_t len)
 {
     std::stringstream stream;
     for (size_t ix = 0; ix < len; ++ix)
@@ -360,7 +360,7 @@ std::string to_hex(const unsigned char *data, size_t len)
     return stream.str();
 }
 
-std::string to_string(const std::wstring &data)
+const std::string to_string(const std::wstring &data)
 {
     size_t in_len = data.length();
     size_t out_len = 0;
@@ -375,7 +375,7 @@ std::string to_string(const std::wstring &data)
     return result;
 }
 
-std::string to_string(const wchar_t *data)
+const std::string to_string(const wchar_t *data)
 {
     size_t in_len = std::char_traits<wchar_t>::length(data);
     size_t out_len = 0;
@@ -390,7 +390,7 @@ std::string to_string(const wchar_t *data)
     return result;
 }
 
-std::wstring to_wstring(const std::string &data)
+const std::wstring to_wstring(const std::string &data)
 {
     size_t in_len = data.length();
     size_t out_len = 0;
@@ -405,7 +405,7 @@ std::wstring to_wstring(const std::string &data)
     return result;
 }
 
-std::wstring to_wstring(const char *data)
+const std::wstring to_wstring(const char *data)
 {
     size_t in_len = std::char_traits<char>::length(data);
     size_t out_len = 0;

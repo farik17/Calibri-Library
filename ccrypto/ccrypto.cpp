@@ -91,7 +91,7 @@ void SHA512_hash(const std::string &data, unsigned char *hash)
     SHA512_Final(hash, &sha512_ctx);
 }
 
-std::string AES256_cbc_encrypt(const std::string &data, const std::string &key, const std::string &iv)
+const std::string AES256_cbc_encrypt(const std::string &data, const std::string &key, const std::string &iv)
 {
     c_int32 in_len = static_cast<c_int32>(data.size());
     c_int32 out_len = 0;
@@ -119,7 +119,7 @@ std::string AES256_cbc_encrypt(const std::string &data, const std::string &key, 
     return encrypted;
 }
 
-std::string AES256_cbc_decrypt(const std::string &data, const std::string &key, const std::string &iv)
+const std::string AES256_cbc_decrypt(const std::string &data, const std::string &key, const std::string &iv)
 {
     c_int32 in_len = static_cast<c_int32>(data.size());
     c_int32 out_len = 0;

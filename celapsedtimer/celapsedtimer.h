@@ -48,16 +48,16 @@ public:
     void start();
     void reset();
 
-    c_uint64 restart(Metrics metrics = Miliseconds);
-    c_uint64 elapsed(Metrics metrics = Miliseconds);
+    const c_uint64 restart(const Metrics metrics = Miliseconds);
+    const c_uint64 elapsed(const Metrics metrics = Miliseconds);
 
-    bool isStarted() const;
-    bool hasExpired(c_uint64 timeout, Metrics metrics = Miliseconds);
+    const bool isStarted() const;
+    const bool hasExpired(const c_uint64 timeout, const Metrics metrics = Miliseconds);
 
 private:
     C_DISABLE_COPY(CElapsedTimer)
 
-    c_uint64 calculateElapsed(Metrics metrics = Miliseconds);
+    const c_uint64 calculateElapsed(const Metrics metrics = Miliseconds);
 
     std::chrono::steady_clock::time_point m_startPoint;
 

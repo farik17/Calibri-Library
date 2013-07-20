@@ -41,7 +41,7 @@ void SHA256_hash(const std::string &data, unsigned char *hash);
 void SHA384_hash(const std::string &data, unsigned char *hash);
 void SHA512_hash(const std::string &data, unsigned char *hash);
 
-std::string AES256_cbc_encrypt(const std::string &data, const std::string &key, const std::string &iv = "aes_ivec");
-std::string AES256_cbc_decrypt(const std::string &data, const std::string &key, const std::string &iv = "aes_ivec");
+const std::string AES256_cbc_encrypt(const std::string &data, const std::string &key, const std::string &iv = "aes_ivec");
+const std::string AES256_cbc_decrypt(const std::string &data, const std::string &key, const std::string &iv = "aes_ivec");
 
 #endif // CCRYPTO_H
