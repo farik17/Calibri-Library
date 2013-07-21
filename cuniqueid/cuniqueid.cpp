@@ -43,6 +43,7 @@ const std::string cuniqueid_to_string(const c_uniqueid &uid)
 #       endif
         return std::string();
     }
+
     return to_string(reinterpret_cast<wchar_t *>(buffer));
 #   else
     c_uint8 *buffer = nullptr;
@@ -53,6 +54,7 @@ const std::string cuniqueid_to_string(const c_uniqueid &uid)
 #       endif
         return std::string();
     }
+
     return reinterpret_cast<char *>(buffer);
 #   endif
 #elif defined(__unix__) || defined(__linux__)
@@ -82,12 +84,14 @@ const c_int32 cuniqueid_generate(c_uniqueid &uid)
     default:
         break;
     }
+
     return result;
 #   else
     return UuidCreate(&uid);
 #   endif
 #elif defined(__unix__) || defined(__linux__)
     uuid_generate(uid);
+
     return 0;
 #else
 #   error platform not supported

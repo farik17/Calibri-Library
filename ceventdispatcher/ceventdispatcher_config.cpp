@@ -58,6 +58,7 @@ const c_int32 CEventDispatcherConfig::setFeatures(const c_uint16 methodFeatures)
     int result = event_config_require_features(m_event_config, features);
     if (result != 0)
         C_DEBUG("invalid or platform specific features");
+
     return result;
 #else
     return event_config_require_features(m_event_config, features);
@@ -83,6 +84,7 @@ const c_int32 CEventDispatcherConfig::setFlags(const c_uint16 configFlags)
     int result = event_config_set_flag(m_event_config, flags);
     if (result != 0)
         C_DEBUG("invalid or platform specific flags");
+
     return result;
 #else
     return event_config_set_flag(m_event_config, flags);
@@ -95,6 +97,7 @@ const c_int32 CEventDispatcherConfig::avoidMethod(const std::string &method)
     int result = event_config_avoid_method(m_event_config, method.c_str());
     if (result != 0)
         C_DEBUG("invalid method");
+
     return result;
 #else
     return event_config_avoid_method(m_event_config, method.c_str());

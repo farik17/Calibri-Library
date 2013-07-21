@@ -39,6 +39,7 @@ timerinfo *timerinfo_new()
     timer_info->ev = nullptr;
     timer_info->ctx = nullptr;
     timer_info->timer_handler = nullptr;
+
     return timer_info;
 }
 
@@ -97,6 +98,7 @@ sslinfo *sslinfo_new()
     ssl_info->ssl_peer_verify_mode = VerifyPeer;
     ssl_info->encrypted_handler = nullptr;
     ssl_info->ssl_error_handler = nullptr;
+
     return ssl_info;
 }
 
@@ -189,6 +191,7 @@ socketinfo *socketinfo_new()
     socket_info->disconnected_handler = nullptr;
     socket_info->read_handler = nullptr;
     socket_info->error_handler = nullptr;
+
     return socket_info;
 }
 
@@ -293,6 +296,7 @@ serverinfo *serverinfo_new()
     server_info->ctx = nullptr;
     server_info->accept_handler = nullptr;
     server_info->accept_error_handler = nullptr;
+
     return server_info;
 }
 

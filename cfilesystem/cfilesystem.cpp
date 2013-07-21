@@ -58,6 +58,7 @@ const c_int32 cfilesystem_create_path(const std::string &path)
 
         if (current_path == PARENT_DIR) {
             path_tree_it = path_tree.erase(path_tree_it);
+
             continue;
         }
 
@@ -108,6 +109,7 @@ const c_int32 cfilesystem_remove_path(const std::string &path)
 
         if (current_path == PARENT_DIR) {
             path_tree_it = decltype(path_tree_it)(path_tree.erase(path_tree_it.base() - 1));
+
             continue;
         }
 
@@ -174,6 +176,7 @@ void cfilesystem_normalize_path_tree(cfilesystem_path_tree &path_tree)
             auto prev_path_tree_it = path_tree_it - 1;
             if ((*prev_path_tree_it) != DOT_DOT) {
                 path_tree_it = path_tree.erase(prev_path_tree_it, path_tree_it + 1);
+
                 continue;
             }
         }

@@ -155,6 +155,7 @@ const c_int32 SSL_init()
     int result = RAND_poll();
     if (result != 1)
         C_DEBUG("failed ssl rand poll");
+
     return result;
 #else
     return RAND_poll();
@@ -169,6 +170,7 @@ const c_int32 SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certi
         int result = SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_PEM);
         if (result != 1)
             C_DEBUG("invalid certificate path");
+
         return result;
 #else
         return SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_PEM);
@@ -180,6 +182,7 @@ const c_int32 SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certi
         int result = SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_ASN1);
         if (result != 1)
             C_DEBUG("invalid certificate path");
+
         return result;
 #else
         return SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_ASN1);
@@ -192,6 +195,7 @@ const c_int32 SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certi
 #endif
         break;
     }
+
     return 0;
 }
 
@@ -203,6 +207,7 @@ const c_int32 SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &priva
         int result = SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_PEM);
         if (result != 1)
             C_DEBUG("invalid private key path");
+
         return result;
 #else
         return SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_PEM);
@@ -214,6 +219,7 @@ const c_int32 SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &priva
         int result = SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_ASN1);
         if (result != 1)
             C_DEBUG("invalid private key path");
+
         return result;
 #else
         return SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_ASN1);
@@ -226,6 +232,7 @@ const c_int32 SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &priva
 #endif
         break;
     }
+
     return 0;
 }
 
@@ -239,6 +246,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
             int result = SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_server_method());
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
+
             return result;
 #else
             return SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_server_method());
@@ -250,6 +258,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
             int result = SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_client_method());
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
+
             return result;
 #else
             return SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_client_method());
@@ -271,6 +280,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
             int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_server_method());
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
+
             return result;
 #else
             return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_server_method());
@@ -282,6 +292,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
             int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_client_method());
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
+
             return result;
 #else
             return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_client_method());
@@ -303,6 +314,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
             int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_server_method());
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
+
             return result;
 #else
             return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_server_method());
@@ -314,6 +326,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
             int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_client_method());
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
+
             return result;
 #else
             return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_client_method());
@@ -335,6 +348,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
             int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_server_method());
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
+
             return result;
 #else
             return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_server_method());
@@ -346,6 +360,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
             int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_client_method());
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
+
             return result;
 #else
             return SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_client_method());
@@ -366,5 +381,6 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
 #endif
         break;
     }
+
     return 0;
 }

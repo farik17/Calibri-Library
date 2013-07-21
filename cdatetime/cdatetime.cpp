@@ -59,12 +59,14 @@ const tm cdatetime_to_tm(const time_t &_time, const bool utc)
 const tm cdatetime_get_current_time_local_tm()
 {
     time_t current_time = time(0);
+
     return *localtime(&current_time);
 }
 
 const tm cdatetime_get_current_time_utc_tm()
 {
     time_t current_time = time(0);
+
     return *gmtime(&current_time);
 }
 
@@ -76,6 +78,7 @@ const time_t cdatetime_get_current_time_local_time_t()
 const time_t cdatetime_get_current_time_utc_time_t()
 {
     time_t current_time = time(0);
+
     return cdatetime_to_time_t(*gmtime(&current_time));
 }
 

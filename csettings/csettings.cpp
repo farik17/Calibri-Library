@@ -58,6 +58,7 @@ const bool CSettings::save()
         if (!isProperties(section)) {
             eraseProperties(section);
             ++propertySectionIt;
+
             continue;
         }
 
@@ -89,6 +90,7 @@ const bool CSettings::save()
         if (!isArray(section)) {
             eraseArray(section);
             ++arraySectionIt;
+
             continue;
         }
 
@@ -153,12 +155,14 @@ const bool CSettings::load()
         if (isProperties(line)) {
             m_propertiesTree[line] = csettings_properties();
             currentSection = line;
+
             continue;
         }
 
         if (isArray(line)) {
             m_arraysTree[line] = csettings_array();
             currentSection = line;
+
             continue;
         }
 
@@ -167,6 +171,7 @@ const bool CSettings::load()
 
         if (isProperties(currentSection)) {
             m_propertiesTree[currentSection][str_left('=', line)] = str_right('=', line);
+
             continue;
         }
 
@@ -208,6 +213,7 @@ const bool CSettings::load()
                 if (!str_contains('=', line))
                     break;
             } while(true);
+
             continue;
         }
     }

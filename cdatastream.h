@@ -45,12 +45,14 @@ inline const size_t cdatastream_write(std::string &dest, const char *source, siz
 {
     dest.replace(pos, len, source, len);
     pos += len;
+
     return len;
 }
 
 inline const size_t cdatastream_write(CTcpSocket &dest, const char *source, size_t &pos, const size_t len)
 {
     C_UNUSED(pos);
+
     return dest.write(source, len);
 }
 
@@ -58,12 +60,14 @@ inline const size_t cdatastream_read(std::string &source, char *dest, size_t &po
 {
     size_t bytes = source.copy(dest, len, pos);
     pos += bytes;
+
     return bytes;
 }
 
 inline const size_t cdatastream_read(CTcpSocket &source, char *dest, size_t &pos, const size_t len)
 {
     C_UNUSED(pos);
+
     return source.read(dest, len);
 }
 
@@ -91,84 +95,98 @@ public:
     inline CDataStream<T> &operator <<(const c_int8 value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_int8));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const c_int16 value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_int16));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const c_int32 value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_int32));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const c_int64 value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_int64));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const c_long value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_long));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const c_uint8 value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_uint8));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const c_uint16 value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_uint16));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const c_uint32 value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_uint32));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const c_uint64 value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_uint64));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const c_ulong value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(c_ulong));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const bool value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(bool));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const float value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(float));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const double value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(double));
+
         return *this;
     }
 
     inline CDataStream<T> &operator <<(const long double value)
     {
         cdatastream_write(m_data, reinterpret_cast<const char *>(&value), m_pos, sizeof(long double));
+
         return *this;
     }
 
@@ -203,84 +221,98 @@ public:
     inline CDataStream<T> &operator >>(c_int8 &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_int8));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(c_int16 &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_int16));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(c_int32 &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_int32));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(c_int64 &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_int64));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(c_long &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_long));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(c_uint8 &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_uint8));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(c_uint16 &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_uint16));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(c_uint32 &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_uint32));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(c_uint64 &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_uint64));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(c_ulong &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(c_ulong));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(bool &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(bool));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(float &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(float));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(double &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(double));
+
         return *this;
     }
 
     inline CDataStream<T> &operator >>(long double &value)
     {
         cdatastream_read(m_data, reinterpret_cast<char *>(&value), m_pos, sizeof(long double));
+
         return *this;
     }
 

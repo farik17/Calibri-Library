@@ -224,6 +224,7 @@ void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &ad
 
     default:
         evutil_freeaddrinfo(addr_info);
+
         return;
     }
 
@@ -295,6 +296,7 @@ const c_int32 CEventDispatcher::execute()
     int result = event_base_dispatch(m_event_base);
     if (result != 0)
         C_DEBUG("internal error");
+
     return result;
 #else
     return event_base_dispatch(m_event_base);
@@ -329,6 +331,7 @@ const c_int32 CEventDispatcher::execute(const EventLoopFlag eventLoopFlag)
     int result = event_base_loop(m_event_base, flag);
     if (result != 0)
         C_DEBUG("internal error");
+
     return result;
 #else
     return event_base_loop(m_event_base, flag);
@@ -341,6 +344,7 @@ const c_int32 CEventDispatcher::terminate()
     int result = event_base_loopbreak(m_event_base);
     if (result != 0)
         C_DEBUG("internal error");
+
     return result;
 #else
     return event_base_loopbreak(m_event_base);
@@ -370,12 +374,14 @@ const std::string CEventDispatcher::socketAddress(const c_fdptr fd)
     case AF_INET: {
         char addr[AF_INET_LENGTH];
         evutil_inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in *>(&sa_stor)->sin_addr, addr, AF_INET_LENGTH);
+
         return addr;
     }
 
     case AF_INET6: {
         char addr[AF_INET6_LENGTH];
         evutil_inet_ntop(AF_INET6, &reinterpret_cast<sockaddr_in6 *>(&sa_stor)->sin6_addr, addr, AF_INET6_LENGTH);
+
         return addr;
     }
 
@@ -539,6 +545,7 @@ void CEventDispatcher::eventNotification(bufferevent *buffer_event, const c_int1
             if (connected_handler)
                 connected_handler(socket_info);
         }
+
         return;
     }
 
