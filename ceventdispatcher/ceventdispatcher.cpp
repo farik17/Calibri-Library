@@ -216,10 +216,12 @@ void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &ad
     switch (addr_info->ai_family) {
     case AF_INET:
         ev_conn_listener = evconnlistener_new_bind(m_event_base, CEventDispatcher::acceptNotification, server_info, (LEV_OPT_CLOSE_ON_FREE | LEV_OPT_REUSEABLE), backlog, addr_info->ai_addr, static_cast<c_int32>(sizeof(sockaddr_in)));
+
         break;
 
     case AF_INET6:
         ev_conn_listener = evconnlistener_new_bind(m_event_base, CEventDispatcher::acceptNotification, server_info, (LEV_OPT_CLOSE_ON_FREE | LEV_OPT_REUSEABLE), backlog, addr_info->ai_addr, static_cast<c_int32>(sizeof(sockaddr_in6)));
+
         break;
 
     default:
@@ -310,14 +312,17 @@ const c_int32 CEventDispatcher::execute(const EventLoopFlag eventLoopFlag)
     switch (eventLoopFlag) {
     case Once:
         flag = EVLOOP_ONCE;
+
         break;
 
     case NonBlock:
         flag = EVLOOP_NONBLOCK;
+
         break;
 
     case NoExitOnEmpty:
         flag = EVLOOP_NO_EXIT_ON_EMPTY;
+
         break;
 
     default:

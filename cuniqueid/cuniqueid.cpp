@@ -75,10 +75,12 @@ const c_int32 cuniqueid_generate(c_uniqueid &uid)
     switch (result) {
     case RPC_S_UUID_LOCAL_ONLY:
         C_DEBUG("c_uniqueid is guaranteed to be unique to this computer only");
+
         break;
 
     case RPC_S_UUID_NO_ADDRESS:
         C_DEBUG("cannot get Ethernet or token-ring hardware address for this computer");
+
         break;
 
     default:

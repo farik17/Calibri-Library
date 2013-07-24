@@ -198,6 +198,7 @@ const bool CSettings::load()
 
                     m_propertiesTree[line] = csettings_properties();
                     currentSection = line;
+
                     break;
                 }
 
@@ -207,6 +208,7 @@ const bool CSettings::load()
 
                     m_arraysTree[line] = csettings_array();
                     currentSection = line;
+
                     break;
                 }
 

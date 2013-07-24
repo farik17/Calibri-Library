@@ -36,10 +36,12 @@ void SSL_CTX_set_peer_verify_mode(SSL_CTX *ssl_ctx, const CSSLPeerVerifyMode ssl
     switch (sslPeerVerifyMode) {
     case VerifyNone:
         SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_NONE, nullptr);
+
         break;
 
     case VerifyPeer:
         SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, nullptr);
+
         break;
 
     default:
@@ -59,10 +61,12 @@ SSL_CTX *SSL_CTX_create(const CSSLProtocol sslProtocol, const CSSLMode sslMode, 
         switch (sslMode) {
         case ServerMode:
             ssl_ctx = SSL_CTX_new(SSLv3_server_method());
+
             break;
 
         case ClientMode:
             ssl_ctx = SSL_CTX_new(SSLv3_client_method());
+
             break;
 
         default:
@@ -71,16 +75,19 @@ SSL_CTX *SSL_CTX_create(const CSSLProtocol sslProtocol, const CSSLMode sslMode, 
 #endif
             return nullptr;
         }
+
         break;
 
     case TLSv1_0:
         switch (sslMode) {
         case ServerMode:
             ssl_ctx = SSL_CTX_new(TLSv1_server_method());
+
             break;
 
         case ClientMode:
             ssl_ctx = SSL_CTX_new(TLSv1_client_method());
+
             break;
 
         default:
@@ -89,16 +96,19 @@ SSL_CTX *SSL_CTX_create(const CSSLProtocol sslProtocol, const CSSLMode sslMode, 
 #endif
             return nullptr;
         }
+
         break;
 
     case TLSv1_1:
         switch (sslMode) {
         case ServerMode:
             ssl_ctx = SSL_CTX_new(TLSv1_1_server_method());
+
             break;
 
         case ClientMode:
             ssl_ctx = SSL_CTX_new(TLSv1_1_client_method());
+
             break;
 
         default:
@@ -107,16 +117,19 @@ SSL_CTX *SSL_CTX_create(const CSSLProtocol sslProtocol, const CSSLMode sslMode, 
 #endif
             return nullptr;
         }
+
         break;
 
     case TLSv1_2:
         switch (sslMode) {
         case ServerMode:
             ssl_ctx = SSL_CTX_new(TLSv1_2_server_method());
+
             break;
 
         case ClientMode:
             ssl_ctx = SSL_CTX_new(TLSv1_2_client_method());
+
             break;
 
         default:
@@ -125,6 +138,7 @@ SSL_CTX *SSL_CTX_create(const CSSLProtocol sslProtocol, const CSSLMode sslMode, 
 #endif
             return nullptr;
         }
+
         break;
 
     default:
@@ -271,6 +285,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
 #endif
             break;
         }
+
         break;
 
     case TLSv1_0:
@@ -305,6 +320,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
 #endif
             break;
         }
+
         break;
 
     case TLSv1_1:
@@ -339,6 +355,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
 #endif
             break;
         }
+
         break;
 
     case TLSv1_2:
@@ -373,6 +390,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
 #endif
             break;
         }
+
         break;
 
     default:
