@@ -303,7 +303,7 @@ const bool str_contains(const char c, const std::string &str)
     return true;
 }
 
-const std::string str_left(const char c, const std::string &str)
+std::string str_left(const char c, const std::string &str)
 {
     size_t pos = str.find(c);
 
@@ -313,7 +313,7 @@ const std::string str_left(const char c, const std::string &str)
     return str.substr(0, pos);
 }
 
-const std::string str_right(const char c, const std::string &str)
+std::string str_right(const char c, const std::string &str)
 {
     size_t pos = str.find(c);
 
@@ -323,7 +323,7 @@ const std::string str_right(const char c, const std::string &str)
     return str.substr(pos + 1);
 }
 
-const std::string str_take_left(const char c, std::string &str)
+std::string str_take_left(const char c, std::string &str)
 {
     size_t pos = str.find(c);
 
@@ -337,7 +337,7 @@ const std::string str_take_left(const char c, std::string &str)
     return result;
 }
 
-const std::string str_take_right(const char c, std::string &str)
+std::string str_take_right(const char c, std::string &str)
 {
     size_t pos = str.find(c);
 
@@ -351,7 +351,7 @@ const std::string str_take_right(const char c, std::string &str)
     return result;
 }
 
-const std::string to_hex(const unsigned char *data, const size_t len)
+std::string to_hex(const unsigned char *data, const size_t len)
 {
     std::stringstream stream;
     for (size_t ix = 0; ix < len; ++ix)
@@ -360,7 +360,7 @@ const std::string to_hex(const unsigned char *data, const size_t len)
     return stream.str();
 }
 
-const std::string to_string(const std::wstring &data)
+std::string to_string(const std::wstring &data)
 {
     size_t in_len = data.length();
     size_t out_len = 0;
@@ -375,7 +375,7 @@ const std::string to_string(const std::wstring &data)
     return result;
 }
 
-const std::string to_string(const wchar_t *data)
+std::string to_string(const wchar_t *data)
 {
     size_t in_len = std::char_traits<wchar_t>::length(data);
     size_t out_len = 0;
@@ -390,7 +390,7 @@ const std::string to_string(const wchar_t *data)
     return result;
 }
 
-const std::wstring to_wstring(const std::string &data)
+std::wstring to_wstring(const std::string &data)
 {
     size_t in_len = data.length();
     size_t out_len = 0;
@@ -405,7 +405,7 @@ const std::wstring to_wstring(const std::string &data)
     return result;
 }
 
-const std::wstring to_wstring(const char *data)
+std::wstring to_wstring(const char *data)
 {
     size_t in_len = std::char_traits<char>::length(data);
     size_t out_len = 0;

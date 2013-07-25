@@ -362,7 +362,7 @@ void CEventDispatcher::initialize(CEventDispatcherConfig *config)
         m_eventDispatcher = new CEventDispatcher(config);
 }
 
-const std::string CEventDispatcher::socketAddress(const c_fdptr fd)
+std::string CEventDispatcher::socketAddress(const c_fdptr fd)
 {
     sockaddr_storage sa_stor;
     size_t sa_stor_len = sizeof(sockaddr_storage);

@@ -155,7 +155,7 @@ const cfilesystem_path_tree cfilesystem_parse_path(const std::string &path)
     return path_tree;
 }
 
-const std::string cfilesystem_path_tree_to_string(const cfilesystem_path_tree &path_tree)
+std::string cfilesystem_path_tree_to_string(const cfilesystem_path_tree &path_tree)
 {
     std::string path;
 

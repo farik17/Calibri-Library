@@ -87,12 +87,12 @@ const bool CTcpServer::close()
     return isListening();
 }
 
-const std::string CTcpServer::address() const
+std::string CTcpServer::address() const
 {
     return CEventDispatcher::instance()->socketAddress(socketDescriptor());
 }
 
-const std::string CTcpServer::errorString() const
+std::string CTcpServer::errorString() const
 {
     return evutil_socket_error_to_string(error());
 }

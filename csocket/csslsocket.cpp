@@ -99,7 +99,7 @@ void CSslSocket::setSslPrivateKey(const std::string &privateKeyPath, const CSSLF
     SSL_CTX_set_private_key(sslinfo_get_ssl_ctx(socketinfo_get_sslinfo(m_socketinfo)), privateKeyPath, fileType);
 }
 
-const std::string CSslSocket::sslErrorString() const
+std::string CSslSocket::sslErrorString() const
 {
     return ERR_error_string(sslError(), nullptr);
 }

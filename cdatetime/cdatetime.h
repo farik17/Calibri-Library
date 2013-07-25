@@ -36,8 +36,8 @@
 #pragma warning(disable:4996)
 #endif
 
-const std::string cdatetime_to_string(const time_t &_time, const std::string &format, const bool utc = true);
-const std::string cdatetime_to_string(const tm &_tm, const std::string &format);
+std::string cdatetime_to_string(const time_t &_time, const std::string &format, const bool utc = true);
+std::string cdatetime_to_string(const tm &_tm, const std::string &format);
 
 const time_t cdatetime_to_time_t(tm &_tm);
 const tm cdatetime_to_tm(const time_t &_time, const bool utc = true);

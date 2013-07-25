@@ -42,8 +42,8 @@ public:
     const bool listen(const std::string &address, const c_uint16 port, const c_int32 backlog = -1);
     const bool close();
 
-    const std::string address() const;
-    const std::string errorString() const;
+    std::string address() const;
+    std::string errorString() const;
 
     const c_fdptr socketDescriptor() const;
 

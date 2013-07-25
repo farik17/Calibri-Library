@@ -61,7 +61,7 @@ public:
 
     static void initialize(CEventDispatcherConfig *config);
 
-    static const std::string socketAddress(const c_fdptr fd);
+    static std::string socketAddress(const c_fdptr fd);
 
     static CEventDispatcher *instance();
 

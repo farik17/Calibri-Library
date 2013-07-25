@@ -41,8 +41,8 @@ public:
     void connectToHost(const std::string &address, const c_uint16 port);
     void close(const bool force = false);
 
-    const std::string address() const;
-    const std::string errorString() const;
+    std::string address() const;
+    std::string errorString() const;
 
     const size_t bytesAvailable() const;
     const size_t write(const char *data, const size_t len);

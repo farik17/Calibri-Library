@@ -25,7 +25,7 @@
 //! Self Includes
 #include "cdatetime.h"
 
-const std::string cdatetime_to_string(const time_t &_time, const std::string &format, const bool utc)
+std::string cdatetime_to_string(const time_t &_time, const std::string &format, const bool utc)
 {
     tm tm_time = cdatetime_to_tm(_time, utc);
 
@@ -35,7 +35,7 @@ const std::string cdatetime_to_string(const time_t &_time, const std::string &fo
     return date_buffer;
 }
 
-const std::string cdatetime_to_string(const tm &_tm, const std::string &format)
+std::string cdatetime_to_string(const tm &_tm, const std::string &format)
 {
     char date_buffer[80];
     strftime(date_buffer, 80, format.c_str(), &_tm);

@@ -82,12 +82,12 @@ void CTcpSocket::close(const bool force)
     CEventDispatcher::instance()->closeSocket(m_socketinfo, force);
 }
 
-const std::string CTcpSocket::address() const
+std::string CTcpSocket::address() const
 {
     return CEventDispatcher::socketAddress(socketDescriptor());
 }
 
-const std::string CTcpSocket::errorString() const
+std::string CTcpSocket::errorString() const
 {
     return evutil_socket_error_to_string(error());
 }

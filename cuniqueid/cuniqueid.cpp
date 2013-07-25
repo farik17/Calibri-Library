@@ -31,7 +31,7 @@
 //! CUtils Includes
 #include "cutils.h"
 
-const std::string cuniqueid_to_string(const c_uniqueid &uid)
+std::string cuniqueid_to_string(const c_uniqueid &uid)
 {
 #if defined(_WIN32)
 #   if defined(UNICODE)

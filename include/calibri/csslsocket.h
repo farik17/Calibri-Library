@@ -42,7 +42,7 @@ public:
     void setSslCertificate(const std::string &certificatePath, const CSSLFileType fileType);
     void setSslPrivateKey(const std::string &privateKeyPath, const CSSLFileType fileType);
 
-    const std::string sslErrorString() const;
+    std::string sslErrorString() const;
 
     const c_ulong sslError() const;
 

@@ -65,17 +65,17 @@ const bool lexical_cast(const std::wstring &data, std::string &out);
 
 const bool str_contains(const char c, const std::string &str);
 
-const std::string str_left(const char c, const std::string &str);
-const std::string str_right(const char c, const std::string &str);
-const std::string str_take_left(const char c, std::string &str);
-const std::string str_take_right(const char c, std::string &str);
+std::string str_left(const char c, const std::string &str);
+std::string str_right(const char c, const std::string &str);
+std::string str_take_left(const char c, std::string &str);
+std::string str_take_right(const char c, std::string &str);
 
-const std::string to_hex(const unsigned char *data, const size_t len);
+std::string to_hex(const unsigned char *data, const size_t len);
 
-const std::string to_string(const std::wstring &data);
-const std::string to_string(const wchar_t *data);
+std::string to_string(const std::wstring &data);
+std::string to_string(const wchar_t *data);
 
-const std::wstring to_wstring(const std::string &data);
-const std::wstring to_wstring(const char *data);
+std::wstring to_wstring(const std::string &data);
+std::wstring to_wstring(const char *data);
 
 #endif // CUTILS_H
