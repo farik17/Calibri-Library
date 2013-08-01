@@ -32,9 +32,6 @@
 #   include <cstring>
 #endif
 
-//! Std Includes
-#include <iostream>
-
 //! LibEvent Includes
 #include <event2/listener.h>
 #include <event2/bufferevent_ssl.h>
@@ -67,8 +64,10 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
     bufferevent *buffer_event = nullptr;
 
     sslinfo *ssl_info = socketinfo_get_sslinfo(socket_info);
+
     if (ssl_info) {
         SSL *ssl = SSL_new(sslinfo_get_ssl_ctx(ssl_info));
+
         if (!ssl) {
 #if defined(DEBUG)
             C_DEBUG("failed to initialize ssl");
@@ -77,6 +76,7 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
         }
 
         buffer_event = bufferevent_openssl_socket_new(m_event_base, fd, ssl, BUFFEREVENT_SSL_ACCEPTING, BEV_OPT_CLOSE_ON_FREE);
+
         if (!buffer_event) {
             SSL_free(ssl);
 #if defined(DEBUG)
@@ -86,6 +86,7 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
         }
     } else {
         buffer_event = bufferevent_socket_new(m_event_base, fd, BEV_OPT_CLOSE_ON_FREE);
+
         if (!buffer_event) {
 #if defined(DEBUG)
             C_DEBUG("failed to initialize events");
@@ -99,6 +100,7 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
     c_int16 events = (EV_READ | EV_PERSIST);
 
     c_int32 features = event_base_get_features(m_event_base);
+
     if (features & EV_FEATURE_ET)
         events |= EV_ET;
 
@@ -119,8 +121,10 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
     bufferevent *buffer_event = nullptr;
 
     sslinfo *ssl_info = socketinfo_get_sslinfo(socket_info);
+
     if (ssl_info) {
         SSL *ssl = SSL_new(sslinfo_get_ssl_ctx(ssl_info));
+
         if (!ssl) {
 #if defined(DEBUG)
             C_DEBUG("failed to initialize ssl");
@@ -129,6 +133,7 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
         }
 
         buffer_event = bufferevent_openssl_socket_new(m_event_base, -1, ssl, BUFFEREVENT_SSL_CONNECTING, BEV_OPT_CLOSE_ON_FREE);
+
         if (!buffer_event) {
             SSL_free(ssl);
 #if defined(DEBUG)
@@ -138,6 +143,7 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
         }
     } else {
         buffer_event = bufferevent_socket_new(m_event_base, -1, BEV_OPT_CLOSE_ON_FREE);
+
         if (!buffer_event) {
 #if defined(DEBUG)
             C_DEBUG("failed to initialize events");
@@ -151,6 +157,7 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
     c_int16 events = (EV_READ | EV_PERSIST);
 
     c_int32 features = event_base_get_features(m_event_base);
+
     if (features & EV_FEATURE_ET)
         events |= EV_ET;
 
@@ -185,6 +192,7 @@ void CEventDispatcher::closeSocket(socketinfo *socket_info, const bool force)
         socketinfo_set_socket_state(socket_info, Unconnected);
 
         const auto &disconnected_handler = socketinfo_get_disconnected_handler(socket_info);
+
         if (disconnected_handler)
             disconnected_handler(socket_info);
     } else {
@@ -257,6 +265,7 @@ void CEventDispatcher::startTimer(timerinfo *timer_info, const c_uint32 msec, co
     c_int16 events = repeat ? (EV_TIMEOUT | EV_PERSIST) : EV_TIMEOUT;
 
     event *ev = event_new(m_event_base, -1, events, CEventDispatcher::timerNotification, timer_info);
+
     if (!ev) {
 #if defined(DEBUG)
         C_DEBUG("failed to initialize timer");
@@ -296,6 +305,7 @@ const c_int32 CEventDispatcher::execute()
 {
 #if defined(DEBUG)
     int result = event_base_dispatch(m_event_base);
+
     if (result != 0)
         C_DEBUG("internal error");
 
@@ -334,6 +344,7 @@ const c_int32 CEventDispatcher::execute(const EventLoopFlag eventLoopFlag)
 
 #if defined(DEBUG)
     int result = event_base_loop(m_event_base, flag);
+
     if (result != 0)
         C_DEBUG("internal error");
 
@@ -347,6 +358,7 @@ const c_int32 CEventDispatcher::terminate()
 {
 #if defined(DEBUG)
     int result = event_base_loopbreak(m_event_base);
+
     if (result != 0)
         C_DEBUG("internal error");
 
@@ -441,8 +453,10 @@ CEventDispatcher::CEventDispatcher()
 #endif
 
     m_event_base = event_base_new();
+
     if (m_event_base) {
         m_evdns_base = evdns_base_new(m_event_base, 1);
+
         if (!m_evdns_base) {
             event_base_free(m_event_base);
 #if defined(DEBUG)
@@ -466,8 +480,10 @@ CEventDispatcher::CEventDispatcher(CEventDispatcherConfig *config)
 #endif
 
     m_event_base = event_base_new_with_config(config->m_event_config);
+
     if (m_event_base) {
         m_evdns_base = evdns_base_new(m_event_base, 1);
+
         if (!m_evdns_base) {
             event_base_free(m_event_base);
 #if defined(DEBUG)
@@ -489,6 +505,7 @@ void CEventDispatcher::initializeWSA()
     WSADATA wsaData;
 
     c_int32 error = WSAStartup(version, &wsaData);
+
     if (error != 0) {
         WSACleanup();
 #if defined(DEBUG)
@@ -507,6 +524,7 @@ void CEventDispatcher::acceptNotification(evconnlistener *listener, const c_fdpt
     serverinfo *server_info = reinterpret_cast<serverinfo *>(ctx);
 
     const auto &accep_handler = serverinfo_get_accept_handler(server_info);
+
     if (accep_handler)
         accep_handler(server_info, fd);
 }
@@ -518,6 +536,7 @@ void CEventDispatcher::acceptErrorNotification(evconnlistener *listener, void *c
     serverinfo *server_info = reinterpret_cast<serverinfo *>(ctx);
 
     const auto &accept_error_handler = serverinfo_get_accept_error_handler(server_info);
+
     if (accept_error_handler)
         accept_error_handler(server_info, evutil_socket_geterror(evconnlistener_get_fd(listener)));
 }
@@ -529,6 +548,7 @@ void CEventDispatcher::readNotification(bufferevent *buffer_event, void *ctx)
     socketinfo *socket_info = reinterpret_cast<socketinfo *>(ctx);
 
     const auto &read_handler = socketinfo_get_read_handler(socket_info);
+
     if (read_handler)
         read_handler(socket_info);
 }
@@ -541,12 +561,15 @@ void CEventDispatcher::eventNotification(bufferevent *buffer_event, const c_int1
         socketinfo_set_socket_state(socket_info, Connected);
 
         sslinfo *ssl_info = socketinfo_get_sslinfo(socket_info);
+
         if (ssl_info) {
             const auto &encrypted_handler = sslinfo_get_encrypted_handler(ssl_info);
+
             if (encrypted_handler)
                 encrypted_handler(socket_info);
         } else {
             const auto &connected_handler = socketinfo_get_connected_handler(socket_info);
+
             if (connected_handler)
                 connected_handler(socket_info);
         }
@@ -556,17 +579,22 @@ void CEventDispatcher::eventNotification(bufferevent *buffer_event, const c_int1
 
     if (events & BEV_EVENT_ERROR) {
         c_int32 error = evutil_socket_geterror(bufferevent_getfd(buffer_event));
+
         if (error != 0) {
             const auto &error_handler = socketinfo_get_error_handler(socket_info);
+
             if (error_handler)
                 error_handler(socket_info, error);
         }
 
         sslinfo *ssl_info = socketinfo_get_sslinfo(socket_info);
+
         if (ssl_info) {
             c_ulong ssl_error = bufferevent_get_openssl_error(buffer_event);
+
             if (ssl_error != 0) {
                 const auto &ssl_error_handler = sslinfo_get_ssl_error_handler(ssl_info);
+
                 if (ssl_error_handler)
                     ssl_error_handler(socket_info, ssl_error);
             }
@@ -580,6 +608,7 @@ void CEventDispatcher::eventNotification(bufferevent *buffer_event, const c_int1
         socketinfo_set_socket_state(socket_info, Unconnected);
 
         const auto &disconnected_handler = socketinfo_get_disconnected_handler(socket_info);
+
         if (disconnected_handler)
             disconnected_handler(socket_info);
     }
@@ -593,6 +622,7 @@ void CEventDispatcher::timerNotification(const c_fdptr fd, const c_int16 events,
     timerinfo *timer_info = reinterpret_cast<timerinfo *>(ctx);
 
     const auto &timer_handler = timerinfo_get_timer_handler(timer_info);
+
     if (timer_handler)
         timer_handler(timer_info);
 }
@@ -615,6 +645,7 @@ void CEventDispatcher::outputBufferNotification(evbuffer *buffer, const evbuffer
     socketinfo_set_socket_state(socket_info, Unconnected);
 
     const auto &disconnected_handler = socketinfo_get_disconnected_handler(socket_info);
+
     if (disconnected_handler)
         disconnected_handler(socket_info);
 }

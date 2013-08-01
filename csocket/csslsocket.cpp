@@ -107,6 +107,7 @@ std::string CSslSocket::sslErrorString() const
 const c_ulong CSslSocket::sslError() const
 {
     c_fdptr fd = socketDescriptor();
+
     if (fd == 0)
         return 0;
 

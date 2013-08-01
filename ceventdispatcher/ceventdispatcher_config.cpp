@@ -25,9 +25,6 @@
 //! Self Includes
 #include "ceventdispatcher_config.h"
 
-//! Std Includes
-#include <iostream>
-
 CEventDispatcherConfig::CEventDispatcherConfig()
     : m_event_config(nullptr)
 {
@@ -49,13 +46,16 @@ const c_int32 CEventDispatcherConfig::setFeatures(const c_uint16 methodFeatures)
 
     if (methodFeatures & CEventDispatcherConfig::ET)
         features |= EV_FEATURE_ET;
+
     if (methodFeatures & CEventDispatcherConfig::O1)
         features |= EV_FEATURE_O1;
+
     if (methodFeatures & CEventDispatcherConfig::FDs)
         features |= EV_FEATURE_FDS;
 
 #if defined(DEBUG)
     int result = event_config_require_features(m_event_config, features);
+
     if (result != 0)
         C_DEBUG("invalid or platform specific features");
 
@@ -71,17 +71,22 @@ const c_int32 CEventDispatcherConfig::setFlags(const c_uint16 configFlags)
 
     if (configFlags & CEventDispatcherConfig::NoLock)
         flags |= EVENT_BASE_FLAG_NOLOCK;
+
     if (configFlags & CEventDispatcherConfig::IgnoreEnvironment)
         flags |= EVENT_BASE_FLAG_IGNORE_ENV;
+
     if (configFlags & CEventDispatcherConfig::StartupIOCP)
         flags |= EVENT_BASE_FLAG_STARTUP_IOCP;
+
     if (configFlags & CEventDispatcherConfig::NoCacheTime)
         flags |= EVENT_BASE_FLAG_NO_CACHE_TIME;
+
     if (configFlags & CEventDispatcherConfig::EPollChangelist)
         flags |= EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST;
 
 #if defined(DEBUG)
     int result = event_config_set_flag(m_event_config, flags);
+
     if (result != 0)
         C_DEBUG("invalid or platform specific flags");
 
@@ -95,6 +100,7 @@ const c_int32 CEventDispatcherConfig::avoidMethod(const std::string &method)
 {
 #if defined(DEBUG)
     int result = event_config_avoid_method(m_event_config, method.c_str());
+
     if (result != 0)
         C_DEBUG("invalid method");
 

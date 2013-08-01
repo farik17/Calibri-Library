@@ -342,6 +342,7 @@ public:
 
         do {
             bytes = cdatastream_read(m_data, data, m_pos, std::min<c_uint64>(size, 1024));
+
             if (bytes == 0)
                 break;
 
@@ -368,6 +369,7 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::vector<D> 
 
     auto dataIt = data.cbegin();
     auto dataEnd = data.cend();
+
     while (dataIt != dataEnd) {
         stream << (*dataIt);
         ++dataIt;
@@ -383,6 +385,7 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::list<D> &d
 
     auto dataIt = data.cbegin();
     auto dataEnd = data.cend();
+
     while (dataIt != dataEnd) {
         stream << (*dataIt);
         ++dataIt;
@@ -398,6 +401,7 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::set<D> &da
 
     auto dataIt = data.cbegin();
     auto dataEnd = data.cend();
+
     while (dataIt != dataEnd) {
         stream << (*dataIt);
         ++dataIt;
@@ -413,6 +417,7 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::map<D, C> 
 
     auto dataIt = data.cbegin();
     auto dataEnd = data.cend();
+
     while (dataIt != dataEnd) {
         stream << (*dataIt).first;
         stream << (*dataIt).second;
@@ -429,6 +434,7 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::unordered_
 
     auto dataIt = data.cbegin();
     auto dataEnd = data.cend();
+
     while (dataIt != dataEnd) {
         stream << (*dataIt).first;
         stream << (*dataIt).second;
@@ -445,6 +451,7 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::unordered_
 
     auto dataIt = data.cbegin();
     auto dataEnd = data.cend();
+
     while (dataIt != dataEnd) {
         stream << (*dataIt);
         ++dataIt;
@@ -465,6 +472,7 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::vector<D> &data)
     data.reserve(size);
 
     c_uint64 ix = 0;
+
     while (ix < size) {
         D value;
         stream >> value;
@@ -487,6 +495,7 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::list<D> &data)
         return stream;
 
     c_uint64 ix = 0;
+
     while (ix < size) {
         D value;
         stream >> value;
@@ -509,6 +518,7 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::set<D> &data)
         return stream;
 
     c_uint64 ix = 0;
+
     while (ix < size) {
         D value;
         stream >> value;
@@ -531,6 +541,7 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::map<D, C> &data)
         return stream;
 
     c_uint64 ix = 0;
+
     while (ix < size) {
         D key;
         C value;
@@ -557,6 +568,7 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::unordered_map<D,
     data.reserve(size);
 
     c_uint64 ix = 0;
+
     while (ix < size) {
         D key;
         C value;
@@ -583,6 +595,7 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::unordered_set<D>
     data.reserve(size);
 
     c_uint64 ix = 0;
+
     while (ix < size) {
         D value;
         stream >> value;

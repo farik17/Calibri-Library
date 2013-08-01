@@ -130,6 +130,7 @@ const c_fdptr CTcpSocket::socketDescriptor() const
 const c_int32 CTcpSocket::error() const
 {
     c_fdptr fd = socketDescriptor();
+
     if (fd == 0)
         return 0;
 
@@ -167,6 +168,7 @@ const bool CTcpSocket::setSocketDescriptor(const c_fdptr fd)
 const bool CTcpSocket::setNoDelay(const c_uint32 flag)
 {
     c_fdptr fd = socketDescriptor();
+
     if (fd == 0)
         return false;
 
@@ -183,6 +185,7 @@ const bool CTcpSocket::setNoDelay(const c_uint32 flag)
 const bool CTcpSocket::setKeepAlive(const c_uint32 flag, const c_uint32 idle, const c_uint32 interval, const c_uint32 count)
 {
     c_fdptr fd = socketDescriptor();
+
     if (fd == 0)
         return false;
 

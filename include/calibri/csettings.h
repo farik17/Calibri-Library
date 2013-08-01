@@ -68,6 +68,7 @@ public:
 
         if (properties) {
             std::string name = str_right('/', key);
+
             if (!isPropertiesTreeContains(section, name))
                 return false;
 
@@ -76,6 +77,7 @@ public:
 
         if (array) {
             std::string name = str_right('/', key);
+
             if (!isArraysTreeContains(section, index, name))
                 return false;
 

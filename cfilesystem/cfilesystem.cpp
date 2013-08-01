@@ -53,6 +53,7 @@ const c_int32 cfilesystem_create_path(const std::string &path)
     std::string current_path;
 
     auto path_tree_it = path_tree.begin();
+
     while (path_tree_it != path_tree.cend()) {
         current_path += (*path_tree_it) + PATH_SEPARATOR;
 
@@ -104,6 +105,7 @@ const c_int32 cfilesystem_remove_path(const std::string &path)
     std::string current_path;
 
     auto path_tree_it = path_tree.rbegin();
+
     while (path_tree_it != path_tree.crend()) {
         current_path = cfilesystem_path_tree_to_string(path_tree);
 
@@ -171,9 +173,11 @@ void cfilesystem_normalize_path_tree(cfilesystem_path_tree &path_tree)
         return;
 
     auto path_tree_it = path_tree.begin() + 1;
+
     while (path_tree_it != path_tree.end()) {
         if ((*path_tree_it) == DOT_DOT) {
             auto prev_path_tree_it = path_tree_it - 1;
+
             if ((*prev_path_tree_it) != DOT_DOT) {
                 path_tree_it = path_tree.erase(prev_path_tree_it, path_tree_it + 1);
 

@@ -108,6 +108,7 @@ const c_fdptr CTcpServer::socketDescriptor() const
 const c_int32 CTcpServer::error() const
 {
     c_fdptr fd = socketDescriptor();
+
     if (fd == 0)
         return 0;
 
