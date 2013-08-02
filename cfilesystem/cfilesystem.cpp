@@ -47,7 +47,7 @@
 
 const c_int32 cfilesystem_create_path(const std::string &path)
 {
-    cfilesystem_path_tree path_tree = cfilesystem_parse_path(path);
+    auto path_tree = cfilesystem_parse_path(path);
     cfilesystem_normalize_path_tree(path_tree);
 
     std::string current_path;
@@ -99,7 +99,7 @@ const c_int32 cfilesystem_create_path(const std::string &path)
 
 const c_int32 cfilesystem_remove_path(const std::string &path)
 {
-    cfilesystem_path_tree path_tree = cfilesystem_parse_path(path);
+    auto path_tree = cfilesystem_parse_path(path);
     cfilesystem_normalize_path_tree(path_tree);
 
     std::string current_path;
@@ -140,7 +140,7 @@ const cfilesystem_path_tree cfilesystem_parse_path(const std::string &path)
     cfilesystem_path_tree path_tree;
 
     size_t from = 0;
-    size_t to = path.find_first_of(PATH_SEPARATOR_PATTERN, from);
+    auto to = path.find_first_of(PATH_SEPARATOR_PATTERN, from);
 
     while (to != std::string::npos) {
         path_tree.push_back(path.substr(from, to - from));
@@ -161,8 +161,14 @@ std::string cfilesystem_path_tree_to_string(const cfilesystem_path_tree &path_tr
 {
     std::string path;
 
-    for (size_t ix = 0; ix < path_tree.size(); ++ix)
-        path += path_tree[ix] + PATH_SEPARATOR;
+    auto path_tree_it = path_tree.cbegin();
+    auto path_tree_end = path_tree.cend();
+
+    while (path_tree_it != path_tree_end) {
+        path += (*path_tree_it) + PATH_SEPARATOR;
+
+        ++path_tree_it;
+    }
 
     return path;
 }

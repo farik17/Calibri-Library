@@ -28,6 +28,14 @@
 /*! timerinfo */
 struct timerinfo
 {
+    timerinfo()
+        : ev(nullptr)
+        , ctx(nullptr)
+        , timer_handler(nullptr)
+    {
+
+    }
+
     event *ev;
     void *ctx;
     std::function<void (timerinfo *)> timer_handler;
@@ -35,12 +43,7 @@ struct timerinfo
 
 timerinfo *timerinfo_new()
 {
-    timerinfo *timer_info = new timerinfo;
-    timer_info->ev = nullptr;
-    timer_info->ctx = nullptr;
-    timer_info->timer_handler = nullptr;
-
-    return timer_info;
+    return new timerinfo();
 }
 
 void timerinfo_free(timerinfo *timer_info)
@@ -81,6 +84,17 @@ const std::function<void (timerinfo *)> &timerinfo_get_timer_handler(const timer
 /*! sslinfo */
 struct sslinfo
 {
+    sslinfo()
+        : ssl_ctx(nullptr)
+        , ssl_protocol(SSLv3_0)
+        , ssl_mode(ClientMode)
+        , ssl_peer_verify_mode(VerifyPeer)
+        , encrypted_handler(nullptr)
+        , ssl_error_handler(nullptr)
+    {
+
+    }
+
     SSL_CTX *ssl_ctx;
     CSSLProtocol ssl_protocol;
     CSSLMode ssl_mode;
@@ -91,15 +105,7 @@ struct sslinfo
 
 sslinfo *sslinfo_new()
 {
-    sslinfo *ssl_info = new sslinfo;
-    ssl_info->ssl_ctx = nullptr;
-    ssl_info->ssl_protocol = SSLv3_0;
-    ssl_info->ssl_mode = ClientMode;
-    ssl_info->ssl_peer_verify_mode = VerifyPeer;
-    ssl_info->encrypted_handler = nullptr;
-    ssl_info->ssl_error_handler = nullptr;
-
-    return ssl_info;
+    return new sslinfo();
 }
 
 void sslinfo_free(sslinfo *ssl_info)
@@ -170,6 +176,19 @@ const std::function<void (socketinfo *, const c_ulong)> &sslinfo_get_ssl_error_h
 /*! socketinfo */
 struct socketinfo
 {
+    socketinfo()
+        : buffer_event(nullptr)
+        , ctx(nullptr)
+        , ssl_info(nullptr)
+        , socket_state(Unconnected)
+        , connected_handler(nullptr)
+        , disconnected_handler(nullptr)
+        , read_handler(nullptr)
+        , error_handler(nullptr)
+    {
+
+    }
+
     bufferevent *buffer_event;
     void *ctx;
     sslinfo *ssl_info;
@@ -182,17 +201,7 @@ struct socketinfo
 
 socketinfo *socketinfo_new()
 {
-    socketinfo *socket_info = new socketinfo;
-    socket_info->buffer_event = nullptr;
-    socket_info->ctx = nullptr;
-    socket_info->ssl_info = nullptr;
-    socket_info->socket_state = Unconnected;
-    socket_info->connected_handler = nullptr;
-    socket_info->disconnected_handler = nullptr;
-    socket_info->read_handler = nullptr;
-    socket_info->error_handler = nullptr;
-
-    return socket_info;
+    return new socketinfo();
 }
 
 void socketinfo_free(socketinfo *socket_info)
@@ -283,6 +292,15 @@ const std::function<void (socketinfo *, const c_int32)> &socketinfo_get_error_ha
 /*! serverinfo */
 struct serverinfo
 {
+    serverinfo()
+        : ev_conn_listener(nullptr)
+        , ctx(nullptr)
+        , accept_handler(nullptr)
+        , accept_error_handler(nullptr)
+    {
+
+    }
+
     evconnlistener *ev_conn_listener;
     void *ctx;
     std::function<void (serverinfo *, const c_fdptr)> accept_handler;
@@ -291,13 +309,7 @@ struct serverinfo
 
 serverinfo *serverinfo_new()
 {
-    serverinfo *server_info = new serverinfo;
-    server_info->ev_conn_listener = nullptr;
-    server_info->ctx = nullptr;
-    server_info->accept_handler = nullptr;
-    server_info->accept_error_handler = nullptr;
-
-    return server_info;
+    return new serverinfo();
 }
 
 void serverinfo_free(serverinfo *server_info)

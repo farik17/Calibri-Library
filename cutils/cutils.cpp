@@ -295,7 +295,7 @@ const bool lexical_cast(const std::wstring &data, std::string &out)
 
 const bool str_contains(const char c, const std::string &str)
 {
-    size_t pos = str.find(c);
+    const auto pos = str.find(c);
 
     if (pos == std::string::npos)
         return false;
@@ -305,7 +305,7 @@ const bool str_contains(const char c, const std::string &str)
 
 std::string str_left(const char c, const std::string &str)
 {
-    size_t pos = str.find(c);
+    const auto pos = str.find(c);
 
     if (pos == std::string::npos)
         return std::string();
@@ -315,7 +315,7 @@ std::string str_left(const char c, const std::string &str)
 
 std::string str_right(const char c, const std::string &str)
 {
-    size_t pos = str.find(c);
+    const auto pos = str.find(c);
 
     if (pos == std::string::npos)
         return std::string();
@@ -325,12 +325,12 @@ std::string str_right(const char c, const std::string &str)
 
 std::string str_take_left(const char c, std::string &str)
 {
-    size_t pos = str.find(c);
+    const auto pos = str.find(c);
 
     if (pos == std::string::npos)
         return std::string();
 
-    std::string result = str.substr(0, pos);
+    const auto result = str.substr(0, pos);
 
     str.erase(0, pos + 1);
 
@@ -339,12 +339,12 @@ std::string str_take_left(const char c, std::string &str)
 
 std::string str_take_right(const char c, std::string &str)
 {
-    size_t pos = str.find(c);
+    const auto pos = str.find(c);
 
     if (pos == std::string::npos)
         return std::string();
 
-    std::string result = str.substr(pos);
+    const auto result = str.substr(pos);
 
     str.erase(pos);
 
@@ -355,16 +355,16 @@ std::string to_hex(const unsigned char *data, const size_t len)
 {
     std::stringstream stream;
     for (size_t ix = 0; ix < len; ++ix)
-        stream << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(data[ix]);
+        stream << std::hex << std::setw(2) << std::setfill('0') << static_cast<c_int32>(data[ix]);
 
     return stream.str();
 }
 
 std::string to_string(const std::wstring &data)
 {
-    size_t in_len = data.length();
+    const auto in_len = data.length();
     size_t out_len = 0;
-    char *buffer = new char[in_len];
+    auto *buffer = new char[in_len];
 
     out_len = wcstombs(buffer, data.c_str(), in_len);
 
@@ -377,9 +377,9 @@ std::string to_string(const std::wstring &data)
 
 std::string to_string(const wchar_t *data)
 {
-    size_t in_len = std::char_traits<wchar_t>::length(data);
+    const auto in_len = std::char_traits<wchar_t>::length(data);
     size_t out_len = 0;
-    char *buffer = new char[in_len];
+    auto *buffer = new char[in_len];
 
     out_len = wcstombs(buffer, data, in_len);
 
@@ -392,9 +392,9 @@ std::string to_string(const wchar_t *data)
 
 std::wstring to_wstring(const std::string &data)
 {
-    size_t in_len = data.length();
+    const auto in_len = data.length();
     size_t out_len = 0;
-    wchar_t *buffer = new wchar_t[in_len];
+    auto *buffer = new wchar_t[in_len];
 
     out_len = mbstowcs(buffer, data.c_str(), in_len);
 
@@ -407,9 +407,9 @@ std::wstring to_wstring(const std::string &data)
 
 std::wstring to_wstring(const char *data)
 {
-    size_t in_len = std::char_traits<char>::length(data);
+    const auto in_len = std::char_traits<char>::length(data);
     size_t out_len = 0;
-    wchar_t *buffer = new wchar_t[in_len];
+    auto *buffer = new wchar_t[in_len];
 
     out_len = mbstowcs(buffer, data, in_len);
 

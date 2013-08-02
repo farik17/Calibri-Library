@@ -58,7 +58,7 @@ inline const size_t cdatastream_write(CTcpSocket &dest, const char *source, size
 
 inline const size_t cdatastream_read(std::string &source, char *dest, size_t &pos, const size_t len)
 {
-    size_t bytes = source.copy(dest, len, pos);
+    const auto bytes = source.copy(dest, len, pos);
     pos += bytes;
 
     return bytes;

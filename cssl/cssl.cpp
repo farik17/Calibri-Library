@@ -163,7 +163,7 @@ const c_int32 SSL_init()
     SSL_library_init();
 
 #if defined(DEBUG)
-    int result = RAND_poll();
+    const auto result = RAND_poll();
 
     if (result != 1)
         C_DEBUG("failed ssl rand poll");
@@ -179,7 +179,7 @@ const c_int32 SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certi
     switch (fileType) {
     case PEM: {
 #if defined(DEBUG)
-        int result = SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_PEM);
+        const auto result = SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_PEM);
 
         if (result != 1)
             C_DEBUG("invalid certificate path");
@@ -192,7 +192,7 @@ const c_int32 SSL_CTX_set_certificate(SSL_CTX *ssl_ctx, const std::string &certi
 
     case ASN1: {
 #if defined(DEBUG)
-        int result = SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_ASN1);
+        const auto result = SSL_CTX_use_certificate_file(ssl_ctx, certificatePath.c_str(), SSL_FILETYPE_ASN1);
 
         if (result != 1)
             C_DEBUG("invalid certificate path");
@@ -218,7 +218,7 @@ const c_int32 SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &priva
     switch (fileType) {
     case PEM: {
 #if defined(DEBUG)
-        int result = SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_PEM);
+        const auto result = SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_PEM);
 
         if (result != 1)
             C_DEBUG("invalid private key path");
@@ -231,7 +231,7 @@ const c_int32 SSL_CTX_set_private_key(SSL_CTX *ssl_ctx, const std::string &priva
 
     case ASN1: {
 #if defined(DEBUG)
-        int result = SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_ASN1);
+        const auto result = SSL_CTX_use_PrivateKey_file(ssl_ctx, privateKeyPath.c_str(), SSL_FILETYPE_ASN1);
 
         if (result != 1)
             C_DEBUG("invalid private key path");
@@ -259,7 +259,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
         switch (sslMode) {
         case ServerMode: {
 #if defined(DEBUG)
-            int result = SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_server_method());
+            const auto result = SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_server_method());
 
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
@@ -272,7 +272,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
 
         case ClientMode: {
 #if defined(DEBUG)
-            int result = SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_client_method());
+            const auto result = SSL_CTX_set_ssl_version(ssl_ctx, SSLv3_client_method());
 
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
@@ -296,7 +296,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
         switch (sslMode) {
         case ServerMode: {
 #if defined(DEBUG)
-            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_server_method());
+            const auto result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_server_method());
 
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
@@ -309,7 +309,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
 
         case ClientMode: {
 #if defined(DEBUG)
-            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_client_method());
+            const auto result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_client_method());
 
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
@@ -333,7 +333,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
         switch (sslMode) {
         case ServerMode: {
 #if defined(DEBUG)
-            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_server_method());
+            const auto result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_server_method());
 
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
@@ -346,7 +346,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
 
         case ClientMode: {
 #if defined(DEBUG)
-            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_client_method());
+            const auto result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_1_client_method());
 
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
@@ -370,7 +370,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
         switch (sslMode) {
         case ServerMode: {
 #if defined(DEBUG)
-            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_server_method());
+            const auto result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_server_method());
 
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");
@@ -383,7 +383,7 @@ const c_int32 SSL_CTX_set_protocol(SSL_CTX *ssl_ctx, const CSSLProtocol sslProto
 
         case ClientMode: {
 #if defined(DEBUG)
-            int result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_client_method());
+            const auto result = SSL_CTX_set_ssl_version(ssl_ctx, TLSv1_2_client_method());
 
             if (result != 1)
                 C_DEBUG("failed to set ssl context protocol");

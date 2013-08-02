@@ -68,7 +68,7 @@ const c_int32 cuniqueid_generate(c_uniqueid &uid)
 {
 #if defined(_WIN32)
 #   if defined(DEBUG)
-    int result = UuidCreate(&uid);
+    const auto result = UuidCreate(&uid);
     switch (result) {
     case RPC_S_UUID_LOCAL_ONLY:
         C_DEBUG("c_uniqueid is guaranteed to be unique to this computer only");

@@ -93,10 +93,10 @@ void SHA512_hash(const std::string &data, unsigned char *hash)
 
 std::string AES256_cbc_encrypt(const std::string &data, const std::string &key, const std::string &iv)
 {
-    c_int32 in_len = static_cast<c_int32>(data.size());
+    const auto in_len = static_cast<c_int32>(data.size());
     c_int32 out_len = 0;
     c_int32 total_len = 0;
-    unsigned char *encrypted_data = new unsigned char[in_len + AES_BLOCK_SIZE - 1];
+    auto *encrypted_data = new unsigned char[static_cast<size_t>(in_len + AES_BLOCK_SIZE - 1)];
     unsigned char key_hash[SHA256_DIGEST_LENGTH];
     unsigned char iv_hash[SHA256_DIGEST_LENGTH];
 
@@ -108,7 +108,7 @@ std::string AES256_cbc_encrypt(const std::string &data, const std::string &key, 
     EVP_EncryptInit(&evp_cipher_ctx, EVP_aes_256_cbc(), key_hash, iv_hash);
     EVP_EncryptUpdate(&evp_cipher_ctx, encrypted_data, &out_len, reinterpret_cast<const unsigned char *>(data.c_str()), in_len);
     total_len += out_len;
-    EVP_EncryptFinal(&evp_cipher_ctx, encrypted_data + total_len, &out_len);
+    EVP_EncryptFinal(&evp_cipher_ctx, reinterpret_cast<unsigned char *>(encrypted_data + total_len), &out_len);
     total_len += out_len;
     EVP_CIPHER_CTX_cleanup(&evp_cipher_ctx);
 
@@ -121,10 +121,10 @@ std::string AES256_cbc_encrypt(const std::string &data, const std::string &key, 
 
 std::string AES256_cbc_decrypt(const std::string &data, const std::string &key, const std::string &iv)
 {
-    c_int32 in_len = static_cast<c_int32>(data.size());
+    const auto in_len = static_cast<c_int32>(data.size());
     c_int32 out_len = 0;
     c_int32 total_len = 0;
-    unsigned char *decrypted_data = new unsigned char[in_len];
+    auto *decrypted_data = new unsigned char[in_len];
     unsigned char key_hash[SHA256_DIGEST_LENGTH];
     unsigned char iv_hash[SHA256_DIGEST_LENGTH];
 
@@ -136,7 +136,7 @@ std::string AES256_cbc_decrypt(const std::string &data, const std::string &key, 
     EVP_DecryptInit(&evp_cipher_ctx, EVP_aes_256_cbc(), key_hash, iv_hash);
     EVP_DecryptUpdate(&evp_cipher_ctx, decrypted_data, &out_len, reinterpret_cast<const unsigned char *>(data.c_str()), in_len);
     total_len += out_len;
-    EVP_DecryptFinal(&evp_cipher_ctx, decrypted_data + total_len, &out_len);
+    EVP_DecryptFinal(&evp_cipher_ctx, reinterpret_cast<unsigned char *>(decrypted_data + total_len), &out_len);
     total_len += out_len;
     EVP_CIPHER_CTX_cleanup(&evp_cipher_ctx);
 

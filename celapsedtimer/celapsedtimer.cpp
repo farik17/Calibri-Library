@@ -53,7 +53,7 @@ const c_uint64 CElapsedTimer::restart(const Metrics metrics)
     if (!m_started)
         return 0;
 
-    c_uint64 result = calculateElapsed(metrics);
+    const auto result = calculateElapsed(metrics);
 
     m_startPoint = std::chrono::steady_clock::now();
 

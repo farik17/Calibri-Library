@@ -44,17 +44,17 @@ const c_int32 CEventDispatcherConfig::setFeatures(const c_uint16 methodFeatures)
 {
     c_uint16 features = 0;
 
-    if (methodFeatures & CEventDispatcherConfig::ET)
+    if (methodFeatures & ET)
         features |= EV_FEATURE_ET;
 
-    if (methodFeatures & CEventDispatcherConfig::O1)
+    if (methodFeatures & O1)
         features |= EV_FEATURE_O1;
 
-    if (methodFeatures & CEventDispatcherConfig::FDs)
+    if (methodFeatures & FDs)
         features |= EV_FEATURE_FDS;
 
 #if defined(DEBUG)
-    int result = event_config_require_features(m_event_config, features);
+    const auto result = event_config_require_features(m_event_config, features);
 
     if (result != 0)
         C_DEBUG("invalid or platform specific features");
@@ -69,23 +69,23 @@ const c_int32 CEventDispatcherConfig::setFlags(const c_uint16 configFlags)
 {
     c_uint16 flags = 0;
 
-    if (configFlags & CEventDispatcherConfig::NoLock)
+    if (configFlags & NoLock)
         flags |= EVENT_BASE_FLAG_NOLOCK;
 
-    if (configFlags & CEventDispatcherConfig::IgnoreEnvironment)
+    if (configFlags & IgnoreEnvironment)
         flags |= EVENT_BASE_FLAG_IGNORE_ENV;
 
-    if (configFlags & CEventDispatcherConfig::StartupIOCP)
+    if (configFlags & StartupIOCP)
         flags |= EVENT_BASE_FLAG_STARTUP_IOCP;
 
-    if (configFlags & CEventDispatcherConfig::NoCacheTime)
+    if (configFlags & NoCacheTime)
         flags |= EVENT_BASE_FLAG_NO_CACHE_TIME;
 
-    if (configFlags & CEventDispatcherConfig::EPollChangelist)
+    if (configFlags & EPollChangelist)
         flags |= EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST;
 
 #if defined(DEBUG)
-    int result = event_config_set_flag(m_event_config, flags);
+    const auto result = event_config_set_flag(m_event_config, flags);
 
     if (result != 0)
         C_DEBUG("invalid or platform specific flags");
@@ -99,7 +99,7 @@ const c_int32 CEventDispatcherConfig::setFlags(const c_uint16 configFlags)
 const c_int32 CEventDispatcherConfig::avoidMethod(const std::string &method)
 {
 #if defined(DEBUG)
-    int result = event_config_avoid_method(m_event_config, method.c_str());
+    const auto result = event_config_avoid_method(m_event_config, method.c_str());
 
     if (result != 0)
         C_DEBUG("invalid method");

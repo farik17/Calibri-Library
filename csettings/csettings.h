@@ -58,16 +58,16 @@ public:
         if (!str_contains('/', key))
             return false;
 
-        std::string section = str_left('/', key);
+        const auto section = str_left('/', key);
 
-        bool array = isArray(section);
-        bool properties = isProperties(section);
+        const auto array = isArray(section);
+        const auto properties = isProperties(section);
 
         if (!properties && !array)
             return false;
 
         if (properties) {
-            std::string name = str_right('/', key);
+            const auto name = str_right('/', key);
 
             if (!isPropertiesTreeContains(section, name))
                 return false;
@@ -76,7 +76,7 @@ public:
         }
 
         if (array) {
-            std::string name = str_right('/', key);
+            const auto name = str_right('/', key);
 
             if (!isArraysTreeContains(section, index, name))
                 return false;
@@ -93,10 +93,10 @@ public:
         if (!str_contains('/', key))
             return false;
 
-        std::string section = str_left('/', key);
+        const auto section = str_left('/', key);
 
-        bool array = isArray(section);
-        bool properties = isProperties(section);
+        const auto array = isArray(section);
+        const auto properties = isProperties(section);
 
         if (!array && !properties)
             return false;

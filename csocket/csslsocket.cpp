@@ -31,7 +31,7 @@
 CSslSocket::CSslSocket()
     : CTcpSocket()
 {
-    sslinfo *ssl_info = sslinfo_new();
+    auto *ssl_info = sslinfo_new();
     sslinfo_set_ssl_ctx(ssl_info, SSL_CTX_create(sslinfo_get_ssl_protocol(ssl_info), sslinfo_get_ssl_mode(ssl_info), sslinfo_get_ssl_peer_verify_mode(ssl_info)));
 
     socketinfo_set_sslinfo(m_socketinfo, ssl_info);
@@ -55,7 +55,7 @@ void CSslSocket::setSslErrorHandler(const std::function<void (socketinfo *, cons
 
 void CSslSocket::setSslProtocol(const CSSLProtocol sslProtocol)
 {
-    sslinfo *ssl_info = socketinfo_get_sslinfo(m_socketinfo);
+    auto *ssl_info = socketinfo_get_sslinfo(m_socketinfo);
 
     if (sslinfo_get_ssl_protocol(ssl_info) == sslProtocol)
         return;
@@ -67,7 +67,7 @@ void CSslSocket::setSslProtocol(const CSSLProtocol sslProtocol)
 
 void CSslSocket::setSslMode(const CSSLMode sslMode)
 {
-    sslinfo *ssl_info = socketinfo_get_sslinfo(m_socketinfo);
+    auto *ssl_info = socketinfo_get_sslinfo(m_socketinfo);
 
     if (sslinfo_get_ssl_mode(ssl_info) == sslMode)
         return;
@@ -79,7 +79,7 @@ void CSslSocket::setSslMode(const CSSLMode sslMode)
 
 void CSslSocket::setSslPeerVerifyMode(const CSSLPeerVerifyMode sslPeerVerifyMode)
 {
-    sslinfo *ssl_info = socketinfo_get_sslinfo(m_socketinfo);
+    auto *ssl_info = socketinfo_get_sslinfo(m_socketinfo);
 
     if (sslinfo_get_ssl_peer_verify_mode(ssl_info) == sslPeerVerifyMode)
         return;
@@ -106,7 +106,7 @@ std::string CSslSocket::sslErrorString() const
 
 const c_ulong CSslSocket::sslError() const
 {
-    c_fdptr fd = socketDescriptor();
+    const auto fd = socketDescriptor();
 
     if (fd == 0)
         return 0;
