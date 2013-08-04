@@ -38,8 +38,6 @@ class CEventDispatcher
 {
 
 public:
-    virtual ~CEventDispatcher();
-
     enum EventLoopFlag : c_uint8 {
         Once = 1,
         NonBlock,
@@ -59,10 +57,9 @@ public:
     const c_int32 execute(const EventLoopFlag eventLoopFlag);
     const c_int32 terminate();
 
-    static void initialize(CEventDispatcherConfig *config);
-
     static std::string socketAddress(const c_fdptr fd);
 
+    static CEventDispatcher *initialize(const CEventDispatcherConfig &config);
     static CEventDispatcher *instance();
 
     static const c_uint16 socketPort(const c_fdptr fd);
@@ -71,23 +68,11 @@ private:
     C_DISABLE_COPY(CEventDispatcher)
 
     CEventDispatcher();
-    CEventDispatcher(CEventDispatcherConfig *config);
-
-#if defined(_WIN32)
-    static void initializeWSA();
-#endif
-
-    static void acceptNotification(evconnlistener *listener, const c_fdptr fd, sockaddr *address, const c_int32 socklen, void *ctx);
-    static void acceptErrorNotification(evconnlistener *listener, void *ctx);
-    static void readNotification(bufferevent *buffer_event, void *ctx);
-    static void eventNotification(bufferevent *buffer_event, const c_int16 events, void *ctx);
-    static void timerNotification(const c_fdptr fd, const c_int16 events, void *ctx);
-    static void outputBufferNotification(evbuffer *buffer, const evbuffer_cb_info *info, void *ctx);
+    CEventDispatcher(const CEventDispatcherConfig &config);
+    ~CEventDispatcher();
 
     event_base *m_event_base;
     evdns_base *m_evdns_base;
-
-    static CEventDispatcher *m_eventDispatcher;
 };
 
 #endif // CEVENTDISPATCHER_H

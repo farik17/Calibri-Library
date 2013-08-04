@@ -44,19 +44,156 @@
 #define AF_INET_LENGTH          16
 #define AF_INET6_LENGTH         48
 
-CEventDispatcher *CEventDispatcher::m_eventDispatcher = nullptr;
-
-CEventDispatcher::~CEventDispatcher()
-{
 #if defined(_WIN32)
-    WSACleanup();
+static inline void initializeWSA()
+{
+    WORD version = MAKEWORD(2, 2);
+    WSADATA wsaData;
+
+    const auto error = WSAStartup(version, &wsaData);
+
+    if (error != 0) {
+        WSACleanup();
+#if defined(DEBUG)
+        C_DEBUG("failed with code " + std::to_string(error));
+#endif
+    }
+}
 #endif
 
-    if (m_event_base)
-        event_base_free(m_event_base);
+static inline void acceptNotification(evconnlistener *listener, const c_fdptr fd, sockaddr *address, const c_int32 socklen, void *ctx)
+{
+    C_UNUSED(listener);
+    C_UNUSED(address);
+    C_UNUSED(socklen);
 
-    if (m_evdns_base)
-        evdns_base_free(m_evdns_base, 1);
+    auto *server_info = reinterpret_cast<serverinfo *>(ctx);
+
+    const auto &accep_handler = serverinfo_get_accept_handler(server_info);
+
+    if (accep_handler)
+        accep_handler(server_info, fd);
+}
+
+static inline void acceptErrorNotification(evconnlistener *listener, void *ctx)
+{
+    C_UNUSED(listener);
+
+    auto *server_info = reinterpret_cast<serverinfo *>(ctx);
+
+    const auto &accept_error_handler = serverinfo_get_accept_error_handler(server_info);
+
+    if (accept_error_handler)
+        accept_error_handler(server_info, evutil_socket_geterror(evconnlistener_get_fd(listener)));
+}
+
+static inline void readNotification(bufferevent *buffer_event, void *ctx)
+{
+    C_UNUSED(buffer_event);
+
+    auto *socket_info = reinterpret_cast<socketinfo *>(ctx);
+
+    const auto &read_handler = socketinfo_get_read_handler(socket_info);
+
+    if (read_handler)
+        read_handler(socket_info);
+}
+
+static inline void eventNotification(bufferevent *buffer_event, const c_int16 events, void *ctx)
+{
+    auto *socket_info = reinterpret_cast<socketinfo *>(ctx);
+
+    if (events & BEV_EVENT_CONNECTED) {
+        socketinfo_set_socket_state(socket_info, Connected);
+
+        auto *ssl_info = socketinfo_get_sslinfo(socket_info);
+
+        if (ssl_info) {
+            const auto &encrypted_handler = sslinfo_get_encrypted_handler(ssl_info);
+
+            if (encrypted_handler)
+                encrypted_handler(socket_info);
+        } else {
+            const auto &connected_handler = socketinfo_get_connected_handler(socket_info);
+
+            if (connected_handler)
+                connected_handler(socket_info);
+        }
+
+        return;
+    }
+
+    if (events & BEV_EVENT_ERROR) {
+        const auto error = evutil_socket_geterror(bufferevent_getfd(buffer_event));
+
+        if (error != 0) {
+            const auto &error_handler = socketinfo_get_error_handler(socket_info);
+
+            if (error_handler)
+                error_handler(socket_info, error);
+        }
+
+        auto *ssl_info = socketinfo_get_sslinfo(socket_info);
+
+        if (ssl_info) {
+            const auto ssl_error = bufferevent_get_openssl_error(buffer_event);
+
+            if (ssl_error != 0) {
+                const auto &ssl_error_handler = sslinfo_get_ssl_error_handler(ssl_info);
+
+                if (ssl_error_handler)
+                    ssl_error_handler(socket_info, ssl_error);
+            }
+        }
+    }
+
+    if (events & BEV_EVENT_EOF) {
+        bufferevent_free(buffer_event);
+
+        socketinfo_set_bufferevent(socket_info, nullptr);
+        socketinfo_set_socket_state(socket_info, Unconnected);
+
+        const auto &disconnected_handler = socketinfo_get_disconnected_handler(socket_info);
+
+        if (disconnected_handler)
+            disconnected_handler(socket_info);
+    }
+}
+
+static inline void timerNotification(const c_fdptr fd, const c_int16 events, void *ctx)
+{
+    C_UNUSED(fd);
+    C_UNUSED(events);
+
+    auto *timer_info = reinterpret_cast<timerinfo *>(ctx);
+
+    const auto &timer_handler = timerinfo_get_timer_handler(timer_info);
+
+    if (timer_handler)
+        timer_handler(timer_info);
+}
+
+static inline void outputBufferNotification(evbuffer *buffer, const evbuffer_cb_info *info, void *ctx)
+{
+    C_UNUSED(info);
+
+    auto *socket_info = reinterpret_cast<socketinfo *>(ctx);
+
+    if (socketinfo_get_socket_state(socket_info) != Closing)
+        return;
+
+    if (evbuffer_get_length(buffer) != 0)
+        return;
+
+    bufferevent_free(socketinfo_get_bufferevent(socket_info));
+
+    socketinfo_set_bufferevent(socket_info, nullptr);
+    socketinfo_set_socket_state(socket_info, Unconnected);
+
+    const auto &disconnected_handler = socketinfo_get_disconnected_handler(socket_info);
+
+    if (disconnected_handler)
+        disconnected_handler(socket_info);
 }
 
 void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
@@ -95,7 +232,7 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
         }
     }
 
-    bufferevent_setcb(buffer_event, CEventDispatcher::readNotification, nullptr, CEventDispatcher::eventNotification, socket_info);
+    bufferevent_setcb(buffer_event, readNotification, nullptr, eventNotification, socket_info);
 
     c_int16 events = (EV_READ | EV_PERSIST);
 
@@ -152,7 +289,7 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
         }
     }
 
-    bufferevent_setcb(buffer_event, CEventDispatcher::readNotification, nullptr, CEventDispatcher::eventNotification, socket_info);
+    bufferevent_setcb(buffer_event, readNotification, nullptr, eventNotification, socket_info);
 
     c_int16 events = (EV_READ | EV_PERSIST);
 
@@ -196,7 +333,7 @@ void CEventDispatcher::closeSocket(socketinfo *socket_info, const bool force)
         if (disconnected_handler)
             disconnected_handler(socket_info);
     } else {
-        evbuffer_add_cb(bufferevent_get_output(buffer_event), CEventDispatcher::outputBufferNotification, socket_info);
+        evbuffer_add_cb(bufferevent_get_output(buffer_event), outputBufferNotification, socket_info);
 
         socketinfo_set_socket_state(socket_info, Closing);
     }
@@ -223,12 +360,12 @@ void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &ad
 
     switch (addr_info->ai_family) {
     case AF_INET:
-        ev_conn_listener = evconnlistener_new_bind(m_event_base, CEventDispatcher::acceptNotification, server_info, (LEV_OPT_CLOSE_ON_FREE | LEV_OPT_REUSEABLE), backlog, addr_info->ai_addr, static_cast<c_int32>(sizeof(sockaddr_in)));
+        ev_conn_listener = evconnlistener_new_bind(m_event_base, acceptNotification, server_info, (LEV_OPT_CLOSE_ON_FREE | LEV_OPT_REUSEABLE), backlog, addr_info->ai_addr, static_cast<c_int32>(sizeof(sockaddr_in)));
 
         break;
 
     case AF_INET6:
-        ev_conn_listener = evconnlistener_new_bind(m_event_base, CEventDispatcher::acceptNotification, server_info, (LEV_OPT_CLOSE_ON_FREE | LEV_OPT_REUSEABLE), backlog, addr_info->ai_addr, static_cast<c_int32>(sizeof(sockaddr_in6)));
+        ev_conn_listener = evconnlistener_new_bind(m_event_base, acceptNotification, server_info, (LEV_OPT_CLOSE_ON_FREE | LEV_OPT_REUSEABLE), backlog, addr_info->ai_addr, static_cast<c_int32>(sizeof(sockaddr_in6)));
 
         break;
 
@@ -248,7 +385,7 @@ void CEventDispatcher::bindServer(serverinfo *server_info, const std::string &ad
 
     evutil_freeaddrinfo(addr_info);
 
-    evconnlistener_set_error_cb(ev_conn_listener, CEventDispatcher::acceptErrorNotification);
+    evconnlistener_set_error_cb(ev_conn_listener, acceptErrorNotification);
 
     serverinfo_set_evconnlistener(server_info, ev_conn_listener);
 }
@@ -264,7 +401,7 @@ void CEventDispatcher::startTimer(timerinfo *timer_info, const c_uint32 msec, co
 {
     c_int16 events = repeat ? (EV_TIMEOUT | EV_PERSIST) : EV_TIMEOUT;
 
-    auto *ev = event_new(m_event_base, -1, events, CEventDispatcher::timerNotification, timer_info);
+    auto *ev = event_new(m_event_base, -1, events, timerNotification, timer_info);
 
     if (!ev) {
 #if defined(DEBUG)
@@ -368,12 +505,6 @@ const c_int32 CEventDispatcher::terminate()
 #endif
 }
 
-void CEventDispatcher::initialize(CEventDispatcherConfig *config)
-{
-    if (!m_eventDispatcher)
-        m_eventDispatcher = new CEventDispatcher(config);
-}
-
 std::string CEventDispatcher::socketAddress(const c_fdptr fd)
 {
     sockaddr_storage sa_stor;
@@ -409,12 +540,18 @@ std::string CEventDispatcher::socketAddress(const c_fdptr fd)
     return std::string();
 }
 
+CEventDispatcher *CEventDispatcher::initialize(const CEventDispatcherConfig &config)
+{
+    static CEventDispatcher eventDispatcher(config);
+
+    return &eventDispatcher;
+}
+
 CEventDispatcher *CEventDispatcher::instance()
 {
-    if (!m_eventDispatcher)
-        m_eventDispatcher = new CEventDispatcher();
+    static CEventDispatcher eventDispatcher;
 
-    return m_eventDispatcher;
+    return &eventDispatcher;
 }
 
 const c_uint16 CEventDispatcher::socketPort(const c_fdptr fd)
@@ -471,7 +608,7 @@ CEventDispatcher::CEventDispatcher()
 #endif
 }
 
-CEventDispatcher::CEventDispatcher(CEventDispatcherConfig *config)
+CEventDispatcher::CEventDispatcher(const CEventDispatcherConfig &config)
     : m_event_base(nullptr)
     , m_evdns_base(nullptr)
 {
@@ -479,7 +616,7 @@ CEventDispatcher::CEventDispatcher(CEventDispatcherConfig *config)
     initializeWSA();
 #endif
 
-    m_event_base = event_base_new_with_config(config->m_event_config);
+    m_event_base = event_base_new_with_config(config.m_event_config);
 
     if (m_event_base) {
         m_evdns_base = evdns_base_new(m_event_base, 1);
@@ -498,154 +635,15 @@ CEventDispatcher::CEventDispatcher(CEventDispatcherConfig *config)
 #endif
 }
 
+CEventDispatcher::~CEventDispatcher()
+{
 #if defined(_WIN32)
-void CEventDispatcher::initializeWSA()
-{
-    WORD version = MAKEWORD(2, 2);
-    WSADATA wsaData;
-
-    const auto error = WSAStartup(version, &wsaData);
-
-    if (error != 0) {
-        WSACleanup();
-#if defined(DEBUG)
-        C_DEBUG("failed with code " + std::to_string(error));
-#endif
-    }
-}
+    WSACleanup();
 #endif
 
-void CEventDispatcher::acceptNotification(evconnlistener *listener, const c_fdptr fd, sockaddr *address, const c_int32 socklen, void *ctx)
-{
-    C_UNUSED(listener);
-    C_UNUSED(address);
-    C_UNUSED(socklen);
+    if (m_event_base)
+        event_base_free(m_event_base);
 
-    auto *server_info = reinterpret_cast<serverinfo *>(ctx);
-
-    const auto &accep_handler = serverinfo_get_accept_handler(server_info);
-
-    if (accep_handler)
-        accep_handler(server_info, fd);
-}
-
-void CEventDispatcher::acceptErrorNotification(evconnlistener *listener, void *ctx)
-{
-    C_UNUSED(listener);
-
-    auto *server_info = reinterpret_cast<serverinfo *>(ctx);
-
-    const auto &accept_error_handler = serverinfo_get_accept_error_handler(server_info);
-
-    if (accept_error_handler)
-        accept_error_handler(server_info, evutil_socket_geterror(evconnlistener_get_fd(listener)));
-}
-
-void CEventDispatcher::readNotification(bufferevent *buffer_event, void *ctx)
-{
-    C_UNUSED(buffer_event);
-
-    auto *socket_info = reinterpret_cast<socketinfo *>(ctx);
-
-    const auto &read_handler = socketinfo_get_read_handler(socket_info);
-
-    if (read_handler)
-        read_handler(socket_info);
-}
-
-void CEventDispatcher::eventNotification(bufferevent *buffer_event, const c_int16 events, void *ctx)
-{
-    auto *socket_info = reinterpret_cast<socketinfo *>(ctx);
-
-    if (events & BEV_EVENT_CONNECTED) {
-        socketinfo_set_socket_state(socket_info, Connected);
-
-        auto *ssl_info = socketinfo_get_sslinfo(socket_info);
-
-        if (ssl_info) {
-            const auto &encrypted_handler = sslinfo_get_encrypted_handler(ssl_info);
-
-            if (encrypted_handler)
-                encrypted_handler(socket_info);
-        } else {
-            const auto &connected_handler = socketinfo_get_connected_handler(socket_info);
-
-            if (connected_handler)
-                connected_handler(socket_info);
-        }
-
-        return;
-    }
-
-    if (events & BEV_EVENT_ERROR) {
-        const auto error = evutil_socket_geterror(bufferevent_getfd(buffer_event));
-
-        if (error != 0) {
-            const auto &error_handler = socketinfo_get_error_handler(socket_info);
-
-            if (error_handler)
-                error_handler(socket_info, error);
-        }
-
-        auto *ssl_info = socketinfo_get_sslinfo(socket_info);
-
-        if (ssl_info) {
-            const auto ssl_error = bufferevent_get_openssl_error(buffer_event);
-
-            if (ssl_error != 0) {
-                const auto &ssl_error_handler = sslinfo_get_ssl_error_handler(ssl_info);
-
-                if (ssl_error_handler)
-                    ssl_error_handler(socket_info, ssl_error);
-            }
-        }
-    }
-
-    if (events & BEV_EVENT_EOF) {
-        bufferevent_free(buffer_event);
-
-        socketinfo_set_bufferevent(socket_info, nullptr);
-        socketinfo_set_socket_state(socket_info, Unconnected);
-
-        const auto &disconnected_handler = socketinfo_get_disconnected_handler(socket_info);
-
-        if (disconnected_handler)
-            disconnected_handler(socket_info);
-    }
-}
-
-void CEventDispatcher::timerNotification(const c_fdptr fd, const c_int16 events, void *ctx)
-{
-    C_UNUSED(fd);
-    C_UNUSED(events);
-
-    auto *timer_info = reinterpret_cast<timerinfo *>(ctx);
-
-    const auto &timer_handler = timerinfo_get_timer_handler(timer_info);
-
-    if (timer_handler)
-        timer_handler(timer_info);
-}
-
-void CEventDispatcher::outputBufferNotification(evbuffer *buffer, const evbuffer_cb_info *info, void *ctx)
-{
-    C_UNUSED(info);
-
-    auto *socket_info = reinterpret_cast<socketinfo *>(ctx);
-
-    if (socketinfo_get_socket_state(socket_info) != Closing)
-        return;
-
-    if (evbuffer_get_length(buffer) != 0)
-        return;
-
-    bufferevent_free(socketinfo_get_bufferevent(socket_info));
-
-    socketinfo_set_bufferevent(socket_info, nullptr);
-    socketinfo_set_socket_state(socket_info, Unconnected);
-
-    const auto &disconnected_handler = socketinfo_get_disconnected_handler(socket_info);
-
-    if (disconnected_handler)
-        disconnected_handler(socket_info);
+    if (m_evdns_base)
+        evdns_base_free(m_evdns_base, 1);
 }

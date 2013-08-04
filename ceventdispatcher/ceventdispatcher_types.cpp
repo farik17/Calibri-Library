@@ -33,7 +33,6 @@ struct timerinfo
         , ctx(nullptr)
         , timer_handler(nullptr)
     {
-
     }
 
     event *ev;
@@ -92,7 +91,6 @@ struct sslinfo
         , encrypted_handler(nullptr)
         , ssl_error_handler(nullptr)
     {
-
     }
 
     SSL_CTX *ssl_ctx;
@@ -186,7 +184,6 @@ struct socketinfo
         , read_handler(nullptr)
         , error_handler(nullptr)
     {
-
     }
 
     bufferevent *buffer_event;
@@ -298,7 +295,6 @@ struct serverinfo
         , accept_handler(nullptr)
         , accept_error_handler(nullptr)
     {
-
     }
 
     evconnlistener *ev_conn_listener;
