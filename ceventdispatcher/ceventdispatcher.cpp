@@ -69,10 +69,10 @@ static inline void acceptNotification(evconnlistener *listener, const c_fdptr fd
 
     auto *server_info = reinterpret_cast<serverinfo *>(ctx);
 
-    const auto &accep_handler = serverinfo_get_accept_handler(server_info);
+    const auto &accept_handler = serverinfo_get_accept_handler(server_info);
 
-    if (accep_handler)
-        accep_handler(server_info, fd);
+    if (accept_handler)
+        accept_handler(server_info, fd);
 }
 
 static inline void acceptErrorNotification(evconnlistener *listener, void *ctx)
