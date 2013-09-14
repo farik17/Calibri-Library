@@ -54,9 +54,9 @@ static inline void initializeWSA()
 
     if (error != 0) {
         WSACleanup();
-#if defined(DEBUG)
+#   if defined(DEBUG)
         C_DEBUG("failed with code " + std::to_string(error));
-#endif
+#   endif
     }
 }
 #endif

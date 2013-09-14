@@ -367,13 +367,8 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::vector<D> 
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto dataIt = data.cbegin();
-    auto dataEnd = data.cend();
-
-    while (dataIt != dataEnd) {
+    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
         stream << (*dataIt);
-        ++dataIt;
-    }
 
     return stream;
 }
@@ -383,13 +378,8 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::list<D> &d
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto dataIt = data.cbegin();
-    auto dataEnd = data.cend();
-
-    while (dataIt != dataEnd) {
+    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
         stream << (*dataIt);
-        ++dataIt;
-    }
 
     return stream;
 }
@@ -399,13 +389,8 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::set<D> &da
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto dataIt = data.cbegin();
-    auto dataEnd = data.cend();
-
-    while (dataIt != dataEnd) {
+    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
         stream << (*dataIt);
-        ++dataIt;
-    }
 
     return stream;
 }
@@ -415,30 +400,9 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::map<D, C> 
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto dataIt = data.cbegin();
-    auto dataEnd = data.cend();
-
-    while (dataIt != dataEnd) {
+    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt) {
         stream << (*dataIt).first;
         stream << (*dataIt).second;
-        ++dataIt;
-    }
-
-    return stream;
-}
-
-template<class T, class D, class C>
-inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::unordered_map<D, C> &data)
-{
-    stream << static_cast<c_uint64>(data.size());
-
-    auto dataIt = data.cbegin();
-    auto dataEnd = data.cend();
-
-    while (dataIt != dataEnd) {
-        stream << (*dataIt).first;
-        stream << (*dataIt).second;
-        ++dataIt;
     }
 
     return stream;
@@ -449,12 +413,20 @@ inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::unordered_
 {
     stream << static_cast<c_uint64>(data.size());
 
-    auto dataIt = data.cbegin();
-    auto dataEnd = data.cend();
-
-    while (dataIt != dataEnd) {
+    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
         stream << (*dataIt);
-        ++dataIt;
+
+    return stream;
+}
+
+template<class T, class D, class C>
+inline CDataStream<T> &operator <<(CDataStream<T> &stream, const std::unordered_map<D, C> &data)
+{
+    stream << static_cast<c_uint64>(data.size());
+
+    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt) {
+        stream << (*dataIt).first;
+        stream << (*dataIt).second;
     }
 
     return stream;
@@ -471,15 +443,11 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::vector<D> &data)
 
     data.reserve(size);
 
-    c_uint64 ix = 0;
-
-    while (ix < size) {
+    for (c_uint64 ix = 0; ix < size; ++ix) {
         D value;
         stream >> value;
 
         data.push_back(value);
-
-        ++ix;
     }
 
     return stream;
@@ -494,15 +462,11 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::list<D> &data)
     if (size == 0)
         return stream;
 
-    c_uint64 ix = 0;
-
-    while (ix < size) {
+    for (c_uint64 ix = 0; ix < size; ++ix) {
         D value;
         stream >> value;
 
         data.push_back(value);
-
-        ++ix;
     }
 
     return stream;
@@ -517,15 +481,11 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::set<D> &data)
     if (size == 0)
         return stream;
 
-    c_uint64 ix = 0;
-
-    while (ix < size) {
+    for (c_uint64 ix = 0; ix < size; ++ix) {
         D value;
         stream >> value;
 
         data.insert(value);
-
-        ++ix;
     }
 
     return stream;
@@ -540,44 +500,13 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::map<D, C> &data)
     if (size == 0)
         return stream;
 
-    c_uint64 ix = 0;
-
-    while (ix < size) {
+    for (c_uint64 ix = 0; ix < size; ++ix) {
         D key;
         C value;
         stream >> key;
         stream >> value;
 
         data[key] = value;
-
-        ++ix;
-    }
-
-    return stream;
-}
-
-template<class T, class D, class C>
-inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::unordered_map<D, C> &data)
-{
-    c_uint64 size = 0;
-    stream >> size;
-
-    if (size == 0)
-        return stream;
-
-    data.reserve(size);
-
-    c_uint64 ix = 0;
-
-    while (ix < size) {
-        D key;
-        C value;
-        stream >> key;
-        stream >> value;
-
-        data[key] = value;
-
-        ++ix;
     }
 
     return stream;
@@ -594,15 +523,34 @@ inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::unordered_set<D>
 
     data.reserve(size);
 
-    c_uint64 ix = 0;
-
-    while (ix < size) {
+    for (c_uint64 ix = 0; ix < size; ++ix) {
         D value;
         stream >> value;
 
         data.insert(value);
+    }
 
-        ++ix;
+    return stream;
+}
+
+template<class T, class D, class C>
+inline CDataStream<T> &operator >>(CDataStream<T> &stream, std::unordered_map<D, C> &data)
+{
+    c_uint64 size = 0;
+    stream >> size;
+
+    if (size == 0)
+        return stream;
+
+    data.reserve(size);
+
+    for (c_uint64 ix = 0; ix < size; ++ix) {
+        D key;
+        C value;
+        stream >> key;
+        stream >> value;
+
+        data[key] = value;
     }
 
     return stream;

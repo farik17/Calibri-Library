@@ -51,15 +51,11 @@ const bool CSettings::save()
         return false;
     }
 
-    auto propertySectionIt = m_propertiesTree.cbegin();
-    auto propertySectionEnd = m_propertiesTree.cend();
-
-    while (propertySectionIt != propertySectionEnd) {
-        const auto &section = (*propertySectionIt).first;
+    for (auto sectionIt = m_propertiesTree.cbegin(), sectionEnd = m_propertiesTree.cend(); sectionIt != sectionEnd; ++sectionIt) {
+        const auto &section = (*sectionIt).first;
 
         if (!isProperties(section)) {
             eraseProperties(section);
-            ++propertySectionIt;
 
             continue;
         }
@@ -67,34 +63,23 @@ const bool CSettings::save()
         m_file << section;
         m_file << std::endl;
 
-        const auto &properties = (*propertySectionIt).second;
+        const auto &properties = (*sectionIt).second;
 
-        auto propertyIt = properties.cbegin();
-        auto propertyEnd = properties.cend();
-
-        while (propertyIt != propertyEnd) {
+        for (auto propertyIt = properties.cbegin(), propertyEnd = properties.cend(); propertyIt != propertyEnd; ++propertyIt) {
             m_file << (*propertyIt).first;
             m_file << '=';
             m_file << (*propertyIt).second;
             m_file << std::endl;
-
-            ++propertyIt;
         }
 
         m_file << std::endl;
-
-        ++propertySectionIt;
     }
 
-    auto arraySectionIt = m_arraysTree.cbegin();
-    auto arraySectionEnd = m_arraysTree.cend();
-
-    while (arraySectionIt != arraySectionEnd) {
-        const auto &section = (*arraySectionIt).first;
+    for (auto sectionIt = m_arraysTree.cbegin(), sectionEnd = m_arraysTree.cend(); sectionIt != sectionEnd; ++sectionIt) {
+        const auto &section = (*sectionIt).first;
 
         if (!isArray(section)) {
             eraseArray(section);
-            ++arraySectionIt;
 
             continue;
         }
@@ -102,30 +87,23 @@ const bool CSettings::save()
         m_file << section;
         m_file << std::endl;
 
-        const auto &array = (*arraySectionIt).second;
+        const auto &array = (*sectionIt).second;
         const auto arrayLength = array.size();
 
         for (size_t ix = 0; ix < arrayLength; ++ix) {
             const auto &properties = array[ix];
 
-            auto propertyIt = properties.cbegin();
-            auto propertyEnd = properties.cend();
-
-            while (propertyIt != propertyEnd) {
+            for (auto propertyIt = properties.cbegin(), propertyEnd = properties.cend(); propertyIt != propertyEnd; ++propertyIt) {
                 m_file << ix;
                 m_file << '/';
                 m_file << (*propertyIt).first;
                 m_file << '=';
                 m_file << (*propertyIt).second;
                 m_file << std::endl;
-
-                ++propertyIt;
             }
         }
 
         m_file << std::endl;
-
-        ++arraySectionIt;
     }
 
     m_file.flush();
