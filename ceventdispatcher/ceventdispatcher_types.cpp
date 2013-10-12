@@ -75,6 +75,11 @@ void timerinfo_set_timer_handler(timerinfo *timer_info, const std::function<void
     timer_info->timer_handler = handler;
 }
 
+void timerinfo_set_timer_handler(timerinfo *timer_info, std::function<void (timerinfo *)> &&handler)
+{
+    timer_info->timer_handler = std::move(handler);
+}
+
 const std::function<void (timerinfo *)> &timerinfo_get_timer_handler(const timerinfo *timer_info)
 {
     return timer_info->timer_handler;
@@ -84,19 +89,19 @@ const std::function<void (timerinfo *)> &timerinfo_get_timer_handler(const timer
 struct sslinfo
 {
     sslinfo()
-        : ssl_ctx(nullptr)
-        , ssl_protocol(SSLv3_0)
+        : ssl_protocol(SSLv3_0)
         , ssl_mode(ClientMode)
         , ssl_peer_verify_mode(VerifyPeer)
+        , ssl_ctx(nullptr)
         , encrypted_handler(nullptr)
         , ssl_error_handler(nullptr)
     {
     }
 
-    SSL_CTX *ssl_ctx;
     CSSLProtocol ssl_protocol;
     CSSLMode ssl_mode;
     CSSLPeerVerifyMode ssl_peer_verify_mode;
+    SSL_CTX *ssl_ctx;
     std::function<void (socketinfo *)> encrypted_handler;
     std::function<void (socketinfo *, const c_ulong)> ssl_error_handler;
 };
@@ -109,16 +114,6 @@ sslinfo *sslinfo_new()
 void sslinfo_free(sslinfo *ssl_info)
 {
     delete ssl_info;
-}
-
-void sslinfo_set_ssl_ctx(sslinfo *ssl_info, SSL_CTX *ssl_ctx)
-{
-    ssl_info->ssl_ctx = ssl_ctx;
-}
-
-SSL_CTX *sslinfo_get_ssl_ctx(const sslinfo *ssl_info)
-{
-    return ssl_info->ssl_ctx;
 }
 
 void sslinfo_set_ssl_protocol(sslinfo *ssl_info, const CSSLProtocol ssl_protocol)
@@ -151,9 +146,24 @@ const CSSLPeerVerifyMode sslinfo_get_ssl_peer_verify_mode(const sslinfo *ssl_inf
     return ssl_info->ssl_peer_verify_mode;
 }
 
+void sslinfo_set_ssl_context(sslinfo *ssl_info, SSL_CTX *ssl_ctx)
+{
+    ssl_info->ssl_ctx = ssl_ctx;
+}
+
+SSL_CTX *sslinfo_get_ssl_context(const sslinfo *ssl_info)
+{
+    return ssl_info->ssl_ctx;
+}
+
 void sslinfo_set_encrypted_handler(sslinfo *ssl_info, const std::function<void (socketinfo *)> &handler)
 {
     ssl_info->encrypted_handler = handler;
+}
+
+void sslinfo_set_encrypted_handler(sslinfo *ssl_info, std::function<void (socketinfo *)> &&handler)
+{
+    ssl_info->encrypted_handler = std::move(handler);
 }
 
 const std::function<void (socketinfo *)> &sslinfo_get_encrypted_handler(const sslinfo *ssl_info)
@@ -166,6 +176,11 @@ void sslinfo_set_ssl_error_handler(sslinfo *ssl_info, const std::function<void (
     ssl_info->ssl_error_handler = handler;
 }
 
+void sslinfo_set_ssl_error_handler(sslinfo *ssl_info, std::function<void (socketinfo *, const c_ulong)> &&handler)
+{
+    ssl_info->ssl_error_handler = std::move(handler);
+}
+
 const std::function<void (socketinfo *, const c_ulong)> &sslinfo_get_ssl_error_handler(const sslinfo *ssl_info)
 {
     return ssl_info->ssl_error_handler;
@@ -175,10 +190,10 @@ const std::function<void (socketinfo *, const c_ulong)> &sslinfo_get_ssl_error_h
 struct socketinfo
 {
     socketinfo()
-        : buffer_event(nullptr)
+        : socket_state(Unconnected)
+        , buffer_event(nullptr)
         , ctx(nullptr)
         , ssl_info(nullptr)
-        , socket_state(Unconnected)
         , connected_handler(nullptr)
         , disconnected_handler(nullptr)
         , read_handler(nullptr)
@@ -186,10 +201,10 @@ struct socketinfo
     {
     }
 
+    CSocketState socket_state;
     bufferevent *buffer_event;
     void *ctx;
     sslinfo *ssl_info;
-    CSocketState socket_state;
     std::function<void (socketinfo *)> connected_handler;
     std::function<void (socketinfo *)> disconnected_handler;
     std::function<void (socketinfo *)> read_handler;
@@ -204,6 +219,16 @@ socketinfo *socketinfo_new()
 void socketinfo_free(socketinfo *socket_info)
 {
     delete socket_info;
+}
+
+void socketinfo_set_socket_state(socketinfo *socket_info, const CSocketState socket_state)
+{
+    socket_info->socket_state = socket_state;
+}
+
+const CSocketState socketinfo_get_socket_state(const socketinfo *socket_info)
+{
+    return socket_info->socket_state;
 }
 
 void socketinfo_set_bufferevent(socketinfo *socket_info, bufferevent *buffer_event)
@@ -236,19 +261,14 @@ sslinfo *socketinfo_get_sslinfo(const socketinfo *socket_info)
     return socket_info->ssl_info;
 }
 
-void socketinfo_set_socket_state(socketinfo *socket_info, const CSocketState socket_state)
-{
-    socket_info->socket_state = socket_state;
-}
-
-const CSocketState socketinfo_get_socket_state(const socketinfo *socket_info)
-{
-    return socket_info->socket_state;
-}
-
 void socketinfo_set_connected_handler(socketinfo *socket_info, const std::function<void (socketinfo *)> &handler)
 {
     socket_info->connected_handler = handler;
+}
+
+void socketinfo_set_connected_handler(socketinfo *socket_info, std::function<void (socketinfo *)> &&handler)
+{
+    socket_info->connected_handler = std::move(handler);
 }
 
 const std::function<void (socketinfo *)> &socketinfo_get_connected_handler(const socketinfo *socket_info)
@@ -261,6 +281,11 @@ void socketinfo_set_disconnected_handler(socketinfo *socket_info, const std::fun
     socket_info->disconnected_handler = handler;
 }
 
+void socketinfo_set_disconnected_handler(socketinfo *socket_info, std::function<void (socketinfo *)> &&handler)
+{
+    socket_info->disconnected_handler = std::move(handler);
+}
+
 const std::function<void (socketinfo *)> &socketinfo_get_disconnected_handler(const socketinfo *socket_info)
 {
     return socket_info->disconnected_handler;
@@ -271,6 +296,11 @@ void socketinfo_set_read_handler(socketinfo *socket_info, const std::function<vo
     socket_info->read_handler = handler;
 }
 
+void socketinfo_set_read_handler(socketinfo *socket_info, std::function<void (socketinfo *)> &&handler)
+{
+    socket_info->read_handler = std::move(handler);
+}
+
 const std::function<void (socketinfo *)> &socketinfo_get_read_handler(const socketinfo *socket_info)
 {
     return socket_info->read_handler;
@@ -279,6 +309,11 @@ const std::function<void (socketinfo *)> &socketinfo_get_read_handler(const sock
 void socketinfo_set_error_handler(socketinfo *socket_info, const std::function<void (socketinfo *, const c_int32)> &handler)
 {
     socket_info->error_handler = handler;
+}
+
+void socketinfo_set_error_handler(socketinfo *socket_info, std::function<void (socketinfo *, const c_int32)> &&handler)
+{
+    socket_info->error_handler = std::move(handler);
 }
 
 const std::function<void (socketinfo *, const c_int32)> &socketinfo_get_error_handler(const socketinfo *socket_info)
@@ -338,6 +373,11 @@ void serverinfo_set_accept_handler(serverinfo *server_info, const std::function<
     server_info->accept_handler = handler;
 }
 
+void serverinfo_set_accept_handler(serverinfo *server_info, std::function<void (serverinfo *, const c_fdptr)> &&handler)
+{
+    server_info->accept_handler = std::move(handler);
+}
+
 const std::function<void (serverinfo *, const c_fdptr)> &serverinfo_get_accept_handler(const serverinfo *server_info)
 {
     return server_info->accept_handler;
@@ -346,6 +386,11 @@ const std::function<void (serverinfo *, const c_fdptr)> &serverinfo_get_accept_h
 void serverinfo_set_accept_error_handler(serverinfo *server_info, const std::function<void (serverinfo *, const c_int32)> &handler)
 {
     server_info->accept_error_handler = handler;
+}
+
+void serverinfo_set_accept_error_handler(serverinfo *server_info, std::function<void (serverinfo *, const c_int32)> &&handler)
+{
+    server_info->accept_error_handler = std::move(handler);
 }
 
 const std::function<void (serverinfo *, const c_int32)> &serverinfo_get_accept_error_handler(const serverinfo *server_info)

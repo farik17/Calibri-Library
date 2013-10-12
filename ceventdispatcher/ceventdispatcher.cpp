@@ -203,7 +203,7 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
     auto *ssl_info = socketinfo_get_sslinfo(socket_info);
 
     if (ssl_info) {
-        auto *ssl = SSL_new(sslinfo_get_ssl_ctx(ssl_info));
+        auto *ssl = SSL_new(sslinfo_get_ssl_context(ssl_info));
 
         if (!ssl) {
 #if defined(DEBUG)
@@ -234,21 +234,6 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
 
     bufferevent_setcb(buffer_event, readNotification, nullptr, eventNotification, socket_info);
 
-    c_int16 events = (EV_READ | EV_PERSIST);
-
-    const auto features = event_base_get_features(m_event_base);
-
-    if (features & EV_FEATURE_ET)
-        events |= EV_ET;
-
-    if (bufferevent_enable(buffer_event, events) != 0) {
-        bufferevent_free(buffer_event);
-#if defined(DEBUG)
-        C_DEBUG("failed to enable events");
-#endif
-        return;
-    }
-
     socketinfo_set_bufferevent(socket_info, buffer_event);
     socketinfo_set_socket_state(socket_info, Connected);
 }
@@ -260,7 +245,7 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
     auto *ssl_info = socketinfo_get_sslinfo(socket_info);
 
     if (ssl_info) {
-        auto *ssl = SSL_new(sslinfo_get_ssl_ctx(ssl_info));
+        auto *ssl = SSL_new(sslinfo_get_ssl_context(ssl_info));
 
         if (!ssl) {
 #if defined(DEBUG)
@@ -290,21 +275,6 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
     }
 
     bufferevent_setcb(buffer_event, readNotification, nullptr, eventNotification, socket_info);
-
-    c_int16 events = (EV_READ | EV_PERSIST);
-
-    const auto features = event_base_get_features(m_event_base);
-
-    if (features & EV_FEATURE_ET)
-        events |= EV_ET;
-
-    if (bufferevent_enable(buffer_event, events) != 0) {
-        bufferevent_free(buffer_event);
-#if defined(DEBUG)
-        C_DEBUG("failed to enable events");
-#endif
-        return;
-    }
 
     if (bufferevent_socket_connect_hostname(buffer_event, m_evdns_base, AF_UNSPEC, address.c_str(), port) != 0) {
         bufferevent_free(buffer_event);

@@ -35,9 +35,13 @@ public:
     virtual ~CTcpSocket();
 
     void setConnectedHandler(const std::function<void (socketinfo *)> &handler);
+    void setConnectedHandler(std::function<void (socketinfo *)> &&handler);
     void setDisconnectedHandler(const std::function<void (socketinfo *)> &handler);
+    void setDisconnectedHandler(std::function<void (socketinfo *)> &&handler);
     void setReadHandler(const std::function<void (socketinfo *)> &handler);
+    void setReadHandler(std::function<void (socketinfo *)> &&handler);
     void setErrorHandler(const std::function<void (socketinfo *, const c_int32)> &handler);
+    void setErrorHandler(std::function<void (socketinfo *, const c_int32)> &&handler);
     void connectToHost(const std::string &address, const c_uint16 port);
     void close(const bool force = false);
 

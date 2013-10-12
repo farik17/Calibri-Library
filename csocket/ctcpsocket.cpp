@@ -51,9 +51,19 @@ void CTcpSocket::setConnectedHandler(const std::function<void (socketinfo *)> &h
     socketinfo_set_connected_handler(m_socketinfo, handler);
 }
 
+void CTcpSocket::setConnectedHandler(std::function<void (socketinfo *)> &&handler)
+{
+    socketinfo_set_connected_handler(m_socketinfo, std::move(handler));
+}
+
 void CTcpSocket::setDisconnectedHandler(const std::function<void (socketinfo *)> &handler)
 {
     socketinfo_set_disconnected_handler(m_socketinfo, handler);
+}
+
+void CTcpSocket::setDisconnectedHandler(std::function<void (socketinfo *)> &&handler)
+{
+    socketinfo_set_disconnected_handler(m_socketinfo, std::move(handler));
 }
 
 void CTcpSocket::setReadHandler(const std::function<void (socketinfo *)> &handler)
@@ -61,9 +71,19 @@ void CTcpSocket::setReadHandler(const std::function<void (socketinfo *)> &handle
     socketinfo_set_read_handler(m_socketinfo, handler);
 }
 
+void CTcpSocket::setReadHandler(std::function<void (socketinfo *)> &&handler)
+{
+    socketinfo_set_read_handler(m_socketinfo, std::move(handler));
+}
+
 void CTcpSocket::setErrorHandler(const std::function<void (socketinfo *, const c_int32)> &handler)
 {
     socketinfo_set_error_handler(m_socketinfo, handler);
+}
+
+void CTcpSocket::setErrorHandler(std::function<void (socketinfo *, const c_int32)> &&handler)
+{
+    socketinfo_set_error_handler(m_socketinfo, std::move(handler));
 }
 
 void CTcpSocket::connectToHost(const std::string &address, const c_uint16 port)

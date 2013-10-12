@@ -46,9 +46,19 @@ void CTcpServer::setAcceptHandler(const std::function<void (serverinfo *, const 
     serverinfo_set_accept_handler(m_serverinfo, handler);
 }
 
+void CTcpServer::setAcceptHandler(std::function<void (serverinfo *, const c_fdptr)> &&handler)
+{
+    serverinfo_set_accept_handler(m_serverinfo, std::move(handler));
+}
+
 void CTcpServer::setAcceptErrorHandler(const std::function<void (serverinfo *, const c_int32)> &handler)
 {
     serverinfo_set_accept_error_handler(m_serverinfo, handler);
+}
+
+void CTcpServer::setAcceptErrorHandler(std::function<void (serverinfo *, const c_int32)> &&handler)
+{
+    serverinfo_set_accept_error_handler(m_serverinfo, std::move(handler));
 }
 
 void CTcpServer::setEnable(const bool enable)

@@ -35,7 +35,9 @@ public:
     virtual ~CTcpServer();
 
     void setAcceptHandler(const std::function<void (serverinfo *, const c_fdptr)> &handler);
+    void setAcceptHandler(std::function<void (serverinfo *, const c_fdptr)> &&handler);
     void setAcceptErrorHandler(const std::function<void (serverinfo *, const c_int32)> &handler);
+    void setAcceptErrorHandler(std::function<void (serverinfo *, const c_int32)> &&handler);
     void setEnable(const bool enable = true);
 
     const bool isListening() const;
