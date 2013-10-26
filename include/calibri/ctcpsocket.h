@@ -40,6 +40,8 @@ public:
     void setDisconnectedHandler(std::function<void (socketinfo *)> &&handler);
     void setReadHandler(const std::function<void (socketinfo *)> &handler);
     void setReadHandler(std::function<void (socketinfo *)> &&handler);
+    void setWriteHandler(const std::function<void (socketinfo *)> &handler);
+    void setWriteHandler(std::function<void (socketinfo *)> &&handler);
     void setErrorHandler(const std::function<void (socketinfo *, const c_int32)> &handler);
     void setErrorHandler(std::function<void (socketinfo *, const c_int32)> &&handler);
     void connectToHost(const std::string &address, const c_uint16 port);
@@ -48,7 +50,8 @@ public:
     std::string address() const;
     std::string errorString() const;
 
-    const size_t bytesAvailable() const;
+    const size_t bytesToRead() const;
+    const size_t bytesToWrite() const;
     const size_t write(const char *data, const size_t len);
     const size_t read(char *data, const size_t len);
 

@@ -93,10 +93,55 @@ static inline void readNotification(bufferevent *buffer_event, void *ctx)
 
     auto *socket_info = reinterpret_cast<socketinfo *>(ctx);
 
-    const auto &read_handler = socketinfo_get_read_handler(socket_info);
+    switch (socketinfo_get_socket_state(socket_info)) {
+    case Connected: {
+        const auto &read_handler = socketinfo_get_read_handler(socket_info);
 
-    if (read_handler)
-        read_handler(socket_info);
+        if (read_handler)
+            read_handler(socket_info);
+
+        break;
+    }
+
+    default:
+        break;
+    }
+}
+
+static inline void writeNotification(bufferevent *buffer_event, void *ctx)
+{
+    auto *socket_info = reinterpret_cast<socketinfo *>(ctx);
+
+    switch (socketinfo_get_socket_state(socket_info)) {
+    case Connected: {
+        const auto &write_handler = socketinfo_get_write_handler(socket_info);
+
+        if (write_handler)
+            write_handler(socket_info);
+
+        break;
+    }
+
+    case Closing: {
+        if (evbuffer_get_length(bufferevent_get_output(buffer_event)) != 0)
+            break;
+
+        bufferevent_free(buffer_event);
+
+        socketinfo_set_bufferevent(socket_info, nullptr);
+        socketinfo_set_socket_state(socket_info, Unconnected);
+
+        const auto &disconnected_handler = socketinfo_get_disconnected_handler(socket_info);
+
+        if (disconnected_handler)
+            disconnected_handler(socket_info);
+
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 static inline void eventNotification(bufferevent *buffer_event, const c_int16 events, void *ctx)
@@ -173,29 +218,6 @@ static inline void timerNotification(const c_fdptr fd, const c_int16 events, voi
         timer_handler(timer_info);
 }
 
-static inline void outputBufferNotification(evbuffer *buffer, const evbuffer_cb_info *info, void *ctx)
-{
-    C_UNUSED(info);
-
-    auto *socket_info = reinterpret_cast<socketinfo *>(ctx);
-
-    if (socketinfo_get_socket_state(socket_info) != Closing)
-        return;
-
-    if (evbuffer_get_length(buffer) != 0)
-        return;
-
-    bufferevent_free(socketinfo_get_bufferevent(socket_info));
-
-    socketinfo_set_bufferevent(socket_info, nullptr);
-    socketinfo_set_socket_state(socket_info, Unconnected);
-
-    const auto &disconnected_handler = socketinfo_get_disconnected_handler(socket_info);
-
-    if (disconnected_handler)
-        disconnected_handler(socket_info);
-}
-
 void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
 {
     bufferevent *buffer_event = nullptr;
@@ -232,7 +254,7 @@ void CEventDispatcher::acceptSocket(socketinfo *socket_info, const c_fdptr fd)
         }
     }
 
-    bufferevent_setcb(buffer_event, readNotification, nullptr, eventNotification, socket_info);
+    bufferevent_setcb(buffer_event, readNotification, writeNotification, eventNotification, socket_info);
 
     socketinfo_set_bufferevent(socket_info, buffer_event);
     socketinfo_set_socket_state(socket_info, Connected);
@@ -274,7 +296,7 @@ void CEventDispatcher::connectSocket(socketinfo *socket_info, const std::string 
         }
     }
 
-    bufferevent_setcb(buffer_event, readNotification, nullptr, eventNotification, socket_info);
+    bufferevent_setcb(buffer_event, readNotification, writeNotification, eventNotification, socket_info);
 
     if (bufferevent_socket_connect_hostname(buffer_event, m_evdns_base, AF_UNSPEC, address.c_str(), port) != 0) {
         bufferevent_free(buffer_event);
@@ -303,8 +325,6 @@ void CEventDispatcher::closeSocket(socketinfo *socket_info, const bool force)
         if (disconnected_handler)
             disconnected_handler(socket_info);
     } else {
-        evbuffer_add_cb(bufferevent_get_output(buffer_event), outputBufferNotification, socket_info);
-
         socketinfo_set_socket_state(socket_info, Closing);
     }
 }

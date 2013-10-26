@@ -113,6 +113,10 @@ void socketinfo_set_read_handler(socketinfo *socket_info, const std::function<vo
 void socketinfo_set_read_handler(socketinfo *socket_info, std::function<void (socketinfo *)> &&handler);
 const std::function<void (socketinfo *)> &socketinfo_get_read_handler(const socketinfo *socket_info);
 
+void socketinfo_set_write_handler(socketinfo *socket_info, const std::function<void (socketinfo *)> &handler);
+void socketinfo_set_write_handler(socketinfo *socket_info, std::function<void (socketinfo *)> &&handler);
+const std::function<void (socketinfo *)> &socketinfo_get_write_handler(const socketinfo *socket_info);
+
 void socketinfo_set_error_handler(socketinfo *socket_info, const std::function<void (socketinfo *, const c_int32)> &handler);
 void socketinfo_set_error_handler(socketinfo *socket_info, std::function<void (socketinfo *, const c_int32)> &&handler);
 const std::function<void (socketinfo *, const c_int32)> &socketinfo_get_error_handler(const socketinfo *socket_info);

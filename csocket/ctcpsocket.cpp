@@ -76,6 +76,16 @@ void CTcpSocket::setReadHandler(std::function<void (socketinfo *)> &&handler)
     socketinfo_set_read_handler(m_socketinfo, std::move(handler));
 }
 
+void CTcpSocket::setWriteHandler(const std::function<void (socketinfo *)> &handler)
+{
+    socketinfo_set_write_handler(m_socketinfo, handler);
+}
+
+void CTcpSocket::setWriteHandler(std::function<void (socketinfo *)> &&handler)
+{
+    socketinfo_set_write_handler(m_socketinfo, std::move(handler));
+}
+
 void CTcpSocket::setErrorHandler(const std::function<void (socketinfo *, const c_int32)> &handler)
 {
     socketinfo_set_error_handler(m_socketinfo, handler);
@@ -112,12 +122,20 @@ std::string CTcpSocket::errorString() const
     return evutil_socket_error_to_string(error());
 }
 
-const size_t CTcpSocket::bytesAvailable() const
+const size_t CTcpSocket::bytesToRead() const
 {
     if (state() != Connected)
         return 0;
 
     return evbuffer_get_length(bufferevent_get_input(socketinfo_get_bufferevent(m_socketinfo)));
+}
+
+const size_t CTcpSocket::bytesToWrite() const
+{
+    if (state() != Connected)
+        return 0;
+
+    return evbuffer_get_length(bufferevent_get_output(socketinfo_get_bufferevent(m_socketinfo)));
 }
 
 const size_t CTcpSocket::write(const char *data, const size_t len)
@@ -169,7 +187,7 @@ const CSocketState CTcpSocket::state() const
 
 const bool CTcpSocket::atEnd() const
 {
-    return bytesAvailable() == 0;
+    return bytesToRead() == 0;
 }
 
 const bool CTcpSocket::setSocketDescriptor(const c_fdptr fd)

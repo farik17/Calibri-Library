@@ -197,6 +197,7 @@ struct socketinfo
         , connected_handler(nullptr)
         , disconnected_handler(nullptr)
         , read_handler(nullptr)
+        , write_handler(nullptr)
         , error_handler(nullptr)
     {
     }
@@ -208,6 +209,7 @@ struct socketinfo
     std::function<void (socketinfo *)> connected_handler;
     std::function<void (socketinfo *)> disconnected_handler;
     std::function<void (socketinfo *)> read_handler;
+    std::function<void (socketinfo *)> write_handler;
     std::function<void (socketinfo *, const c_int32)> error_handler;
 };
 
@@ -304,6 +306,21 @@ void socketinfo_set_read_handler(socketinfo *socket_info, std::function<void (so
 const std::function<void (socketinfo *)> &socketinfo_get_read_handler(const socketinfo *socket_info)
 {
     return socket_info->read_handler;
+}
+
+void socketinfo_set_write_handler(socketinfo *socket_info, const std::function<void (socketinfo *)> &handler)
+{
+    socket_info->write_handler = handler;
+}
+
+void socketinfo_set_write_handler(socketinfo *socket_info, std::function<void (socketinfo *)> &&handler)
+{
+    socket_info->write_handler = std::move(handler);
+}
+
+const std::function<void (socketinfo *)> &socketinfo_get_write_handler(const socketinfo *socket_info)
+{
+    return socket_info->write_handler;
 }
 
 void socketinfo_set_error_handler(socketinfo *socket_info, const std::function<void (socketinfo *, const c_int32)> &handler)
