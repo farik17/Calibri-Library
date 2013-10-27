@@ -124,7 +124,7 @@ std::string AES256_cbc_decrypt(const std::string &data, const std::string &key, 
     const auto in_len = static_cast<c_int32>(data.size());
     c_int32 out_len = 0;
     c_int32 total_len = 0;
-    auto *decrypted_data = new unsigned char[in_len];
+    auto *decrypted_data = new unsigned char[static_cast<size_t>(in_len)];
     unsigned char key_hash[SHA256_DIGEST_LENGTH];
     unsigned char iv_hash[SHA256_DIGEST_LENGTH];
 
