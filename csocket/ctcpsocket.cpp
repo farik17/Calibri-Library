@@ -185,11 +185,6 @@ const CSocketState CTcpSocket::state() const
     return socketinfo_get_socket_state(m_socketinfo);
 }
 
-const bool CTcpSocket::atEnd() const
-{
-    return bytesToRead() == 0;
-}
-
 const bool CTcpSocket::setSocketDescriptor(const c_fdptr fd)
 {
     if (state() != Unconnected)

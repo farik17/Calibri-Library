@@ -63,7 +63,6 @@ public:
 
     const CSocketState state() const;
 
-    const bool atEnd() const;
     const bool setSocketDescriptor(const c_fdptr fd);
     const bool setNoDelay(const c_uint32 flag);
     const bool setKeepAlive(const c_uint32 flag, const c_uint32 idle = 0, const c_uint32 interval = 0, const c_uint32 count = 0);
