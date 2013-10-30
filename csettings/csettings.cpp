@@ -88,9 +88,8 @@ const bool CSettings::save()
         m_file << std::endl;
 
         const auto &array = (*sectionIt).second;
-        const auto arrayLength = array.size();
 
-        for (size_t ix = 0; ix < arrayLength; ++ix) {
+        for (size_t ix = 0; ix < array.size(); ++ix) {
             const auto &properties = array[ix];
 
             for (auto propertyIt = properties.cbegin(), propertyEnd = properties.cend(); propertyIt != propertyEnd; ++propertyIt) {
