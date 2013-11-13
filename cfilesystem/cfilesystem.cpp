@@ -34,30 +34,87 @@
 #   include <errno.h>
 #endif
 
+//! Std Includes
+#include <vector>
+
 //! CUtils Includes
 #include "cutils.h"
 
-//! Defines
-#define PATH_SEPARATOR_PATTERN       "\\/"
-#define PATH_SEPARATOR               "/"
-#define DOT_DOT                      ".."
-#define DOT                          "."
-#define PARENT_DIR                   "../"
-#define CURRENT_DIR                  "./"
+//! Constants
+static const std::string path_separator_pattern = "\\/";
+static const std::string path_separator =  "/";
+static const std::string dot_dot = "..";
+static const std::string dot = ".";
+static const std::string parent_dir = "../";
+static const std::string current_dir = "./";
+
+static inline std::vector<std::string> path_tree_from_string(const std::string &path)
+{
+    std::vector<std::string> result;
+
+    size_t from = 0;
+    auto to = path.find_first_of(path_separator_pattern, from);
+
+    while (to != std::string::npos) {
+        result.push_back(path.substr(from, to - from));
+
+        from = to + 1;
+        to = path.find_first_of(path_separator_pattern, from + 1);
+    }
+
+    to = path.length();
+
+    if (from != to)
+        result.push_back(path.substr(from, to - from));
+
+    return result;
+}
+
+static inline std::string path_tree_to_string(const std::vector<std::string> &path_tree)
+{
+    std::string result;
+
+    for (auto path_tree_it = path_tree.cbegin(), path_tree_end = path_tree.cend(); path_tree_it != path_tree_end; ++path_tree_it)
+        result += (*path_tree_it) + path_separator;
+
+    return result;
+}
+
+static inline void normalize_path_tree(std::vector<std::string> &path_tree)
+{
+    if (path_tree.size() < 2)
+        return;
+
+    auto path_tree_it = path_tree.begin() + 1;
+
+    while (path_tree_it != path_tree.end()) {
+        if ((*path_tree_it) == dot_dot) {
+            auto prev_path_tree_it = path_tree_it - 1;
+
+            if ((*prev_path_tree_it) != dot_dot) {
+                path_tree_it = path_tree.erase(prev_path_tree_it, path_tree_it + 1);
+
+                continue;
+            }
+        }
+
+        ++path_tree_it;
+    }
+}
 
 const c_int32 cfilesystem_create_path(const std::string &path)
 {
-    auto path_tree = cfilesystem_parse_path(path);
-    cfilesystem_normalize_path_tree(path_tree);
+    auto path_tree = path_tree_from_string(path);
+    normalize_path_tree(path_tree);
 
     std::string current_path;
 
     auto path_tree_it = path_tree.begin();
 
     while (path_tree_it != path_tree.cend()) {
-        current_path += (*path_tree_it) + PATH_SEPARATOR;
+        current_path += (*path_tree_it) + path_separator;
 
-        if (current_path == PARENT_DIR) {
+        if (current_path == parent_dir) {
             path_tree_it = path_tree.erase(path_tree_it);
 
             continue;
@@ -99,17 +156,17 @@ const c_int32 cfilesystem_create_path(const std::string &path)
 
 const c_int32 cfilesystem_remove_path(const std::string &path)
 {
-    auto path_tree = cfilesystem_parse_path(path);
-    cfilesystem_normalize_path_tree(path_tree);
+    auto path_tree = path_tree_from_string(path);
+    normalize_path_tree(path_tree);
 
     std::string current_path;
 
     auto path_tree_it = path_tree.rbegin();
 
     while (path_tree_it != path_tree.crend()) {
-        current_path = cfilesystem_path_tree_to_string(path_tree);
+        current_path = path_tree_to_string(path_tree);
 
-        if (current_path == PARENT_DIR) {
+        if (current_path == parent_dir) {
             path_tree_it = decltype(path_tree_it)(path_tree.erase(path_tree_it.base() - 1));
 
             continue;
@@ -133,58 +190,4 @@ const c_int32 cfilesystem_remove_path(const std::string &path)
     }
 
     return 0;
-}
-
-cfilesystem_path_tree cfilesystem_parse_path(const std::string &path)
-{
-    cfilesystem_path_tree path_tree;
-
-    size_t from = 0;
-    auto to = path.find_first_of(PATH_SEPARATOR_PATTERN, from);
-
-    while (to != std::string::npos) {
-        path_tree.push_back(path.substr(from, to - from));
-
-        from = to + 1;
-        to = path.find_first_of(PATH_SEPARATOR_PATTERN, from + 1);
-    }
-
-    to = path.length();
-
-    if (from != to)
-        path_tree.push_back(path.substr(from, to - from));
-
-    return path_tree;
-}
-
-std::string cfilesystem_path_tree_to_string(const cfilesystem_path_tree &path_tree)
-{
-    std::string path;
-
-    for (auto path_tree_it = path_tree.cbegin(), path_tree_end = path_tree.cend(); path_tree_it != path_tree_end; ++path_tree_it)
-        path += (*path_tree_it) + PATH_SEPARATOR;
-
-    return path;
-}
-
-void cfilesystem_normalize_path_tree(cfilesystem_path_tree &path_tree)
-{
-    if (path_tree.size() < 2)
-        return;
-
-    auto path_tree_it = path_tree.begin() + 1;
-
-    while (path_tree_it != path_tree.end()) {
-        if ((*path_tree_it) == DOT_DOT) {
-            auto prev_path_tree_it = path_tree_it - 1;
-
-            if ((*prev_path_tree_it) != DOT_DOT) {
-                path_tree_it = path_tree.erase(prev_path_tree_it, path_tree_it + 1);
-
-                continue;
-            }
-        }
-
-        ++path_tree_it;
-    }
 }
