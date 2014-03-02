@@ -25,11 +25,15 @@ private slots:
     void testCString();
     void testString();
 
-    void testReassign();
+    void testSeek();
 
-    void testContainers();
-    void testOrderedAssociativeContainers();
-    void testUnorderedAssociativeContainers();
+    void testVector();
+    void testList();
+    void testForwardList();
+    void testSet();
+    void testMap();
+    void testUnorderedSet();
+    void testUnorderedMap();
 };
 
 void tst_DataStream::testInt8()
@@ -256,7 +260,7 @@ void tst_DataStream::testString()
     QVERIFY2(in == out, "std::string read/write failed.");
 }
 
-void tst_DataStream::testReassign()
+void tst_DataStream::testSeek()
 {
     std::string in = "string data";
 
@@ -277,11 +281,11 @@ void tst_DataStream::testReassign()
     readStream >> size;
     readStream >> out;
 
-    QVERIFY2(static_cast<uint32>(in.size() == size), "reassign failed.");
-    QVERIFY2(in == out, "reassign failed.");
+    QVERIFY2(static_cast<uint32>(in.size() == size), "seek failed.");
+    QVERIFY2(in == out, "seek failed.");
 }
 
-void tst_DataStream::testContainers()
+void tst_DataStream::testVector()
 {
     std::vector<std::string> in(10, "string data");
 
@@ -295,15 +299,68 @@ void tst_DataStream::testContainers()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "container read/write failed.");
+    QVERIFY2(in == out, "vector read/write failed.");
 }
 
-void tst_DataStream::testOrderedAssociativeContainers()
+void tst_DataStream::testList()
+{
+    std::list<std::string> in(10, "string data");
+
+    std::string buffer;
+
+    Calibri::DataStream<std::string> writeStream(buffer);
+    writeStream << in;
+
+    std::list<std::string> out;
+
+    Calibri::DataStream<std::string> readStream(buffer);
+    readStream >> out;
+
+    QVERIFY2(in == out, "list read/write failed.");
+}
+
+void tst_DataStream::testForwardList()
+{
+    std::forward_list<std::string> in(10, "string data");
+
+    std::string buffer;
+
+    Calibri::DataStream<std::string> writeStream(buffer);
+    writeStream << in;
+
+    std::forward_list<std::string> out;
+
+    Calibri::DataStream<std::string> readStream(buffer);
+    readStream >> out;
+
+    QVERIFY2(in == out, "forward list read/write failed.");
+}
+
+void tst_DataStream::testSet()
+{
+    std::set<std::string> in;
+
+    in.insert("string data");
+
+    std::string buffer;
+
+    Calibri::DataStream<std::string> writeStream(buffer);
+    writeStream << in;
+
+    std::set<std::string> out;
+
+    Calibri::DataStream<std::string> readStream(buffer);
+    readStream >> out;
+
+    QVERIFY2(in == out, "set read/write failed.");
+}
+
+void tst_DataStream::testMap()
 {
     std::map<std::string, std::string> in;
 
-    in["key one"] = "value one";
-    in["key two"] = "value two";
+    in.insert(std::make_pair("key one", "value one"));
+    in.insert(std::make_pair("key two", "value two"));
 
     std::string buffer;
 
@@ -315,15 +372,34 @@ void tst_DataStream::testOrderedAssociativeContainers()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "ordered associative container read/write failed.");
+    QVERIFY2(in == out, "map read/write failed.");
 }
 
-void tst_DataStream::testUnorderedAssociativeContainers()
+void tst_DataStream::testUnorderedSet()
+{
+    std::unordered_set<std::string> in;
+
+    in.insert("string data");
+
+    std::string buffer;
+
+    Calibri::DataStream<std::string> writeStream(buffer);
+    writeStream << in;
+
+    std::unordered_set<std::string> out;
+
+    Calibri::DataStream<std::string> readStream(buffer);
+    readStream >> out;
+
+    QVERIFY2(in == out, "unordered set read/write failed.");
+}
+
+void tst_DataStream::testUnorderedMap()
 {
     std::unordered_map<std::string, std::string> in;
 
-    in["key one"] = "value one";
-    in["key two"] = "value two";
+    in.insert(std::make_pair("key one", "value one"));
+    in.insert(std::make_pair("key two", "value two"));
 
     std::string buffer;
 
@@ -335,7 +411,7 @@ void tst_DataStream::testUnorderedAssociativeContainers()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "unordered associative container read/write failed.");
+    QVERIFY2(in == out, "unordered map read/write failed.");
 }
 
 QTEST_MAIN(tst_DataStream)

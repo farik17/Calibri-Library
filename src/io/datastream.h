@@ -4,6 +4,7 @@
 //! Std Includes
 #include <vector>
 #include <list>
+#include <forward_list>
 #include <set>
 #include <map>
 #include <unordered_set>
@@ -177,6 +178,17 @@ template<typename DeviceType, typename ValueType>
 inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::list<ValueType> &data)
 {
     dataStream << static_cast<uint32>(data.size());
+
+    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
+        dataStream << (*dataIt);
+
+    return dataStream;
+}
+
+template<typename DeviceType, typename ValueType>
+inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::forward_list<ValueType> &data)
+{
+    dataStream << static_cast<uint32>(std::distance(data.cbegin(), data.cend()));
 
     for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
         dataStream << (*dataIt);
@@ -394,6 +406,42 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
 }
 
 template<typename DeviceType, typename ValueType>
+inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::forward_list<ValueType> &data)
+{
+    data.clear();
+
+    uint32 size = 0;
+    dataStream >> size;
+
+    auto it = data.before_begin();
+
+    for (uint32 ix = 0; ix < size; ++ix) {
+        ValueType value;
+        dataStream >> value;
+
+        if (dataStream.status() != DataStreamStatus::Ok) {
+            data.clear();
+
+            break;
+        }
+
+        try {
+            it = data.insert_after(it, std::move(value));
+        } catch (const std::exception &ex) {
+            std::cerr << FUNC_INFO << ex.what();
+
+            dataStream.setStatus(DataStreamStatus::ReadError);
+
+            data.clear();
+
+            break;
+        }
+    }
+
+    return dataStream;
+}
+
+template<typename DeviceType, typename ValueType>
 inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::set<ValueType> &data)
 {
     data.clear();
@@ -448,7 +496,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         }
 
         try {
-            data[std::move(key)] = std::move(value);
+            data.insert(std::make_pair(std::move(key), std::move(value)));
         } catch (const std::exception &ex) {
             std::cerr << FUNC_INFO << ex.what();
 
@@ -538,7 +586,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         }
 
         try {
-            data[std::move(key)] = std::move(value);
+            data.insert(std::make_pair(std::move(key), std::move(value)));
         } catch (const std::exception &ex) {
             std::cerr << FUNC_INFO << ex.what();
 
