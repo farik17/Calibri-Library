@@ -50,7 +50,7 @@ void tst_DataStream::testInt8()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "c_int8 read/write failed.");
+    QVERIFY2(in == out, "int8 read/write failed.");
 }
 
 void tst_DataStream::testUint8()
@@ -67,7 +67,7 @@ void tst_DataStream::testUint8()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "c_uint8 read/write failed.");
+    QVERIFY2(in == out, "uint8 read/write failed.");
 }
 
 void tst_DataStream::testInt16()
@@ -84,7 +84,7 @@ void tst_DataStream::testInt16()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "c_int16 read/write failed.");
+    QVERIFY2(in == out, "int16 read/write failed.");
 }
 
 void tst_DataStream::testUint16()
@@ -101,7 +101,7 @@ void tst_DataStream::testUint16()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "c_uint16 read/write failed.");
+    QVERIFY2(in == out, "uint16 read/write failed.");
 }
 
 void tst_DataStream::testInt32()
@@ -118,7 +118,7 @@ void tst_DataStream::testInt32()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "c_int32 read/write failed.");
+    QVERIFY2(in == out, "int32 read/write failed.");
 }
 
 void tst_DataStream::testUint32()
@@ -135,7 +135,7 @@ void tst_DataStream::testUint32()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "c_uint32 read/write failed.");
+    QVERIFY2(in == out, "uint32 read/write failed.");
 }
 
 void tst_DataStream::testInt64()
@@ -152,7 +152,7 @@ void tst_DataStream::testInt64()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "c_int64 read/write failed.");
+    QVERIFY2(in == out, "int64 read/write failed.");
 }
 
 void tst_DataStream::testUint64()
@@ -169,7 +169,7 @@ void tst_DataStream::testUint64()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "c_uint64 read/write failed.");
+    QVERIFY2(in == out, "uint64 read/write failed.");
 }
 
 void tst_DataStream::testFloat()
@@ -220,7 +220,7 @@ void tst_DataStream::testLongDouble()
     Calibri::DataStream<std::string> readStream(buffer);
     readStream >> out;
 
-    QVERIFY2(in == out, "long double read/write failed.");
+    QVERIFY2(in == out, "longdouble read/write failed.");
 }
 
 void tst_DataStream::testCString()
