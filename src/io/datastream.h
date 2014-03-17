@@ -19,11 +19,9 @@
 #   pragma warning(disable:4996)
 #endif
 
-namespace Calibri
-{
+namespace Calibri {
 
-enum class DataStreamStatus : uint8
-{
+enum class DataStreamStatus : uint8 {
     Ok = 0,
     ReadError,
     WriteError
@@ -33,7 +31,7 @@ template<typename DeviceType>
 class DataStream
 {
 public:
-    explicit DataStream(DeviceType &device)
+    explicit DataStream(DeviceType &device) DECL_NOEXCEPT
         : m_device(device)
         , m_pos(0)
         , m_status(DataStreamStatus::Ok)
