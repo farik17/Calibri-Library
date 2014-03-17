@@ -120,7 +120,7 @@ inline const size_t dataStreamRead(DataStream<std::string> &dataStream, char *da
  * DataStream write operators
  */
 template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const ValueType value)
+inline DataStream<typename std::enable_if<std::is_arithmetic<ValueType>::value, DeviceType>::type> &operator <<(DataStream<DeviceType> &dataStream, const ValueType value)
 {
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
@@ -246,7 +246,7 @@ inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, c
  * DataStream read operators
  */
 template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, ValueType &value)
+inline DataStream<typename std::enable_if<std::is_arithmetic<ValueType>::value, DeviceType>::type> &operator >>(DataStream<DeviceType> &dataStream, ValueType &value)
 {
     value = 0;
 
