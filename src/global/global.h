@@ -14,33 +14,33 @@
 #define CALIBRI_VERSION CALIBRI_VERSION_VALUE(2, 0, 0)
 #define CALIBRI_VERSION_CHECK(major, minor, patch) (CALIBRI_VERSION >= CALIBRI_VERSION_VALUE(major, minor, patch))
 
-//! Typedefs
-typedef char int8;
-typedef unsigned char uint8;
-typedef short int16;
-typedef unsigned short uint16;
-typedef int int32;
-typedef unsigned int uint32;
-typedef long long int64;
-typedef unsigned long long uint64;
+//! Aliases
+using int8 = char;
+using uint8 = unsigned char;
+using int16 = short;
+using uint16 = unsigned short;
+using int32 = int;
+using uint32 = unsigned int;
+using int64 = long long;
+using uint64 = unsigned long long;
 
-typedef int64 longlong;
-typedef uint64 ulonglong;
+using longlong = int64;
+using ulonglong = uint64;
 
-typedef unsigned char uchar;
-typedef unsigned short ushort;
-typedef unsigned int uint;
-typedef unsigned long ulong;
+using uchar = unsigned char;
+using ushort = unsigned short;
+using uint = unsigned int;
+using ulong = unsigned long;
 
-typedef long double longdouble;
+using longdouble = long double;
 
-typedef intptr_t intptr;
-typedef uintptr_t uintptr;
+using intptr = intptr_t;
+using uintptr = uintptr_t;
 
 #if defined(OS_WINDOWS)
-typedef intptr fdptr;
+using fdptr = intptr;
 #elif defined(OS_UNIX) || defined(OS_LINUX)
-typedef int32 fdptr;
+using fdptr = int32;
 #endif
 
 #endif // GLOBAL_H

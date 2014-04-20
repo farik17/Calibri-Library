@@ -87,8 +87,10 @@
 
 #if defined(COMPILER_CXX11_CONSTEXPR)
 #   define DECL_CONSTEXPR constexpr
+#   define CONSTEXPR constexpr
 #else
 #   define DECL_CONSTEXPR
+#   define CONSTEXPR const
 #endif
 
 #if defined(COMPILER_CXX11_DEFAULT_MEMBERS)

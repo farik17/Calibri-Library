@@ -43,7 +43,7 @@ public:
         return m_device;
     }
 
-    const size_t pos() const DECL_NOEXCEPT
+    size_t pos() const DECL_NOEXCEPT
     {
         return m_pos;
     }
@@ -81,7 +81,7 @@ private:
 /*!
  * DataStream write function
  */
-inline const size_t dataStreamWrite(DataStream<std::string> &dataStream, const char *data, const size_t size)
+inline size_t dataStreamWrite(DataStream<std::string> &dataStream, const char *data, size_t size)
 {
     try {
         dataStream.device().replace(dataStream.pos(), size, data, size);
@@ -99,7 +99,7 @@ inline const size_t dataStreamWrite(DataStream<std::string> &dataStream, const c
 /*!
  * DataStream read function
  */
-inline const size_t dataStreamRead(DataStream<std::string> &dataStream, char *data, const size_t size)
+inline size_t dataStreamRead(DataStream<std::string> &dataStream, char *data, size_t size)
 {
     size_t bytes = 0;
 
@@ -120,7 +120,7 @@ inline const size_t dataStreamRead(DataStream<std::string> &dataStream, char *da
  * DataStream write operators
  */
 template<typename DeviceType, typename ValueType>
-inline DataStream<typename std::enable_if<std::is_arithmetic<ValueType>::value, DeviceType>::type> &operator <<(DataStream<DeviceType> &dataStream, const ValueType value)
+inline typename std::enable_if<std::is_arithmetic<ValueType>::value, DataStream<DeviceType> >::type &operator <<(DataStream<DeviceType> &dataStream, ValueType value)
 {
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
@@ -246,7 +246,7 @@ inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, c
  * DataStream read operators
  */
 template<typename DeviceType, typename ValueType>
-inline DataStream<typename std::enable_if<std::is_arithmetic<ValueType>::value, DeviceType>::type> &operator >>(DataStream<DeviceType> &dataStream, ValueType &value)
+inline typename std::enable_if<std::is_arithmetic<ValueType>::value, DataStream<DeviceType> >::type &operator >>(DataStream<DeviceType> &dataStream, ValueType &value)
 {
     value = 0;
 

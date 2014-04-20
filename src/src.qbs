@@ -13,7 +13,13 @@ Product {
 
     cpp.includePaths: [
         "global",
-        "io"
+        "io",
+        "tools",
+        "math"
+    ]
+
+    cpp.cxxFlags: [
+        "-std=c++11"
     ]
 
     Group {
@@ -27,6 +33,22 @@ Product {
     Group {
         name: "io"
         prefix: "io/"
+        files: [
+            "*.h"
+        ]
+    }
+
+    Group {
+        name: "tools"
+        prefix: "tools/"
+        files: [
+            "*.h"
+        ]
+    }
+
+    Group {
+        name: "math"
+        prefix: "math/"
         files: [
             "*.h"
         ]

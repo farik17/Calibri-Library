@@ -20,6 +20,10 @@ Product {
         "../../src/io"
     ]
 
+    cpp.cxxFlags: [
+        "-std=c++11"
+    ]
+
     Depends {
         name: "Qt"
         submodules: [
