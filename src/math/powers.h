@@ -112,12 +112,8 @@ DECL_CONSTEXPR inline longdouble negative(int16 exponent, const longdouble *powe
 DECL_CONSTEXPR inline longdouble implementation(int16 exponent, const longdouble *powers)
 {
     return exponent >= 0
-            ? exponent > std::numeric_limits<longdouble>::max()
-              ? std::numeric_limits<longdouble>::infinity()
-              : positive(exponent, powers)
-              : exponent < std::numeric_limits<longdouble>::min()
-                ? 0
-                : negative(std::abs(exponent), powers);
+            ? positive(exponent, powers)
+            : negative(std::abs(exponent), powers);
 }
 
 }
