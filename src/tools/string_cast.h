@@ -183,11 +183,11 @@ inline const typename std::enable_if<std::is_floating_point<DataType>::value, Da
                 ++decimals;
             });
 
-            if (decimals >= std::numeric_limits<DataType>::max_digits10)
+            if (decimals >= std::numeric_limits<DataType>::digits10)
                 abort = true;
         } while (!abort);
 
-        result += sign * fraction / powerOf<Constants::Exponent<DataType>::base>(decimals);
+        result += sign * fraction / powerOf(decimals, Constants::Exponent<DataType>::base);
     }
 
     if (*data == 'e' || *data == 'E') {
@@ -235,7 +235,7 @@ inline const typename std::enable_if<std::is_floating_point<DataType>::value, Da
             break;
         }
 
-        result *= powerOf<Constants::Exponent<DataType>::base>(exponent);
+        result *= powerOf(exponent, Constants::Exponent<DataType>::base);
     }
 
     return result;
