@@ -35,8 +35,8 @@ DECL_CONSTEXPR inline longdouble negative(int64 exponent, longdouble base, longd
 DECL_CONSTEXPR inline longdouble implementation(int64 exponent, longdouble base)
 {
     return exponent >= 0
-            ? Powers::Internal::positive(exponent, base)
-            : Powers::Internal::negative(std::abs(exponent), base);
+            ? positive(exponent, base)
+            : negative(std::abs(exponent), base);
 }
 
 }
