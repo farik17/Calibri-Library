@@ -15,28 +15,30 @@ namespace Calibri
 namespace Powers
 {
 
+namespace Constants
+{
+
+CONSTEXPR static auto multiplier = [](longdouble base, longdouble value) -> longdouble { return value * base; };
+CONSTEXPR static auto divisor = [](longdouble base, longdouble value) -> longdouble { return value / base; };
+
+}
+
 namespace Internal
 {
 
-DECL_CONSTEXPR inline longdouble positive(int64 exponent, longdouble base, longdouble value = 1.0e0l)
+template<typename Predicate>
+DECL_CONSTEXPR inline longdouble implementation(Predicate predicate, int64 exponent, longdouble base, longdouble value = 1.0e0l)
 {
     return exponent != 0
-            ? positive(exponent >> 1, base * base, (exponent & 1) != 0 ? value * base : value)
-            : value;
-}
-
-DECL_CONSTEXPR inline longdouble negative(int64 exponent, longdouble base, longdouble value = 1.0e0l)
-{
-    return exponent != 0
-            ? negative(exponent >> 1, base * base, (exponent & 1) != 0 ? value / base : value)
+            ? implementation(predicate, exponent >> 1, base * base, (exponent & 1) != 0 ? predicate(base, value) : value)
             : value;
 }
 
 DECL_CONSTEXPR inline longdouble implementation(int64 exponent, longdouble base)
 {
     return exponent >= 0
-            ? positive(exponent, base)
-            : negative(std::abs(exponent), base);
+            ? implementation(Constants::multiplier, exponent, base)
+            : implementation(Constants::divisor, std::abs(exponent), base);
 }
 
 }
