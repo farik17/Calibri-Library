@@ -17,7 +17,6 @@ Product {
         "tools",
         "math"
     ]
-
     cpp.cxxFlags: [
         "-std=c++11"
     ]

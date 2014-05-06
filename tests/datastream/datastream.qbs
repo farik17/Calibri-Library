@@ -19,7 +19,6 @@ Product {
         "../../src/global",
         "../../src/io"
     ]
-
     cpp.cxxFlags: [
         "-std=c++11"
     ]
