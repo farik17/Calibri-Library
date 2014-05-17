@@ -17,9 +17,17 @@ Product {
         "tools",
         "math"
     ]
-    cpp.cxxFlags: [
-        "-std=c++11"
-    ]
+
+    Properties {
+        condition: qbs.toolchain.contains("gcc") || qbs.toolchain.contains("mingw")
+        cpp.cxxFlags: [
+            "-std=c++11",
+            "-mtune=native",
+            "-march=native",
+            "-o3",
+            "-funroll-loops"
+        ]
+    }
 
     Group {
         name: "global"

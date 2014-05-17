@@ -2,6 +2,6 @@ import qbs
 
 Project {
     references: [
-        "io/io.qbs"
+        "datastream/datastream.qbs"
     ]
 }
