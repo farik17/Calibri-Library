@@ -187,7 +187,7 @@ inline const typename std::enable_if<std::is_floating_point<DataType>::value, Da
                 abort = true;
         } while (!abort);
 
-        result += sign * fraction / powerOf(decimals, Constants::Exponent<DataType>::base);
+        result += sign * fraction / std::pow(Constants::Exponent<DataType>::base, decimals);
     }
 
     if (*data == 'e' || *data == 'E') {
@@ -235,7 +235,7 @@ inline const typename std::enable_if<std::is_floating_point<DataType>::value, Da
             break;
         }
 
-        result *= powerOf(exponent, Constants::Exponent<DataType>::base);
+        result *= std::pow(Constants::Exponent<DataType>::base, exponent);
     }
 
     return result;

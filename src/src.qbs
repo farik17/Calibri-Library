@@ -44,12 +44,4 @@ Product {
             "*.h"
         ]
     }
-
-    Group {
-        name: "math"
-        prefix: "math/"
-        files: [
-            "*.h"
-        ]
-    }
 }
