@@ -8,7 +8,6 @@
 
 //! Project Includes
 #include "repeater.h"
-#include "powers.h"
 
 namespace Calibri
 {
