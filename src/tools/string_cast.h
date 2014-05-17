@@ -74,7 +74,7 @@ namespace Internal
 {
 
 template<typename DataType>
-inline const typename std::enable_if<std::is_integral<DataType>::value, DataType>::type implementation(const char *data)
+inline typename std::enable_if<std::is_integral<DataType>::value, DataType>::type implementation(const char *data)
 {
     if (!data)
         return 0;
@@ -119,7 +119,7 @@ inline const typename std::enable_if<std::is_integral<DataType>::value, DataType
 }
 
 template<typename DataType>
-inline const typename std::enable_if<std::is_floating_point<DataType>::value, DataType>::type implementation(const char *data)
+inline typename std::enable_if<std::is_floating_point<DataType>::value, DataType>::type implementation(const char *data)
 {
     if (!data)
         return 0;
@@ -245,7 +245,7 @@ inline const typename std::enable_if<std::is_floating_point<DataType>::value, Da
 }
 
 template<typename DataType>
-inline const DataType string_cast(const std::string &data)
+inline DataType string_cast(const std::string &data)
 {
     return StringCast::Internal::implementation<DataType>(data.c_str());
 }
