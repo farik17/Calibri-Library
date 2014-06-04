@@ -13,7 +13,7 @@
 #include <iostream>
 
 //! Project Includes
-#include "global.h"
+#include "disablecopy.h"
 
 #if defined(CC_MSVC)
 #   pragma warning(disable:4996)
@@ -28,7 +28,7 @@ enum class DataStreamStatus : uint8 {
 };
 
 template<typename DeviceType>
-class DataStream
+class DataStream : private DisableCopy
 {
 public:
     explicit DataStream(DeviceType &device) DECL_NOEXCEPT
@@ -69,8 +69,6 @@ public:
     }
 
 private:
-    DISABLE_COPY(DataStream)
-
     DeviceType &m_device;
 
     size_t m_pos;
@@ -119,43 +117,43 @@ inline size_t dataStreamRead(DataStream<std::string> &dataStream, char *data, si
 /*!
  * DataStream write operators
  */
-template<typename DeviceType, typename ValueType>
-inline typename std::enable_if<std::is_arithmetic<ValueType>::value, DataStream<DeviceType>>::type &operator <<(DataStream<DeviceType> &dataStream, ValueType value)
+template<typename DeviceType, typename DataType>
+inline typename std::enable_if<std::is_arithmetic<DataType>::value, DataStream<DeviceType>>::type &operator <<(DataStream<DeviceType> &dataStream, DataType data)
 {
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
 
-    if (dataStreamWrite(dataStream, reinterpret_cast<const char *>(&value), sizeof(ValueType)) != sizeof(ValueType))
+    if (dataStreamWrite(dataStream, reinterpret_cast<const char *>(&data), sizeof(DataType)) != sizeof(DataType))
         dataStream.setStatus(DataStreamStatus::WriteError);
 
     return dataStream;
 }
 
 template<typename DeviceType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const char *value)
+inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const char *data)
 {
-    size_t size = std::char_traits<char>::length(value);
+    size_t size = std::char_traits<char>::length(data);
 
     dataStream << static_cast<uint32>(size);
 
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
 
-    if (dataStreamWrite(dataStream, value, size) != size)
+    if (dataStreamWrite(dataStream, data, size) != size)
         dataStream.setStatus(DataStreamStatus::WriteError);
 
     return dataStream;
 }
 
 template<typename DeviceType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::string &value)
+inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::string &data)
 {
-    dataStream << static_cast<uint32>(value.size());
+    dataStream << static_cast<uint32>(data.size());
 
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
 
-    if (dataStreamWrite(dataStream, value.c_str(), value.size()) != value.size())
+    if (dataStreamWrite(dataStream, data.c_str(), data.size()) != data.size())
         dataStream.setStatus(DataStreamStatus::WriteError);
 
     return dataStream;
@@ -245,27 +243,27 @@ inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, c
 /*!
  * DataStream read operators
  */
-template<typename DeviceType, typename ValueType>
-inline typename std::enable_if<std::is_arithmetic<ValueType>::value, DataStream<DeviceType>>::type &operator >>(DataStream<DeviceType> &dataStream, ValueType &value)
+template<typename DeviceType, typename DataType>
+inline typename std::enable_if<std::is_arithmetic<DataType>::value, DataStream<DeviceType>>::type &operator >>(DataStream<DeviceType> &dataStream, DataType &data)
 {
-    value = 0;
+    data = 0;
 
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
 
-    if (dataStreamRead(dataStream, reinterpret_cast<char *>(&value), sizeof(ValueType)) != sizeof(ValueType)) {
+    if (dataStreamRead(dataStream, reinterpret_cast<char *>(&data), sizeof(DataType)) != sizeof(DataType)) {
         dataStream.setStatus(DataStreamStatus::ReadError);
 
-        value = 0;
+        data = 0;
     }
 
     return dataStream;
 }
 
 template<typename DeviceType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, char *&value)
+inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, char *&data)
 {
-    value = nullptr;
+    data = nullptr;
 
     uint32 size = 0;
     dataStream >> size;
@@ -274,7 +272,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, c
         return dataStream;
 
     try {
-        value = new char[static_cast<size_t>(size + 1)];
+        data = new char[static_cast<size_t>(size + 1)];
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what();
 
@@ -283,22 +281,22 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, c
         return dataStream;
     }
 
-    if (dataStreamRead(dataStream, value, static_cast<size_t>(size)) != static_cast<size_t>(size)) {
+    if (dataStreamRead(dataStream, data, static_cast<size_t>(size)) != static_cast<size_t>(size)) {
         dataStream.setStatus(DataStreamStatus::ReadError);
 
-        delete[] value;
-        value = nullptr;
+        delete[] data;
+        data = nullptr;
     }
 
-    value[size] = '\0';
+    data[size] = '\0';
 
     return dataStream;
 }
 
 template<typename DeviceType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::string &value)
+inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::string &data)
 {
-    value.clear();
+    data.clear();
 
     uint32 size = 0;
     dataStream >> size;
@@ -307,7 +305,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         return dataStream;
 
     try {
-        value.resize(static_cast<size_t>(size));
+        data.resize(static_cast<size_t>(size));
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what();
 
@@ -316,10 +314,10 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         return dataStream;
     }
 
-    if (dataStreamRead(dataStream, &value.front(), static_cast<size_t>(size)) != static_cast<size_t>(size)) {
+    if (dataStreamRead(dataStream, &data.front(), static_cast<size_t>(size)) != static_cast<size_t>(size)) {
         dataStream.setStatus(DataStreamStatus::ReadError);
 
-        value.clear();
+        data.clear();
     }
 
     return dataStream;

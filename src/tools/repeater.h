@@ -5,10 +5,13 @@
 #include <cstddef>
 
 //! Project Includes
-#include "global.h"
+#include "disablecopy.h"
+
+namespace Calibri
+{
 
 template<size_t Count>
-class Repeater
+class Repeater : private DisableCopy
 {
 public:
     template<typename Predicate, typename... Arguments>
@@ -18,22 +21,20 @@ public:
     }
 
 private:
-    DISABLE_COPY(Repeater)
-
     Repeater() DECL_NOEXCEPT {}
 };
 
 template<>
-class Repeater<0>
+class Repeater<0> : private DisableCopy
 {
 public:
     template<typename Predicate, typename... Arguments>
     static void run(Predicate , Arguments...) {}
 
 private:
-    DISABLE_COPY(Repeater<0>)
-
     Repeater<0>() DECL_NOEXCEPT {}
 };
+
+}
 
 #endif // REPEATER_H

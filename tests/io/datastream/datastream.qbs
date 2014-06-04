@@ -17,7 +17,8 @@ Product {
     cpp.includePaths: [
         "../../../src",
         "../../../src/global",
-        "../../../src/io"
+        "../../../src/io",
+        "../../../src/tools"
     ]
 
     Properties {

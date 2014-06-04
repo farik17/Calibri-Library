@@ -106,8 +106,5 @@
 #endif
 
 #define UNUSED(expr) (void)expr;
-#define DISABLE_COPY(Class)\
-    Class(const Class &) DECL_DELETE;\
-    Class &operator =(const Class &) DECL_DELETE;
 
 #endif // COMPILERDETECTION_H
