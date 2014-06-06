@@ -84,7 +84,7 @@ inline size_t dataStreamWrite(DataStream<std::string> &dataStream, const char *d
     try {
         dataStream.device().replace(dataStream.pos(), size, data, size);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what();
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         return 0;
     }
@@ -104,7 +104,7 @@ inline size_t dataStreamRead(DataStream<std::string> &dataStream, char *data, si
     try {
         bytes = dataStream.device().copy(data, size, dataStream.pos());
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what();
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         return 0;
     }
@@ -274,7 +274,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, c
     try {
         data = new char[static_cast<size_t>(size + 1)];
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what();
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -307,7 +307,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
     try {
         data.resize(static_cast<size_t>(size));
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what();
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -334,7 +334,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
     try {
         data.reserve(static_cast<size_t>(size));
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what();
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -354,7 +354,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         try {
             data.push_back(std::move(value));
         } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what();
+            std::cerr << FUNC_INFO << ex.what() << std::endl;
 
             dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -388,7 +388,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         try {
             data.push_back(std::move(value));
         } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what();
+            std::cerr << FUNC_INFO << ex.what() << std::endl;
 
             dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -424,7 +424,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         try {
             it = data.insert_after(it, std::move(value));
         } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what();
+            std::cerr << FUNC_INFO << ex.what() << std::endl;
 
             dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -458,7 +458,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         try {
             data.insert(std::move(value));
         } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what();
+            std::cerr << FUNC_INFO << ex.what() << std::endl;
 
             dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -494,7 +494,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         try {
             data.insert(std::make_pair(std::move(key), std::move(value)));
         } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what();
+            std::cerr << FUNC_INFO << ex.what() << std::endl;
 
             dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -518,7 +518,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
     try {
         data.reserve(static_cast<size_t>(size));
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what();
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -538,7 +538,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         try {
             data.insert(std::move(value));
         } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what();
+            std::cerr << FUNC_INFO << ex.what() << std::endl;
 
             dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -562,7 +562,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
     try {
         data.reserve(static_cast<size_t>(size));
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what();
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -584,7 +584,7 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
         try {
             data.insert(std::make_pair(std::move(key), std::move(value)));
         } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what();
+            std::cerr << FUNC_INFO << ex.what() << std::endl;
 
             dataStream.setStatus(DataStreamStatus::ReadError);
 
