@@ -4,7 +4,7 @@
 //! Std Includes
 #include <cstddef>
 
-//! Project Includes
+//! CalibriLibrary Includes
 #include "disablecopy.h"
 
 namespace Calibri
@@ -21,7 +21,7 @@ public:
     }
 
 private:
-    Repeater() DECL_NOEXCEPT {}
+    Repeater() noexcept = default;
 };
 
 template<>
@@ -32,7 +32,7 @@ public:
     static void run(Predicate , Arguments...) {}
 
 private:
-    Repeater<0>() DECL_NOEXCEPT {}
+    Repeater<0>() noexcept = default;
 };
 
 }

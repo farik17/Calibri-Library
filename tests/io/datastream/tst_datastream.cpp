@@ -1,7 +1,7 @@
 //! Qt Includes
 #include <QtTest/QtTest>
 
-//! Project Includes
+//! CalibriLibrary Includes
 #include "datastream.h"
 
 class tst_DataStream : public QObject
@@ -17,37 +17,38 @@ private slots:
     void testUint32();
     void testInt64();
     void testUint64();
-
     void testFloat();
     void testDouble();
     void testLongDouble();
-
     void testCString();
     void testString();
-
     void testSeek();
-
     void testVector();
-    void testList();
+    void testDeque();
     void testForwardList();
+    void testList();
     void testSet();
+    void testMultiSet();
     void testMap();
+    void testMultiMap();
     void testUnorderedSet();
+    void testUnorderedMultiSet();
     void testUnorderedMap();
+    void testUnorderedMultiMap();
 };
 
 void tst_DataStream::testInt8()
 {
-    int8 in = 1;
+    int8 in{64};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    int8 out = 0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "int8 read/write failed.");
@@ -55,16 +56,16 @@ void tst_DataStream::testInt8()
 
 void tst_DataStream::testUint8()
 {
-    uint8 in = 1;
+    uint8 in{64};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    uint8 out = 0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "uint8 read/write failed.");
@@ -72,16 +73,16 @@ void tst_DataStream::testUint8()
 
 void tst_DataStream::testInt16()
 {
-    int16 in = 1;
+    int16 in{64};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    int16 out = 0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "int16 read/write failed.");
@@ -89,16 +90,16 @@ void tst_DataStream::testInt16()
 
 void tst_DataStream::testUint16()
 {
-    uint16 in = 1;
+    uint16 in{64};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    uint16 out = 0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "uint16 read/write failed.");
@@ -106,16 +107,16 @@ void tst_DataStream::testUint16()
 
 void tst_DataStream::testInt32()
 {
-    int32 in = 1;
+    int32 in{64};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    int32 out = 0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "int32 read/write failed.");
@@ -123,16 +124,16 @@ void tst_DataStream::testInt32()
 
 void tst_DataStream::testUint32()
 {
-    uint32 in = 1;
+    uint32 in{64};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    uint32 out = 0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "uint32 read/write failed.");
@@ -140,16 +141,16 @@ void tst_DataStream::testUint32()
 
 void tst_DataStream::testInt64()
 {
-    int64 in = 1;
+    int64 in{64};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    int64 out = 0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "int64 read/write failed.");
@@ -157,16 +158,16 @@ void tst_DataStream::testInt64()
 
 void tst_DataStream::testUint64()
 {
-    uint64 in = 1;
+    uint64 in{64};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    uint64 out = 0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "uint64 read/write failed.");
@@ -174,16 +175,16 @@ void tst_DataStream::testUint64()
 
 void tst_DataStream::testFloat()
 {
-    float in = 1.001f;
+    float in{64.0064f};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    float out = 0.0f;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "float read/write failed.");
@@ -191,16 +192,16 @@ void tst_DataStream::testFloat()
 
 void tst_DataStream::testDouble()
 {
-    double in = 1.001;
+    double in{64.0064d};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    double out = 0.0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "double read/write failed.");
@@ -208,16 +209,16 @@ void tst_DataStream::testDouble()
 
 void tst_DataStream::testLongDouble()
 {
-    longdouble in = 1.001;
+    longdouble in{64.0064l};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    longdouble out = 0.0;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "longdouble read/write failed.");
@@ -225,16 +226,16 @@ void tst_DataStream::testLongDouble()
 
 void tst_DataStream::testCString()
 {
-    const char *in = "cstring data";
+    const char *in{"cstring data"};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    char *out = nullptr;
+    char *out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(out, "cstring read/write failed.");
@@ -245,16 +246,16 @@ void tst_DataStream::testCString()
 
 void tst_DataStream::testString()
 {
-    std::string in = "string data";
+    std::string in{"string data"};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    std::string out;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "std::string read/write failed.");
@@ -262,156 +263,245 @@ void tst_DataStream::testString()
 
 void tst_DataStream::testSeek()
 {
-    std::string in = "string data";
+    std::string in{"string data"};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << 0;
     writeStream << in;
 
     writeStream.seek(0);
 
-    writeStream << static_cast<uint32>(in.size());
+    writeStream << Calibri::meta_cast<uint32>(in.size());
 
-    uint32 size = 0;
-    std::string out;
+    uint32 size{};
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> size;
     readStream >> out;
 
-    QVERIFY2(static_cast<uint32>(in.size() == size), "seek failed.");
+    QVERIFY2(Calibri::meta_cast<uint32>(in.size() == size), "seek failed.");
     QVERIFY2(in == out, "seek failed.");
 }
 
 void tst_DataStream::testVector()
 {
-    std::vector<std::string> in(10, "string data");
+    std::vector<std::string> in{2, "string data"};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    std::vector<std::string> out;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "vector read/write failed.");
 }
 
-void tst_DataStream::testList()
+void tst_DataStream::testDeque()
 {
-    std::list<std::string> in(10, "string data");
+    std::deque<std::string> in{2, "string data"};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    std::list<std::string> out;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "list read/write failed.");
+    QVERIFY2(in == out, "deque read/write failed.");
 }
 
 void tst_DataStream::testForwardList()
 {
-    std::forward_list<std::string> in(10, "string data");
+    std::forward_list<std::string> in{2, "string data"};
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    std::forward_list<std::string> out;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "forward list read/write failed.");
 }
 
-void tst_DataStream::testSet()
+void tst_DataStream::testList()
 {
-    std::set<std::string> in;
+    std::list<std::string> in{2, "string data"};
 
-    in.insert("string data");
+    buffer data{};
 
-    std::string buffer;
-
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    std::set<std::string> out;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
+    readStream >> out;
+
+    QVERIFY2(in == out, "list read/write failed.");
+}
+
+void tst_DataStream::testSet()
+{
+    std::set<std::string> in{};
+    in.insert("string data");
+
+    buffer data{};
+
+    Calibri::DataStream<decltype(data)> writeStream(&data);
+    writeStream << in;
+
+    decltype(in) out{};
+
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "set read/write failed.");
 }
 
+void tst_DataStream::testMultiSet()
+{
+    std::multiset<std::string> in{};
+    in.insert("string data");
+    in.insert("string data");
+
+    buffer data{};
+
+    Calibri::DataStream<decltype(data)> writeStream(&data);
+    writeStream << in;
+
+    decltype(in) out{};
+
+    decltype(writeStream) readStream(&data);
+    readStream >> out;
+
+    QVERIFY2(in == out, "multiset read/write failed.");
+}
+
 void tst_DataStream::testMap()
 {
-    std::map<std::string, std::string> in;
-
+    std::map<std::string, std::string> in{};
     in.insert(std::make_pair("key one", "value one"));
     in.insert(std::make_pair("key two", "value two"));
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    std::map<std::string, std::string> out;
+    decltype(in) out;
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "map read/write failed.");
 }
 
-void tst_DataStream::testUnorderedSet()
+void tst_DataStream::testMultiMap()
 {
-    std::unordered_set<std::string> in;
+    std::multimap<std::string, std::string> in{};
+    in.insert(std::make_pair("key one", "value one"));
+    in.insert(std::make_pair("key one", "value two"));
 
-    in.insert("string data");
+    buffer data{};
 
-    std::string buffer;
-
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    std::unordered_set<std::string> out;
+    decltype(in) out;
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
+    readStream >> out;
+
+    QVERIFY2(in == out, "multimap read/write failed.");
+}
+
+void tst_DataStream::testUnorderedSet()
+{
+    std::unordered_set<std::string> in{};
+    in.insert("string data");
+
+    buffer data{};
+
+    Calibri::DataStream<decltype(data)> writeStream(&data);
+    writeStream << in;
+
+    decltype(in) out{};
+
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "unordered set read/write failed.");
 }
 
+void tst_DataStream::testUnorderedMultiSet()
+{
+    std::unordered_multiset<std::string> in{};
+    in.insert("string data");
+    in.insert("string data");
+
+    buffer data{};
+
+    Calibri::DataStream<decltype(data)> writeStream(&data);
+    writeStream << in;
+
+    decltype(in) out{};
+
+    decltype(writeStream) readStream(&data);
+    readStream >> out;
+
+    QVERIFY2(in == out, "unordered multiset read/write failed.");
+}
+
 void tst_DataStream::testUnorderedMap()
 {
-    std::unordered_map<std::string, std::string> in;
-
+    std::unordered_map<std::string, std::string> in{};
     in.insert(std::make_pair("key one", "value one"));
     in.insert(std::make_pair("key two", "value two"));
 
-    std::string buffer;
+    buffer data{};
 
-    Calibri::DataStream<std::string> writeStream(buffer);
+    Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    std::unordered_map<std::string, std::string> out;
+    decltype(in) out{};
 
-    Calibri::DataStream<std::string> readStream(buffer);
+    decltype(writeStream) readStream(&data);
     readStream >> out;
 
     QVERIFY2(in == out, "unordered map read/write failed.");
+}
+
+void tst_DataStream::testUnorderedMultiMap()
+{
+    std::unordered_multimap<std::string, std::string> in{};
+    in.insert(std::make_pair("key one", "value one"));
+    in.insert(std::make_pair("key one", "value two"));
+
+    buffer data{};
+
+    Calibri::DataStream<decltype(data)> writeStream(&data);
+    writeStream << in;
+
+    decltype(in) out{};
+
+    decltype(writeStream) readStream(&data);
+    readStream >> out;
+
+    QVERIFY2(in == out, "unordered multimap read/write failed.");
 }
 
 QTEST_MAIN(tst_DataStream)

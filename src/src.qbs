@@ -14,8 +14,7 @@ Product {
     cpp.includePaths: [
         "global",
         "io",
-        "tools",
-        "math"
+        "tools"
     ]
 
     Properties {
@@ -25,7 +24,8 @@ Product {
             "-mtune=native",
             "-march=native",
             "-o3",
-            "-funroll-loops"
+            "-funroll-loops",
+            "-flto"
         ]
     }
 

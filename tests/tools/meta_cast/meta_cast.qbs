@@ -1,7 +1,7 @@
 import qbs
 
 Product {
-    name: "tst_datastream"
+    name: "tst_meta_cast"
     consoleApplication: true
     type: [
         "application"

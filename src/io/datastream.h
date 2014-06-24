@@ -2,22 +2,18 @@
 #define DATASTREAM_H
 
 //! Std Includes
-#include <vector>
-#include <list>
+#include <deque>
 #include <forward_list>
+#include <list>
 #include <set>
 #include <map>
 #include <unordered_set>
 #include <unordered_map>
-#include <algorithm>
 #include <iostream>
 
-//! Project Includes
+//! CalibriLibrary Includes
 #include "disablecopy.h"
-
-#if defined(CC_MSVC)
-#   pragma warning(disable:4996)
-#endif
+#include "meta_cast.h"
 
 namespace Calibri {
 
@@ -31,94 +27,107 @@ template<typename DeviceType>
 class DataStream : private DisableCopy
 {
 public:
-    explicit DataStream(DeviceType &device) DECL_NOEXCEPT
-        : m_device(device)
-        , m_pos(0)
-        , m_status(DataStreamStatus::Ok)
+    explicit DataStream(DeviceType *device) noexcept
+        : m_device{device}
     {
     }
 
-    DeviceType &device() DECL_NOEXCEPT
+    auto device() noexcept -> DeviceType *
     {
         return m_device;
     }
 
-    size_t pos() const DECL_NOEXCEPT
+    auto pos() const noexcept -> size_t
     {
         return m_pos;
     }
 
-    void seek(const size_t pos) DECL_NOEXCEPT
+    void seek(size_t pos) noexcept
     {
         m_pos = pos;
     }
 
-    DataStreamStatus status() const DECL_NOEXCEPT
+    auto status() const noexcept -> DataStreamStatus
     {
         return m_status;
     }
 
-    void setStatus(DataStreamStatus status) DECL_NOEXCEPT
+    void setStatus(DataStreamStatus status) noexcept
     {
         m_status = status;
     }
 
-    void resetStatus() DECL_NOEXCEPT
+    void resetStatus() noexcept
     {
         m_status = DataStreamStatus::Ok;
     }
 
 private:
-    DeviceType &m_device;
+    DeviceType *m_device{};
 
-    size_t m_pos;
+    size_t m_pos{};
 
-    DataStreamStatus m_status;
+    DataStreamStatus m_status{DataStreamStatus::Ok};
 };
 
 /*!
  * DataStream write function
  */
-inline size_t dataStreamWrite(DataStream<std::string> &dataStream, const char *data, size_t size)
+inline auto dataStreamWrite(DataStream<buffer> &dataStream, const char *data, size_t size) noexcept -> size_t
 {
     try {
-        dataStream.device().replace(dataStream.pos(), size, data, size);
+        auto overflow = 0;
+        auto pos = dataStream.pos() + size;
+
+        if (pos > dataStream.device()->size())
+            overflow = pos - dataStream.device()->size();
+
+        dataStream.device()->resize(dataStream.device()->size() + overflow);
+
+        std::copy_n(data, size, std::next(dataStream.device()->begin(), dataStream.pos()));
+
+        dataStream.seek(pos);
+
+        return size;
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         return 0;
     }
-
-    dataStream.seek(dataStream.pos() + size);
-
-    return size;
 }
 
 /*!
  * DataStream read function
  */
-inline size_t dataStreamRead(DataStream<std::string> &dataStream, char *data, size_t size)
+inline auto dataStreamRead(DataStream<buffer> &dataStream, char *data, size_t size) noexcept -> size_t
 {
-    size_t bytes = 0;
-
     try {
-        bytes = dataStream.device().copy(data, size, dataStream.pos());
+        auto overflow = 0;
+        auto pos = dataStream.pos() + size;
+
+        if (pos > dataStream.device()->size())
+            overflow = pos - dataStream.device()->size();
+
+        size -= overflow;
+        pos -= overflow;
+
+        std::copy_n(std::next(dataStream.device()->begin(), dataStream.pos()), size, data);
+
+        dataStream.seek(pos);
+
+        return size;
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         return 0;
     }
-
-    dataStream.seek(dataStream.pos() + bytes);
-
-    return bytes;
 }
 
 /*!
  * DataStream write operators
  */
-template<typename DeviceType, typename DataType>
-inline typename std::enable_if<std::is_arithmetic<DataType>::value, DataStream<DeviceType>>::type &operator <<(DataStream<DeviceType> &dataStream, DataType data)
+template<typename DeviceType, typename DataType, typename std::enable_if<std::is_arithmetic<DataType>::value, class Enabler>::type... Enabler>
+inline auto operator <<(DataStream<DeviceType> &dataStream, DataType data) noexcept -> DataStream<DeviceType> &
 {
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
@@ -130,11 +139,11 @@ inline typename std::enable_if<std::is_arithmetic<DataType>::value, DataStream<D
 }
 
 template<typename DeviceType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const char *data)
+inline auto operator <<(DataStream<DeviceType> &dataStream, const char *data) noexcept -> DataStream<DeviceType> &
 {
-    size_t size = std::char_traits<char>::length(data);
+    auto size = std::char_traits<char>::length(data);
 
-    dataStream << static_cast<uint32>(size);
+    dataStream << meta_cast<uint32>(size);
 
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
@@ -146,9 +155,9 @@ inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, c
 }
 
 template<typename DeviceType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::string &data)
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::string &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << static_cast<uint32>(data.size());
+    dataStream << meta_cast<uint32>(data.size());
 
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
@@ -159,82 +168,144 @@ inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, c
     return dataStream;
 }
 
+//! Sequence containers
 template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::vector<ValueType> &data)
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::vector<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << static_cast<uint32>(data.size());
+    dataStream << meta_cast<uint32>(data.size());
 
-    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
-        dataStream << (*dataIt);
+    for (const auto &value : data)
+        dataStream << value;
 
     return dataStream;
 }
 
 template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::list<ValueType> &data)
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::deque<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << static_cast<uint32>(data.size());
+    dataStream << meta_cast<uint32>(data.size());
 
-    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
-        dataStream << (*dataIt);
+    for (const auto &value : data)
+        dataStream << value;
 
     return dataStream;
 }
 
 template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::forward_list<ValueType> &data)
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::forward_list<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << static_cast<uint32>(std::distance(data.cbegin(), data.cend()));
+    dataStream << meta_cast<uint32>(std::distance(std::begin(data), std::end(data)));
 
-    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
-        dataStream << (*dataIt);
+    for (const auto &value : data)
+        dataStream << value;
 
     return dataStream;
 }
 
 template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::set<ValueType> &data)
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::list<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << static_cast<uint32>(data.size());
+    dataStream << meta_cast<uint32>(data.size());
 
-    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
-        dataStream << (*dataIt);
+    for (const auto &value : data)
+        dataStream << value;
+
+    return dataStream;
+}
+
+//! Associative containers
+template<typename DeviceType, typename ValueType>
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::set<ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    dataStream << meta_cast<uint32>(data.size());
+
+    for (const auto &value : data)
+        dataStream << value;
+
+    return dataStream;
+}
+
+template<typename DeviceType, typename ValueType>
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::multiset<ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    dataStream << meta_cast<uint32>(data.size());
+
+    for (const auto &value : data)
+        dataStream << value;
 
     return dataStream;
 }
 
 template<typename DeviceType, typename KeyType, typename ValueType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::map<KeyType, ValueType> &data)
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::map<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << static_cast<uint32>(data.size());
+    dataStream << meta_cast<uint32>(data.size());
 
-    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt) {
-        dataStream << (*dataIt).first;
-        dataStream << (*dataIt).second;
+    for (const auto &pair : data) {
+        dataStream << pair.first;
+        dataStream << pair.second;
     }
 
     return dataStream;
 }
 
-template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::unordered_set<ValueType> &data)
+template<typename DeviceType, typename KeyType, typename ValueType>
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::multimap<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << static_cast<uint32>(data.size());
+    dataStream << meta_cast<uint32>(data.size());
 
-    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt)
-        dataStream << (*dataIt);
+    for (const auto &pair : data) {
+        dataStream << pair.first;
+        dataStream << pair.second;
+    }
+
+    return dataStream;
+}
+
+//! Unordered associative containers
+template<typename DeviceType, typename ValueType>
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered_set<ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    dataStream << meta_cast<uint32>(data.size());
+
+    for (const auto &value : data)
+        dataStream << value;
+
+    return dataStream;
+}
+
+template<typename DeviceType, typename ValueType>
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered_multiset<ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    dataStream << meta_cast<uint32>(data.size());
+
+    for (const auto &value : data)
+        dataStream << value;
 
     return dataStream;
 }
 
 template<typename DeviceType, typename KeyType, typename ValueType>
-inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, const std::unordered_map<KeyType, ValueType> &data)
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered_map<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << static_cast<uint32>(data.size());
+    dataStream << meta_cast<uint32>(data.size());
 
-    for (auto dataIt = data.cbegin(), dataEnd = data.cend(); dataIt != dataEnd; ++dataIt) {
-        dataStream << (*dataIt).first;
-        dataStream << (*dataIt).second;
+    for (const auto &pair : data) {
+        dataStream << pair.first;
+        dataStream << pair.second;
+    }
+
+    return dataStream;
+}
+
+template<typename DeviceType, typename KeyType, typename ValueType>
+inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered_multimap<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    dataStream << meta_cast<uint32>(data.size());
+
+    for (const auto &pair : data) {
+        dataStream << pair.first;
+        dataStream << pair.second;
     }
 
     return dataStream;
@@ -243,8 +314,8 @@ inline DataStream<DeviceType> &operator <<(DataStream<DeviceType> &dataStream, c
 /*!
  * DataStream read operators
  */
-template<typename DeviceType, typename DataType>
-inline typename std::enable_if<std::is_arithmetic<DataType>::value, DataStream<DeviceType>>::type &operator >>(DataStream<DeviceType> &dataStream, DataType &data)
+template<typename DeviceType, typename DataType, typename std::enable_if<std::is_arithmetic<DataType>::value, class Enabler>::type... Enabler>
+inline auto operator >>(DataStream<DeviceType> &dataStream, DataType &data) noexcept -> DataStream<DeviceType> &
 {
     data = 0;
 
@@ -261,18 +332,27 @@ inline typename std::enable_if<std::is_arithmetic<DataType>::value, DataStream<D
 }
 
 template<typename DeviceType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, char *&data)
+inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcept -> DataStream<DeviceType> &
 {
-    data = nullptr;
-
-    uint32 size = 0;
-    dataStream >> size;
-
-    if (size == 0)
-        return dataStream;
-
     try {
-        data = new char[static_cast<size_t>(size + 1)];
+        data = nullptr;
+
+        uint32 size{};
+        dataStream >> size;
+
+        if (dataStream.status() != DataStreamStatus::Ok)
+            return dataStream;
+
+        data = new char[meta_cast<size_t>(size + 1)]{};
+
+        if (dataStreamRead(dataStream, data, meta_cast<size_t>(size)) != meta_cast<size_t>(size)) {
+            dataStream.setStatus(DataStreamStatus::ReadError);
+
+            delete[] data;
+            data = nullptr;
+        }
+
+        return dataStream;
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
@@ -280,32 +360,29 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, c
 
         return dataStream;
     }
-
-    if (dataStreamRead(dataStream, data, static_cast<size_t>(size)) != static_cast<size_t>(size)) {
-        dataStream.setStatus(DataStreamStatus::ReadError);
-
-        delete[] data;
-        data = nullptr;
-    }
-
-    data[size] = '\0';
-
-    return dataStream;
 }
 
 template<typename DeviceType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::string &data)
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::string &data) noexcept -> DataStream<DeviceType> &
 {
-    data.clear();
-
-    uint32 size = 0;
-    dataStream >> size;
-
-    if (size == 0)
-        return dataStream;
-
     try {
-        data.resize(static_cast<size_t>(size));
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        if (dataStream.status() != DataStreamStatus::Ok)
+            return dataStream;
+
+        data.resize(meta_cast<size_t>(size));
+
+        if (dataStreamRead(dataStream, &data.front(), meta_cast<size_t>(size)) != meta_cast<size_t>(size)) {
+            dataStream.setStatus(DataStreamStatus::ReadError);
+
+            data.clear();
+        }
+
+        return dataStream;
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
@@ -313,288 +390,441 @@ inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, s
 
         return dataStream;
     }
+}
 
-    if (dataStreamRead(dataStream, &data.front(), static_cast<size_t>(size)) != static_cast<size_t>(size)) {
+//! Sequence containers
+template<typename DeviceType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::vector<ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    try {
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        data.reserve(meta_cast<size_t>(size));
+
+        for (auto i = 0; i < size; ++i) {
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.push_back(std::move(value));
+        }
+
+        return dataStream;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
+
         dataStream.setStatus(DataStreamStatus::ReadError);
 
         data.clear();
-    }
 
-    return dataStream;
+        return dataStream;
+    }
 }
 
 template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::vector<ValueType> &data)
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::deque<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    data.clear();
-
-    uint32 size = 0;
-    dataStream >> size;
-
     try {
-        data.reserve(static_cast<size_t>(size));
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        for (auto i = 0; i < size; ++i) {
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.push_back(std::move(value));
+        }
+
+        return dataStream;
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
+        data.clear();
+
         return dataStream;
     }
-
-    for (uint32 ix = 0; ix < size; ++ix) {
-        ValueType value;
-        dataStream >> value;
-
-        if (dataStream.status() != DataStreamStatus::Ok) {
-            data.clear();
-
-            break;
-        }
-
-        try {
-            data.push_back(std::move(value));
-        } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what() << std::endl;
-
-            dataStream.setStatus(DataStreamStatus::ReadError);
-
-            data.clear();
-
-            break;
-        }
-    }
-
-    return dataStream;
 }
 
 template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::list<ValueType> &data)
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::forward_list<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    data.clear();
+    try {
+        data.clear();
 
-    uint32 size = 0;
-    dataStream >> size;
+        uint32 size{};
+        dataStream >> size;
 
-    for (uint32 ix = 0; ix < size; ++ix) {
-        ValueType value;
-        dataStream >> value;
+        auto it = data.cbefore_begin();
 
-        if (dataStream.status() != DataStreamStatus::Ok) {
-            data.clear();
+        for (auto i = 0; i < size; ++i) {
+            ValueType value{};
+            dataStream >> value;
 
-            break;
-        }
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
 
-        try {
-            data.push_back(std::move(value));
-        } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what() << std::endl;
+                break;
+            }
 
-            dataStream.setStatus(DataStreamStatus::ReadError);
-
-            data.clear();
-
-            break;
-        }
-    }
-
-    return dataStream;
-}
-
-template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::forward_list<ValueType> &data)
-{
-    data.clear();
-
-    uint32 size = 0;
-    dataStream >> size;
-
-    auto it = data.before_begin();
-
-    for (uint32 ix = 0; ix < size; ++ix) {
-        ValueType value;
-        dataStream >> value;
-
-        if (dataStream.status() != DataStreamStatus::Ok) {
-            data.clear();
-
-            break;
-        }
-
-        try {
             it = data.insert_after(it, std::move(value));
-        } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what() << std::endl;
-
-            dataStream.setStatus(DataStreamStatus::ReadError);
-
-            data.clear();
-
-            break;
-        }
-    }
-
-    return dataStream;
-}
-
-template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::set<ValueType> &data)
-{
-    data.clear();
-
-    uint32 size = 0;
-    dataStream >> size;
-
-    for (uint32 ix = 0; ix < size; ++ix) {
-        ValueType value;
-        dataStream >> value;
-
-        if (dataStream.status() != DataStreamStatus::Ok) {
-            data.clear();
-
-            break;
         }
 
-        try {
-            data.insert(std::move(value));
-        } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what() << std::endl;
-
-            dataStream.setStatus(DataStreamStatus::ReadError);
-
-            data.clear();
-
-            break;
-        }
-    }
-
-    return dataStream;
-}
-
-template<typename DeviceType, typename KeyType, typename ValueType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::map<KeyType, ValueType> &data)
-{
-    data.clear();
-
-    uint32 size = 0;
-    dataStream >> size;
-
-    for (uint32 ix = 0; ix < size; ++ix) {
-        KeyType key;
-        ValueType value;
-        dataStream >> key;
-        dataStream >> value;
-
-        if (dataStream.status() != DataStreamStatus::Ok) {
-            data.clear();
-
-            break;
-        }
-
-        try {
-            data.insert(std::make_pair(std::move(key), std::move(value)));
-        } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what() << std::endl;
-
-            dataStream.setStatus(DataStreamStatus::ReadError);
-
-            data.clear();
-
-            break;
-        }
-    }
-
-    return dataStream;
-}
-
-template<typename DeviceType, typename ValueType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::unordered_set<ValueType> &data)
-{
-    data.clear();
-
-    uint32 size = 0;
-    dataStream >> size;
-
-    try {
-        data.reserve(static_cast<size_t>(size));
+        return dataStream;
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
+        data.clear();
+
         return dataStream;
     }
-
-    for (uint32 ix = 0; ix < size; ++ix) {
-        ValueType value;
-        dataStream >> value;
-
-        if (dataStream.status() != DataStreamStatus::Ok) {
-            data.clear();
-
-            break;
-        }
-
-        try {
-            data.insert(std::move(value));
-        } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what() << std::endl;
-
-            dataStream.setStatus(DataStreamStatus::ReadError);
-
-            data.clear();
-
-            break;
-        }
-    }
-
-    return dataStream;
 }
 
-template<typename DeviceType, typename KeyType, typename ValueType>
-inline DataStream<DeviceType> &operator >>(DataStream<DeviceType> &dataStream, std::unordered_map<KeyType, ValueType> &data)
+template<typename DeviceType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::list<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    data.clear();
-
-    uint32 size = 0;
-    dataStream >> size;
-
     try {
-        data.reserve(static_cast<size_t>(size));
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        for (auto i = 0; i < size; ++i) {
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.push_back(std::move(value));
+        }
+
+        return dataStream;
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
+        data.clear();
+
         return dataStream;
     }
+}
 
-    for (uint32 ix = 0; ix < size; ++ix) {
-        KeyType key;
-        ValueType value;
-        dataStream >> key;
-        dataStream >> value;
+//! Associative containers
+template<typename DeviceType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::set<ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    try {
+        data.clear();
 
-        if (dataStream.status() != DataStreamStatus::Ok) {
-            data.clear();
+        uint32 size{};
+        dataStream >> size;
 
-            break;
+        for (auto i = 0; i < size; ++i) {
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.insert(std::move(value));
         }
 
-        try {
-            data.insert(std::make_pair(std::move(key), std::move(value)));
-        } catch (const std::exception &ex) {
-            std::cerr << FUNC_INFO << ex.what() << std::endl;
+        return dataStream;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
 
-            dataStream.setStatus(DataStreamStatus::ReadError);
+        dataStream.setStatus(DataStreamStatus::ReadError);
 
-            data.clear();
+        data.clear();
 
-            break;
-        }
+        return dataStream;
     }
+}
 
-    return dataStream;
+template<typename DeviceType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::multiset<ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    try {
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        for (auto i = 0; i < size; ++i) {
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.insert(std::move(value));
+        }
+
+        return dataStream;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
+
+        dataStream.setStatus(DataStreamStatus::ReadError);
+
+        data.clear();
+
+        return dataStream;
+    }
+}
+
+template<typename DeviceType, typename KeyType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::map<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    try {
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        for (auto i = 0; i < size; ++i) {
+            KeyType key{};
+            dataStream >> key;
+
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.insert(std::make_pair(std::move(key), std::move(value)));
+        }
+
+        return dataStream;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
+
+        dataStream.setStatus(DataStreamStatus::ReadError);
+
+        data.clear();
+
+        return dataStream;
+    }
+}
+
+template<typename DeviceType, typename KeyType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::multimap<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    try {
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        for (auto i = 0; i < size; ++i) {
+            KeyType key{};
+            dataStream >> key;
+
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.insert(std::make_pair(std::move(key), std::move(value)));
+        }
+
+        return dataStream;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
+
+        dataStream.setStatus(DataStreamStatus::ReadError);
+
+        data.clear();
+
+        return dataStream;
+    }
+}
+
+//! Unordered associative containers
+template<typename DeviceType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_set<ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    try {
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        data.reserve(meta_cast<size_t>(size));
+
+        for (auto i = 0; i < size; ++i) {
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.insert(std::move(value));
+        }
+
+        return dataStream;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
+
+        dataStream.setStatus(DataStreamStatus::ReadError);
+
+        data.clear();
+
+        return dataStream;
+    }
+}
+
+template<typename DeviceType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multiset<ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    try {
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        data.reserve(meta_cast<size_t>(size));
+
+        for (auto i = 0; i < size; ++i) {
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.insert(std::move(value));
+        }
+
+        return dataStream;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
+
+        dataStream.setStatus(DataStreamStatus::ReadError);
+
+        data.clear();
+
+        return dataStream;
+    }
+}
+
+template<typename DeviceType, typename KeyType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_map<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    try {
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        data.reserve(meta_cast<size_t>(size));
+
+        for (auto i = 0; i < size; ++i) {
+            KeyType key{};
+            dataStream >> key;
+
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.insert(std::make_pair(std::move(key), std::move(value)));
+        }
+
+        return dataStream;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
+
+        dataStream.setStatus(DataStreamStatus::ReadError);
+
+        data.clear();
+
+        return dataStream;
+    }
+}
+
+template<typename DeviceType, typename KeyType, typename ValueType>
+inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multimap<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
+{
+    try {
+        data.clear();
+
+        uint32 size{};
+        dataStream >> size;
+
+        data.reserve(meta_cast<size_t>(size));
+
+        for (auto i = 0; i < size; ++i) {
+            KeyType key{};
+            dataStream >> key;
+
+            ValueType value{};
+            dataStream >> value;
+
+            if (dataStream.status() != DataStreamStatus::Ok) {
+                data.clear();
+
+                break;
+            }
+
+            data.insert(std::make_pair(std::move(key), std::move(value)));
+        }
+
+        return dataStream;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << ex.what() << std::endl;
+
+        dataStream.setStatus(DataStreamStatus::ReadError);
+
+        data.clear();
+
+        return dataStream;
+    }
 }
 
 }

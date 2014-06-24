@@ -1,20 +1,17 @@
 #ifndef DISABLECOPY_H
 #define DISABLECOPY_H
 
-//! Project Includes
-#include "global.h"
-
 namespace Calibri
 {
 
 class DisableCopy
 {
 public:
-    DECL_CONSTEXPR explicit DisableCopy() DECL_NOEXCEPT {}
+    constexpr explicit DisableCopy() noexcept = default;
 
 private:
-    DisableCopy(const DisableCopy &) DECL_DELETE;
-    DisableCopy &operator =(const DisableCopy &) DECL_DELETE;
+    DisableCopy(const DisableCopy &) = delete;
+    DisableCopy &operator =(const DisableCopy &) = delete;
 };
 
 }

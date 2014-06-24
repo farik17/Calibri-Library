@@ -7,24 +7,24 @@
 #include <iostream>
 #include <limits>
 
-//! Project Includes
+//! CalibriLibrary Includes
 #include "global.h"
 
 namespace Calibri
 {
 
 //! Convert convertible types
-template<typename CastType, typename DataType>
-inline typename std::enable_if<std::is_convertible<DataType, CastType>::value, CastType>::type meta_cast(DataType data) DECL_NOEXCEPT
+template<typename CastType, typename DataType, typename std::enable_if<std::is_convertible<DataType, CastType>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(DataType data) noexcept -> CastType
 {
     return static_cast<CastType>(data);
 }
 
 //! Convert cstring to arithmetic types
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_same<CastType, long>::value, CastType>::type meta_cast(const char *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, long>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end = nullptr;
+    char *end{};
     auto result = std::strtol(data, &end, Base);
 
     switch (errno) {
@@ -53,10 +53,10 @@ inline typename std::enable_if<std::is_same<CastType, long>::value, CastType>::t
     return result;
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_same<CastType, ulong>::value, CastType>::type meta_cast(const char *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, ulong>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end = nullptr;
+    char *end{};
     auto result = std::strtoul(data, &end, Base);
 
     switch (errno) {
@@ -85,12 +85,12 @@ inline typename std::enable_if<std::is_same<CastType, ulong>::value, CastType>::
     return result;
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<(std::is_same<CastType, int8>::value
-                                || std::is_same<CastType, int16>::value
-                                || std::is_same<CastType, int32>::value), CastType>::type meta_cast(const char *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<(std::is_same<CastType, int8>::value
+                                                                   || std::is_same<CastType, int16>::value
+                                                                   || std::is_same<CastType, int32>::value), class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end = nullptr;
+    char *end{};
     auto result = std::strtol(data, &end, Base);
 
     switch (errno) {
@@ -119,12 +119,12 @@ inline typename std::enable_if<(std::is_same<CastType, int8>::value
     return meta_cast<CastType>(result);
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<(std::is_same<CastType, uint8>::value
-                                || std::is_same<CastType, uint16>::value
-                                || std::is_same<CastType, uint32>::value), CastType>::type meta_cast(const char *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<(std::is_same<CastType, uint8>::value
+                                                                   || std::is_same<CastType, uint16>::value
+                                                                   || std::is_same<CastType, uint32>::value), class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end = nullptr;
+    char *end{};
     auto result = std::strtoul(data, &end, Base);
 
     switch (errno) {
@@ -153,10 +153,10 @@ inline typename std::enable_if<(std::is_same<CastType, uint8>::value
     return meta_cast<CastType>(result);
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_same<CastType, int64>::value, CastType>::type meta_cast(const char *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, int64>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end = nullptr;
+    char *end{};
     auto result = std::strtoll(data, &end, Base);
 
     switch (errno) {
@@ -185,10 +185,10 @@ inline typename std::enable_if<std::is_same<CastType, int64>::value, CastType>::
     return result;
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_same<CastType, uint64>::value, CastType>::type meta_cast(const char *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, uint64>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end = nullptr;
+    char *end{};
     auto result = std::strtoull(data, &end, Base);
 
     switch (errno) {
@@ -217,10 +217,10 @@ inline typename std::enable_if<std::is_same<CastType, uint64>::value, CastType>:
     return result;
 }
 
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, float>::value, CastType>::type meta_cast(const char *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, typename std::enable_if<std::is_same<CastType, float>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end = nullptr;
+    char *end{};
     auto result = std::strtof(data, &end);
 
     switch (errno) {
@@ -249,10 +249,10 @@ inline typename std::enable_if<std::is_same<CastType, float>::value, CastType>::
     return result;
 }
 
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, double>::value, CastType>::type meta_cast(const char *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, typename std::enable_if<std::is_same<CastType, double>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end = nullptr;
+    char *end{};
     auto result = std::strtod(data, &end);
 
     switch (errno) {
@@ -281,10 +281,10 @@ inline typename std::enable_if<std::is_same<CastType, double>::value, CastType>:
     return result;
 }
 
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, longdouble>::value, CastType>::type meta_cast(const char *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, typename std::enable_if<std::is_same<CastType, longdouble>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end = nullptr;
+    char *end{};
     auto result = std::strtold(data, &end);
 
     switch (errno) {
@@ -314,23 +314,23 @@ inline typename std::enable_if<std::is_same<CastType, longdouble>::value, CastTy
 }
 
 //! Convert string to arithmetic types
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_integral<CastType>::value, CastType>::type meta_cast(const std::string &data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_integral<CastType>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const std::string &data, bool *ok = nullptr) noexcept -> CastType
 {
     return meta_cast<CastType, Base>(data.c_str(), ok);
 }
 
-template<typename CastType>
-inline typename std::enable_if<std::is_floating_point<CastType>::value, CastType>::type meta_cast(const std::string &data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, typename std::enable_if<std::is_floating_point<CastType>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const std::string &data, bool *ok = nullptr) noexcept -> CastType
 {
     return meta_cast<CastType>(data.c_str(), ok);
 }
 
 //! Convert wcstring to arithmetic types
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_same<CastType, long>::value, CastType>::type meta_cast(const wchar_t *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, long>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end = nullptr;
+    wchar_t *end{};
     auto result = std::wcstol(data, &end, Base);
 
     switch (errno) {
@@ -359,10 +359,10 @@ inline typename std::enable_if<std::is_same<CastType, long>::value, CastType>::t
     return result;
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_same<CastType, ulong>::value, CastType>::type meta_cast(const wchar_t *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, ulong>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end = nullptr;
+    wchar_t *end{};
     auto result = std::wcstoul(data, &end, Base);
 
     switch (errno) {
@@ -391,12 +391,12 @@ inline typename std::enable_if<std::is_same<CastType, ulong>::value, CastType>::
     return result;
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<(std::is_same<CastType, int8>::value
-                                || std::is_same<CastType, int16>::value
-                                || std::is_same<CastType, int32>::value), CastType>::type meta_cast(const wchar_t *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<(std::is_same<CastType, int8>::value
+                                                                   || std::is_same<CastType, int16>::value
+                                                                   || std::is_same<CastType, int32>::value), class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end = nullptr;
+    wchar_t *end{};
     auto result = std::wcstol(data, &end, Base);
 
     switch (errno) {
@@ -425,12 +425,12 @@ inline typename std::enable_if<(std::is_same<CastType, int8>::value
     return meta_cast<CastType>(result);
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<(std::is_same<CastType, uint8>::value
-                                || std::is_same<CastType, uint16>::value
-                                || std::is_same<CastType, uint32>::value), CastType>::type meta_cast(const wchar_t *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<(std::is_same<CastType, uint8>::value
+                                                                   || std::is_same<CastType, uint16>::value
+                                                                   || std::is_same<CastType, uint32>::value), class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end = nullptr;
+    wchar_t *end{};
     auto result = std::wcstoul(data, &end, Base);
 
     switch (errno) {
@@ -459,10 +459,10 @@ inline typename std::enable_if<(std::is_same<CastType, uint8>::value
     return meta_cast<CastType>(result);
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_same<CastType, int64>::value, CastType>::type meta_cast(const wchar_t *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, int64>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end = nullptr;
+    wchar_t *end{};
     auto result = std::wcstoll(data, &end, Base);
 
     switch (errno) {
@@ -491,10 +491,10 @@ inline typename std::enable_if<std::is_same<CastType, int64>::value, CastType>::
     return result;
 }
 
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_same<CastType, uint64>::value, CastType>::type meta_cast(const wchar_t *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, uint64>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end = nullptr;
+    wchar_t *end{};
     auto result = std::wcstoull(data, &end, Base);
 
     switch (errno) {
@@ -523,10 +523,10 @@ inline typename std::enable_if<std::is_same<CastType, uint64>::value, CastType>:
     return result;
 }
 
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, float>::value, CastType>::type meta_cast(const wchar_t *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, typename std::enable_if<std::is_same<CastType, float>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end = nullptr;
+    wchar_t *end{};
     auto result = std::wcstof(data, &end);
 
     switch (errno) {
@@ -555,10 +555,10 @@ inline typename std::enable_if<std::is_same<CastType, float>::value, CastType>::
     return result;
 }
 
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, double>::value, CastType>::type meta_cast(const wchar_t *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, typename std::enable_if<std::is_same<CastType, double>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end = nullptr;
+    wchar_t *end{};
     auto result = std::wcstod(data, &end);
 
     switch (errno) {
@@ -587,10 +587,10 @@ inline typename std::enable_if<std::is_same<CastType, double>::value, CastType>:
     return result;
 }
 
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, longdouble>::value, CastType>::type meta_cast(const wchar_t *data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, typename std::enable_if<std::is_same<CastType, longdouble>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end = nullptr;
+    wchar_t *end{};
     auto result = std::wcstold(data, &end);
 
     switch (errno) {
@@ -620,94 +620,96 @@ inline typename std::enable_if<std::is_same<CastType, longdouble>::value, CastTy
 }
 
 //! Convert wstring to arithmetic types
-template<typename CastType, int Base = 10>
-inline typename std::enable_if<std::is_integral<CastType>::value, CastType>::type meta_cast(const std::wstring &data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, int Base = 10, typename std::enable_if<std::is_integral<CastType>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const std::wstring &data, bool *ok = nullptr) noexcept -> CastType
 {
     return meta_cast<CastType, Base>(data.c_str(), ok);
 }
 
-template<typename CastType>
-inline typename std::enable_if<std::is_floating_point<CastType>::value, CastType>::type meta_cast(const std::wstring &data, bool *ok = nullptr) DECL_NOEXCEPT
+template<typename CastType, typename std::enable_if<std::is_floating_point<CastType>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const std::wstring &data, bool *ok = nullptr) noexcept -> CastType
 {
     return meta_cast<CastType>(data.c_str(), ok);
 }
 
 //! Convert arithmetic types to string
-template<typename CastType, typename DataType>
-inline typename std::enable_if<std::is_same<CastType, std::string>::value && std::is_arithmetic<DataType>::value, CastType>::type meta_cast(DataType data)
+template<typename CastType, typename DataType, typename std::enable_if<(std::is_same<CastType, std::string>::value
+                                                                       && std::is_arithmetic<DataType>::value), class Enabler>::type... Enabler>
+inline auto meta_cast(DataType data) noexcept -> CastType
 {
     try {
         return std::to_string(data);
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
-        return std::string();
+        return {};
     }
 }
 
 //! Convert arithmetic types to wstring
-template<typename CastType, typename DataType>
-inline typename std::enable_if<std::is_same<CastType, std::wstring>::value && std::is_arithmetic<DataType>::value, CastType>::type meta_cast(DataType data)
+template<typename CastType, typename DataType, typename std::enable_if<(std::is_same<CastType, std::wstring>::value
+                                                                       && std::is_arithmetic<DataType>::value), class Enabler>::type... Enabler>
+inline auto meta_cast(DataType data) noexcept -> CastType
 {
     try {
         return std::to_wstring(data);
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
-        return std::wstring();
+        return {};
     }
 }
 
 //! Convert cstring to wstring
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, std::wstring>::value, CastType>::type meta_cast(const char *data)
+template<typename CastType, typename std::enable_if<std::is_same<CastType, std::wstring>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const char *data) noexcept -> CastType
 {
-    std::wstring result;
+    std::wstring result{};
 
     try {
         result.resize(std::mbstowcs(nullptr, data, 0));
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
-        return std::wstring();
+        return {};
     }
 
     if (std::mbstowcs(&result.front(), data, result.size()) == meta_cast<size_t>(-1))
-        return std::wstring();
+        return {};
 
     return result;
 }
 
 //! Convert wcstring to string
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, std::string>::value, CastType>::type meta_cast(const wchar_t *data)
+template<typename CastType, typename std::enable_if<std::is_same<CastType, std::string>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const wchar_t *data) noexcept -> CastType
 {
-    std::string result;
+    std::string result{};
 
     try {
         result.resize(std::wcstombs(nullptr, data, 0));
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << ex.what() << std::endl;
 
-        return std::string();
+        return {};
     }
 
     if (std::wcstombs(&result.front(), data, result.size()) == meta_cast<size_t>(-1))
-        return std::string();
+        return {};
 
     return result;
 }
 
 //! Convert string to wstring
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, std::wstring>::value, CastType>::type meta_cast(const std::string &data)
+template<typename CastType, typename std::enable_if<std::is_same<CastType, std::wstring>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const std::string &data) noexcept -> CastType
 {
     return meta_cast<CastType>(data.c_str());
 }
 
 //! Convert wstring to string
-template<typename CastType>
-inline typename std::enable_if<std::is_same<CastType, std::string>::value, CastType>::type meta_cast(const std::wstring &data)
+template<typename CastType, typename std::enable_if<std::is_same<CastType, std::string>::value, class Enabler>::type... Enabler>
+inline auto meta_cast(const std::wstring &data) noexcept -> CastType
 {
     return meta_cast<CastType>(data.c_str());
 }

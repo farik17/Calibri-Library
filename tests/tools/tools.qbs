@@ -2,7 +2,6 @@ import qbs
 
 Project {
     references: [
-        "io/io.qbs",
-        "tools/tools.qbs"
+        "meta_cast/meta_cast.qbs"
     ]
 }
