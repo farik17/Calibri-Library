@@ -28,7 +28,7 @@ class DataStream : private DisableCopy
 {
 public:
     explicit DataStream(DeviceType *device) noexcept
-        : m_device{device}
+        : m_device { device }
     {
     }
 
@@ -63,11 +63,11 @@ public:
     }
 
 private:
-    DeviceType *m_device{};
+    DeviceType *m_device {};
 
-    size_t m_pos{};
+    size_t m_pos {};
 
-    DataStreamStatus m_status{DataStreamStatus::Ok};
+    DataStreamStatus m_status { DataStreamStatus::Ok };
 };
 
 /*!
@@ -337,13 +337,13 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcep
     try {
         data = nullptr;
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         if (dataStream.status() != DataStreamStatus::Ok)
             return dataStream;
 
-        data = new char[meta_cast<size_t>(size + 1)]{};
+        data = new char[meta_cast<size_t>(size + 1)] {};
 
         if (dataStreamRead(dataStream, data, meta_cast<size_t>(size)) != meta_cast<size_t>(size)) {
             dataStream.setStatus(DataStreamStatus::ReadError);
@@ -368,7 +368,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::string &data) n
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         if (dataStream.status() != DataStreamStatus::Ok)
@@ -399,13 +399,13 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::vector<ValueTyp
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         data.reserve(meta_cast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -435,11 +435,11 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::deque<ValueType
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         for (auto i = 0; i < size; ++i) {
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -469,13 +469,13 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::forward_list<Va
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         auto it = data.cbefore_begin();
 
         for (auto i = 0; i < size; ++i) {
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -505,11 +505,11 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::list<ValueType>
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         for (auto i = 0; i < size; ++i) {
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -540,11 +540,11 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::set<ValueType> 
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         for (auto i = 0; i < size; ++i) {
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -574,11 +574,11 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::multiset<ValueT
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         for (auto i = 0; i < size; ++i) {
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -608,14 +608,14 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::map<KeyType, Va
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         for (auto i = 0; i < size; ++i) {
-            KeyType key{};
+            KeyType key {};
             dataStream >> key;
 
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -645,14 +645,14 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::multimap<KeyTyp
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         for (auto i = 0; i < size; ++i) {
-            KeyType key{};
+            KeyType key {};
             dataStream >> key;
 
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -683,13 +683,13 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_set<V
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         data.reserve(meta_cast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -719,13 +719,13 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         data.reserve(meta_cast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -755,16 +755,16 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_map<K
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         data.reserve(meta_cast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
-            KeyType key{};
+            KeyType key {};
             dataStream >> key;
 
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -794,16 +794,16 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
     try {
         data.clear();
 
-        uint32 size{};
+        uint32 size {};
         dataStream >> size;
 
         data.reserve(meta_cast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
-            KeyType key{};
+            KeyType key {};
             dataStream >> key;
 
-            ValueType value{};
+            ValueType value {};
             dataStream >> value;
 
             if (dataStream.status() != DataStreamStatus::Ok) {
@@ -827,6 +827,6 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
     }
 }
 
-}
+} // namespace Calibri
 
 #endif // DATASTREAM_H

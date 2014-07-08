@@ -24,7 +24,7 @@ inline auto meta_cast(DataType data) noexcept -> CastType
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, long>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end{};
+    char *end {};
     auto result = std::strtol(data, &end, Base);
 
     switch (errno) {
@@ -56,7 +56,7 @@ inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, ulong>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end{};
+    char *end {};
     auto result = std::strtoul(data, &end, Base);
 
     switch (errno) {
@@ -90,7 +90,7 @@ template<typename CastType, int Base = 10, typename std::enable_if<(std::is_same
                                                                    || std::is_same<CastType, int32>::value), class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end{};
+    char *end {};
     auto result = std::strtol(data, &end, Base);
 
     switch (errno) {
@@ -124,7 +124,7 @@ template<typename CastType, int Base = 10, typename std::enable_if<(std::is_same
                                                                    || std::is_same<CastType, uint32>::value), class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end{};
+    char *end {};
     auto result = std::strtoul(data, &end, Base);
 
     switch (errno) {
@@ -156,7 +156,7 @@ inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, int64>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end{};
+    char *end {};
     auto result = std::strtoll(data, &end, Base);
 
     switch (errno) {
@@ -188,7 +188,7 @@ inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, uint64>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end{};
+    char *end {};
     auto result = std::strtoull(data, &end, Base);
 
     switch (errno) {
@@ -220,7 +220,7 @@ inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 template<typename CastType, typename std::enable_if<std::is_same<CastType, float>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end{};
+    char *end {};
     auto result = std::strtof(data, &end);
 
     switch (errno) {
@@ -252,7 +252,7 @@ inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 template<typename CastType, typename std::enable_if<std::is_same<CastType, double>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end{};
+    char *end {};
     auto result = std::strtod(data, &end);
 
     switch (errno) {
@@ -284,7 +284,7 @@ inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 template<typename CastType, typename std::enable_if<std::is_same<CastType, longdouble>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
-    char *end{};
+    char *end {};
     auto result = std::strtold(data, &end);
 
     switch (errno) {
@@ -330,7 +330,7 @@ inline auto meta_cast(const std::string &data, bool *ok = nullptr) noexcept -> C
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, long>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end{};
+    wchar_t *end {};
     auto result = std::wcstol(data, &end, Base);
 
     switch (errno) {
@@ -362,7 +362,7 @@ inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastT
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, ulong>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end{};
+    wchar_t *end {};
     auto result = std::wcstoul(data, &end, Base);
 
     switch (errno) {
@@ -396,7 +396,7 @@ template<typename CastType, int Base = 10, typename std::enable_if<(std::is_same
                                                                    || std::is_same<CastType, int32>::value), class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end{};
+    wchar_t *end {};
     auto result = std::wcstol(data, &end, Base);
 
     switch (errno) {
@@ -430,7 +430,7 @@ template<typename CastType, int Base = 10, typename std::enable_if<(std::is_same
                                                                    || std::is_same<CastType, uint32>::value), class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end{};
+    wchar_t *end {};
     auto result = std::wcstoul(data, &end, Base);
 
     switch (errno) {
@@ -462,7 +462,7 @@ inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastT
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, int64>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end{};
+    wchar_t *end {};
     auto result = std::wcstoll(data, &end, Base);
 
     switch (errno) {
@@ -494,7 +494,7 @@ inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastT
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_same<CastType, uint64>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end{};
+    wchar_t *end {};
     auto result = std::wcstoull(data, &end, Base);
 
     switch (errno) {
@@ -526,7 +526,7 @@ inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastT
 template<typename CastType, typename std::enable_if<std::is_same<CastType, float>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end{};
+    wchar_t *end {};
     auto result = std::wcstof(data, &end);
 
     switch (errno) {
@@ -558,7 +558,7 @@ inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastT
 template<typename CastType, typename std::enable_if<std::is_same<CastType, double>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end{};
+    wchar_t *end {};
     auto result = std::wcstod(data, &end);
 
     switch (errno) {
@@ -590,7 +590,7 @@ inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastT
 template<typename CastType, typename std::enable_if<std::is_same<CastType, longdouble>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastType
 {
-    wchar_t *end{};
+    wchar_t *end {};
     auto result = std::wcstold(data, &end);
 
     switch (errno) {
@@ -664,7 +664,7 @@ inline auto meta_cast(DataType data) noexcept -> CastType
 template<typename CastType, typename std::enable_if<std::is_same<CastType, std::wstring>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const char *data) noexcept -> CastType
 {
-    std::wstring result{};
+    std::wstring result {};
 
     try {
         result.resize(std::mbstowcs(nullptr, data, 0));
@@ -684,7 +684,7 @@ inline auto meta_cast(const char *data) noexcept -> CastType
 template<typename CastType, typename std::enable_if<std::is_same<CastType, std::string>::value, class Enabler>::type... Enabler>
 inline auto meta_cast(const wchar_t *data) noexcept -> CastType
 {
-    std::string result{};
+    std::string result {};
 
     try {
         result.resize(std::wcstombs(nullptr, data, 0));
@@ -714,6 +714,6 @@ inline auto meta_cast(const std::wstring &data) noexcept -> CastType
     return meta_cast<CastType>(data.c_str());
 }
 
-}
+} // namespace Calibri
 
 #endif // META_CAST_H

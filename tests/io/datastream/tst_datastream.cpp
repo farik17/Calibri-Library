@@ -39,14 +39,14 @@ private slots:
 
 void tst_DataStream::testInt8()
 {
-    int8 in{64};
+    int8 in { 64 };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -56,14 +56,14 @@ void tst_DataStream::testInt8()
 
 void tst_DataStream::testUint8()
 {
-    uint8 in{64};
+    uint8 in { 64 };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -73,14 +73,14 @@ void tst_DataStream::testUint8()
 
 void tst_DataStream::testInt16()
 {
-    int16 in{64};
+    int16 in { 64 };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -90,14 +90,14 @@ void tst_DataStream::testInt16()
 
 void tst_DataStream::testUint16()
 {
-    uint16 in{64};
+    uint16 in { 64 };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -107,14 +107,14 @@ void tst_DataStream::testUint16()
 
 void tst_DataStream::testInt32()
 {
-    int32 in{64};
+    int32 in { 64 };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -124,14 +124,14 @@ void tst_DataStream::testInt32()
 
 void tst_DataStream::testUint32()
 {
-    uint32 in{64};
+    uint32 in { 64 };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -141,14 +141,14 @@ void tst_DataStream::testUint32()
 
 void tst_DataStream::testInt64()
 {
-    int64 in{64};
+    int64 in { 64 };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -158,14 +158,14 @@ void tst_DataStream::testInt64()
 
 void tst_DataStream::testUint64()
 {
-    uint64 in{64};
+    uint64 in { 64 };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -175,14 +175,14 @@ void tst_DataStream::testUint64()
 
 void tst_DataStream::testFloat()
 {
-    float in{64.0064f};
+    float in { 64.0064f };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -192,14 +192,14 @@ void tst_DataStream::testFloat()
 
 void tst_DataStream::testDouble()
 {
-    double in{64.0064d};
+    double in { 64.0064d };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -209,14 +209,14 @@ void tst_DataStream::testDouble()
 
 void tst_DataStream::testLongDouble()
 {
-    longdouble in{64.0064l};
+    longdouble in { 64.0064l };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -226,14 +226,14 @@ void tst_DataStream::testLongDouble()
 
 void tst_DataStream::testCString()
 {
-    const char *in{"cstring data"};
+    const char *in { "cstring data" };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    char *out{};
+    char *out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -246,14 +246,14 @@ void tst_DataStream::testCString()
 
 void tst_DataStream::testString()
 {
-    std::string in{"string data"};
+    std::string in { "string data" };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -263,9 +263,9 @@ void tst_DataStream::testString()
 
 void tst_DataStream::testSeek()
 {
-    std::string in{"string data"};
+    std::string in { "string data" };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << 0;
@@ -275,8 +275,8 @@ void tst_DataStream::testSeek()
 
     writeStream << Calibri::meta_cast<uint32>(in.size());
 
-    uint32 size{};
-    decltype(in) out{};
+    uint32 size {};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> size;
@@ -288,14 +288,14 @@ void tst_DataStream::testSeek()
 
 void tst_DataStream::testVector()
 {
-    std::vector<std::string> in{2, "string data"};
+    std::vector<std::string> in { 2, "string data" };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -305,14 +305,14 @@ void tst_DataStream::testVector()
 
 void tst_DataStream::testDeque()
 {
-    std::deque<std::string> in{2, "string data"};
+    std::deque<std::string> in { 2, "string data" };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -322,14 +322,14 @@ void tst_DataStream::testDeque()
 
 void tst_DataStream::testForwardList()
 {
-    std::forward_list<std::string> in{2, "string data"};
+    std::forward_list<std::string> in { 2, "string data" };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -339,14 +339,14 @@ void tst_DataStream::testForwardList()
 
 void tst_DataStream::testList()
 {
-    std::list<std::string> in{2, "string data"};
+    std::list<std::string> in { 2, "string data" };
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -356,15 +356,15 @@ void tst_DataStream::testList()
 
 void tst_DataStream::testSet()
 {
-    std::set<std::string> in{};
+    std::set<std::string> in {};
     in.insert("string data");
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -374,16 +374,16 @@ void tst_DataStream::testSet()
 
 void tst_DataStream::testMultiSet()
 {
-    std::multiset<std::string> in{};
+    std::multiset<std::string> in {};
     in.insert("string data");
     in.insert("string data");
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -393,16 +393,16 @@ void tst_DataStream::testMultiSet()
 
 void tst_DataStream::testMap()
 {
-    std::map<std::string, std::string> in{};
+    std::map<std::string, std::string> in {};
     in.insert(std::make_pair("key one", "value one"));
     in.insert(std::make_pair("key two", "value two"));
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out;
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -412,16 +412,16 @@ void tst_DataStream::testMap()
 
 void tst_DataStream::testMultiMap()
 {
-    std::multimap<std::string, std::string> in{};
+    std::multimap<std::string, std::string> in {};
     in.insert(std::make_pair("key one", "value one"));
     in.insert(std::make_pair("key one", "value two"));
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out;
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -431,15 +431,15 @@ void tst_DataStream::testMultiMap()
 
 void tst_DataStream::testUnorderedSet()
 {
-    std::unordered_set<std::string> in{};
+    std::unordered_set<std::string> in {};
     in.insert("string data");
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -449,16 +449,16 @@ void tst_DataStream::testUnorderedSet()
 
 void tst_DataStream::testUnorderedMultiSet()
 {
-    std::unordered_multiset<std::string> in{};
+    std::unordered_multiset<std::string> in {};
     in.insert("string data");
     in.insert("string data");
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -468,16 +468,16 @@ void tst_DataStream::testUnorderedMultiSet()
 
 void tst_DataStream::testUnorderedMap()
 {
-    std::unordered_map<std::string, std::string> in{};
+    std::unordered_map<std::string, std::string> in {};
     in.insert(std::make_pair("key one", "value one"));
     in.insert(std::make_pair("key two", "value two"));
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;
@@ -487,16 +487,16 @@ void tst_DataStream::testUnorderedMap()
 
 void tst_DataStream::testUnorderedMultiMap()
 {
-    std::unordered_multimap<std::string, std::string> in{};
+    std::unordered_multimap<std::string, std::string> in {};
     in.insert(std::make_pair("key one", "value one"));
     in.insert(std::make_pair("key one", "value two"));
 
-    buffer data{};
+    buffer data {};
 
     Calibri::DataStream<decltype(data)> writeStream(&data);
     writeStream << in;
 
-    decltype(in) out{};
+    decltype(in) out {};
 
     decltype(writeStream) readStream(&data);
     readStream >> out;

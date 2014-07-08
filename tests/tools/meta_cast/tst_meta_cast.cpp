@@ -62,7 +62,7 @@ void tst_meta_cast::testFromStringToNumeric()
     std::wstring inWstringInt { L"3" };
     std::wstring inWstringFloat { L"3.003" };
 
-    for (auto type : mTypes) {
+    for (const auto &type : mTypes) {
         switch (type) {
         case Types::Int8: {
             int8 controlValue { 3 };
@@ -108,6 +108,7 @@ void tst_meta_cast::testFromStringToNumeric()
             out = meta_cast<int16> (inWstringInt);
             QVERIFY2(out, "Failed to convert from std::wstring to int16");
             QVERIFY2(out == controlValue, "Failed to convert from std::wstring to int16");
+
             break;
         }
 
@@ -123,6 +124,7 @@ void tst_meta_cast::testFromStringToNumeric()
             out = meta_cast<uint16> (inWstringInt);
             QVERIFY2(out, "Failed to convert from std::wstring to uint16");
             QVERIFY2(out == controlValue, "Failed to convert from std::wstring to uint16");
+
             break;
         }
 
@@ -138,6 +140,7 @@ void tst_meta_cast::testFromStringToNumeric()
             out = meta_cast<int32> (inWstringInt);
             QVERIFY2(out, "Failed to convert from std::wstring to int32");
             QVERIFY2(out == controlValue, "Failed to convert from std::wstring to int32");
+
             break;
         }
 
@@ -153,6 +156,7 @@ void tst_meta_cast::testFromStringToNumeric()
             out = meta_cast<uint32> (inWstringInt);
             QVERIFY2(out, "Failed to convert from std::wstring to int32");
             QVERIFY2(out == controlValue, "Failed to convert from std::wstring to uint32");
+
             break;
         }
 
@@ -168,6 +172,7 @@ void tst_meta_cast::testFromStringToNumeric()
             out = meta_cast<int64> (inWstringInt);
             QVERIFY2(out, "Failed to convert from std::wstring to int64");
             QVERIFY2(out == controlValue, "Failed to convert from std::wstring to int64");
+
             break;
         }
 
@@ -183,6 +188,7 @@ void tst_meta_cast::testFromStringToNumeric()
             out = meta_cast<uint64> (inWstringInt);
             QVERIFY2(out, "Failed to convert from std::wstring to uint64");
             QVERIFY2(out == controlValue, "Failed to convert from std::wstring to uint64");
+
             break;
         }
 
@@ -198,6 +204,7 @@ void tst_meta_cast::testFromStringToNumeric()
             out = meta_cast<float> (inWstringFloat);
             QVERIFY2(out, "Failed to convert from std::wstring to float");
             QVERIFY2(out == controlValue, "Failed to convert from std::wstring to float");
+
             break;
         }
 
@@ -213,6 +220,7 @@ void tst_meta_cast::testFromStringToNumeric()
             out = meta_cast<double> (inWstringFloat);
             QVERIFY2(out, "Failed to convert from std::wstring to double");
             QVERIFY2(out == controlValue, "Failed to convert from std::wstring to double");
+
             break;
         }
 
@@ -228,6 +236,7 @@ void tst_meta_cast::testFromStringToNumeric()
             out = meta_cast<longdouble> (inWstringFloat);
             QVERIFY2(out, "Failed to convert from std::wstring to longdouble");
             QVERIFY2(out == controlValue, "Failed to convert from std::wstring to longdouble");
+
             break;
         }
 
@@ -249,123 +258,134 @@ void tst_meta_cast::testFromNumericToString()
     for (auto type : mTypes) {
         switch (type) {
         case Types::Int8: {
-            int8 in = 3;
+            int8 in { 3 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueInt, "Failed to convert from std::string to int8");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueInt, "Failed to convert from std::wstring to int8");
+
             break;
         }
 
         case Types::Uint8: {
-            uint8 in = 3;
+            uint8 in { 3 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueInt, "Failed to convert from std::string to uint8");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueInt, "Failed to convert from std::wstring to uint8");
+
             break;
         }
 
         case Types::Int16: {
-            int16 in = 3;
+            int16 in { 3 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueInt, "Failed to convert from std::string to int16");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueInt, "Failed to convert from std::wstring to int16");
+
             break;
         }
 
         case Types::Uint16: {
-            uint16 in = 3;
+            uint16 in { 3 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueInt, "Failed to convert from std::string to uint16");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueInt, "Failed to convert from std::wstring to uint16");
+
             break;
         }
 
         case Types::Int32: {
-            int32 in = 3;
+            int32 in { 3 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueInt, "Failed to convert from std::string to int32");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueInt, "Failed to convert from std::wstring to int32");
+
             break;
         }
 
         case Types::Uint32: {
-            uint32 in = 3;
+            uint32 in { 3 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueInt, "Failed to convert from std::string to uint32");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueInt, "Failed to convert from std::wstring to uint32");
+
             break;
         }
 
         case Types::Int64: {
-            int64 in = 3;
+            int64 in { 3 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueInt, "Failed to convert from std::string to int64");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueInt, "Failed to convert from std::wstring to int64");
+
             break;
         }
 
         case Types::Uint64: {
-            uint64 in = 3;
+            uint64 in { 3 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueInt, "Failed to convert from std::string to uint64");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueInt, "Failed to convert from std::wstring to uint64");
+
             break;
         }
 
         case Types::Float: {
-            float in = 3.003;
+            float in { 3.003 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueFloat, "Failed to convert from std::string to float");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueFloat, "Failed to convert from std::wstring to float");
+
             break;
         }
 
         case Types::Double: {
-            double in = 3.003;
+            double in { 3.003 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueFloat, "Failed to convert from std::string to double");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueFloat, "Failed to convert from std::wstring to double");
+
             break;
         }
 
         case Types::Longdouble: {
-            longdouble in = 3.003;
+            longdouble in { 3.003 };
 
             auto outString = meta_cast<std::string> (in);
             QVERIFY2(outString == stringControlValueFloat, "Failed to convert from std::string to longdouble");
 
             auto outWstring = meta_cast<std::wstring> (in);
             QVERIFY2(outWstring == wstringControlValueFloat, "Failed to convert from std::wstring to longdouble");
+
             break;
         }
 

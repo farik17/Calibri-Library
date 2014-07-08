@@ -33,7 +33,8 @@ Product {
         name: "global"
         prefix: "global/"
         files: [
-            "*.h"
+            "*.h",
+            "*.cpp"
         ]
     }
 
@@ -41,7 +42,8 @@ Product {
         name: "io"
         prefix: "io/"
         files: [
-            "*.h"
+            "*.h",
+            "*.cpp"
         ]
     }
 
@@ -49,7 +51,8 @@ Product {
         name: "tools"
         prefix: "tools/"
         files: [
-            "*.h"
+            "*.h",
+            "*.cpp"
         ]
     }
 }

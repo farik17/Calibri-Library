@@ -7,6 +7,7 @@ Product {
         "application"
     ]
     files: [
+        "*.h",
         "*.cpp"
     ]
 

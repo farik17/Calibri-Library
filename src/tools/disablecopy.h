@@ -14,6 +14,6 @@ private:
     DisableCopy &operator =(const DisableCopy &) = delete;
 };
 
-}
+} // namespace Calibri
 
 #endif // DISABLECOPY_H

@@ -35,6 +35,6 @@ private:
     Repeater<0>() noexcept = default;
 };
 
-}
+} // namespace Calibri
 
 #endif // REPEATER_H
