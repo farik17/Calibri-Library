@@ -19,7 +19,7 @@ void ElapsedTimer::reset() noexcept
     m_startPoint = std::chrono::steady_clock::time_point();
 }
 
-uint64 ElapsedTimer::restart(ElapsedTimerMetrics metrics) noexcept
+auto ElapsedTimer::restart(ElapsedTimerMetrics metrics) noexcept -> uint64
 {
     auto timeExpired = expired(metrics);
 
@@ -28,17 +28,17 @@ uint64 ElapsedTimer::restart(ElapsedTimerMetrics metrics) noexcept
     return timeExpired;
 }
 
-uint64 ElapsedTimer::elapsed(ElapsedTimerMetrics metrics) const noexcept
+auto ElapsedTimer::elapsed(ElapsedTimerMetrics metrics) const noexcept -> uint64
 {
     return expired(metrics);
 }
 
-bool ElapsedTimer::hasExpired(uint64 timeout, ElapsedTimerMetrics metrics) const noexcept
+auto ElapsedTimer::hasExpired(uint64 timeout, ElapsedTimerMetrics metrics) const noexcept -> bool
 {
     return timeout < elapsed(metrics);
 }
 
-uint64 ElapsedTimer::expired(ElapsedTimerMetrics metrics) const noexcept
+auto ElapsedTimer::expired(ElapsedTimerMetrics metrics) const noexcept -> uint64
 {
     switch (metrics) {
     case ElapsedTimerMetrics::Hours:
@@ -60,7 +60,7 @@ uint64 ElapsedTimer::expired(ElapsedTimerMetrics metrics) const noexcept
         return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - m_startPoint).count();
 
     default:
-        return 0;
+        return {};
     }
 }
 

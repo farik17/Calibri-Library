@@ -27,13 +27,13 @@ public:
     void start() noexcept;
     void reset() noexcept;
 
-    uint64 restart(ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) noexcept;
-    uint64 elapsed(ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) const noexcept;
+    auto restart(ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) noexcept -> uint64;
+    auto elapsed(ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) const noexcept -> uint64;
 
-    bool hasExpired(uint64 timeout, ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) const noexcept;
+    auto hasExpired(uint64 timeout, ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) const noexcept -> bool;
 
 private:
-    uint64 expired(ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) const noexcept;
+    auto expired(ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) const noexcept -> uint64;
 
     std::chrono::steady_clock::time_point m_startPoint {};
 };
