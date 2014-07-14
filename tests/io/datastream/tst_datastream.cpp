@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! CalibriLibrary Includes
-#include "datastream.h"
+#include "io/datastream.h"
 
 class tst_DataStream : public QObject
 {

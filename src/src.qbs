@@ -12,9 +12,7 @@ Product {
     }
 
     cpp.includePaths: [
-        "global",
-        "io",
-        "tools"
+        "./."
     ]
 
     Properties {

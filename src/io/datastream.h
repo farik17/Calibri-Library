@@ -12,10 +12,11 @@
 #include <iostream>
 
 //! CalibriLibrary Includes
-#include "disablecopy.h"
-#include "meta_cast.h"
+#include "tools/disablecopy.h"
+#include "tools/meta_cast.h"
 
-namespace Calibri {
+namespace Calibri
+{
 
 enum class DataStreamStatus : uint8 {
     Ok = 0,
