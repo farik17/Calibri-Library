@@ -1,42 +1,7 @@
 //! Self Includes
 #include "elapsedtimer.h"
 
-namespace Calibri
-{
-
-constexpr ElapsedTimer::ElapsedTimer() noexcept
-{
-
-}
-
-void ElapsedTimer::start() noexcept
-{
-    m_startPoint = std::chrono::steady_clock::now();
-}
-
-void ElapsedTimer::reset() noexcept
-{
-    m_startPoint = std::chrono::steady_clock::time_point();
-}
-
-auto ElapsedTimer::restart(ElapsedTimerMetrics metrics) noexcept -> uint64
-{
-    auto timeExpired = expired(metrics);
-
-    m_startPoint = std::chrono::steady_clock::now();
-
-    return timeExpired;
-}
-
-auto ElapsedTimer::elapsed(ElapsedTimerMetrics metrics) const noexcept -> uint64
-{
-    return expired(metrics);
-}
-
-auto ElapsedTimer::hasExpired(uint64 timeout, ElapsedTimerMetrics metrics) const noexcept -> bool
-{
-    return timeout < elapsed(metrics);
-}
+namespace Calibri {
 
 auto ElapsedTimer::expired(ElapsedTimerMetrics metrics) const noexcept -> uint64
 {

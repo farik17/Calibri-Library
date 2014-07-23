@@ -4,7 +4,7 @@
 //! Std Includes
 #include <iostream>
 
-//! CalibriLibrary Includes
+//! Calibri-Library Includes
 #include "tools/meta_cast.h"
 
 using Calibri::meta_cast;

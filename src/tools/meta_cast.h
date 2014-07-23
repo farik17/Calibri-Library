@@ -7,11 +7,10 @@
 #include <iostream>
 #include <limits>
 
-//! CalibriLibrary Includes
+//! Calibri-Library Includes
 #include "global/global.h"
 
-namespace Calibri
-{
+namespace Calibri {
 
 //! Convert convertible types
 template<typename CastType, typename DataType, typename std::enable_if<std::is_convertible<DataType, CastType>::value, class Enabler>::type... Enabler>

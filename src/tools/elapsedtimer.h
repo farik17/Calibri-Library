@@ -4,11 +4,10 @@
 //! Std Includes
 #include <chrono>
 
-//! CalibriLibrary Includes
+//! Calibri-Library Includes
 #include "global/global.h"
 
-namespace Calibri
-{
+namespace Calibri {
 
 enum class ElapsedTimerMetrics : uint8 {
     Hours = 0,
@@ -22,10 +21,10 @@ enum class ElapsedTimerMetrics : uint8 {
 class ElapsedTimer
 {
 public:
-    constexpr explicit ElapsedTimer() noexcept;
+    constexpr ElapsedTimer() noexcept;
 
-    void start() noexcept;
-    void reset() noexcept;
+    auto start() noexcept -> void;
+    auto reset() noexcept -> void;
 
     auto restart(ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) noexcept -> uint64;
     auto elapsed(ElapsedTimerMetrics metrics = ElapsedTimerMetrics::Miliseconds) const noexcept -> uint64;
@@ -37,6 +36,42 @@ private:
 
     std::chrono::steady_clock::time_point m_startPoint {};
 };
+
+/*!
+ * ElapsedTimer inline methods
+ */
+inline constexpr ElapsedTimer::ElapsedTimer() noexcept
+{
+}
+
+inline auto ElapsedTimer::start() noexcept -> void
+{
+    m_startPoint = std::chrono::steady_clock::now();
+}
+
+inline auto ElapsedTimer::reset() noexcept -> void
+{
+    m_startPoint = std::chrono::steady_clock::time_point();
+}
+
+inline auto ElapsedTimer::restart(ElapsedTimerMetrics metrics) noexcept -> uint64
+{
+    auto timeExpired = expired(metrics);
+
+    m_startPoint = std::chrono::steady_clock::now();
+
+    return timeExpired;
+}
+
+inline auto ElapsedTimer::elapsed(ElapsedTimerMetrics metrics) const noexcept -> uint64
+{
+    return expired(metrics);
+}
+
+inline auto ElapsedTimer::hasExpired(uint64 timeout, ElapsedTimerMetrics metrics) const noexcept -> bool
+{
+    return timeout < elapsed(metrics);
+}
 
 } // namespace Calibri
 

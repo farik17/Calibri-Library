@@ -11,12 +11,12 @@
 #include <unordered_map>
 #include <iostream>
 
-//! CalibriLibrary Includes
+//! Calibri-Library Includes
 #include "tools/disablecopy.h"
 #include "tools/meta_cast.h"
+#include "tools/buffer.h"
 
-namespace Calibri
-{
+namespace Calibri {
 
 enum class DataStreamStatus : uint8 {
     Ok = 0,
@@ -28,40 +28,19 @@ template<typename DeviceType>
 class DataStream : private DisableCopy
 {
 public:
-    explicit DataStream(DeviceType *device) noexcept
-        : m_device { device }
-    {
-    }
+    DataStream(DeviceType *device) noexcept;
 
-    auto device() noexcept -> DeviceType *
-    {
-        return m_device;
-    }
+    auto device() const noexcept -> DeviceType *;
 
-    auto pos() const noexcept -> size_t
-    {
-        return m_pos;
-    }
+    auto pos() const noexcept -> size_t;
 
-    void seek(size_t pos) noexcept
-    {
-        m_pos = pos;
-    }
+    auto seek(size_t pos) noexcept -> void;
 
-    auto status() const noexcept -> DataStreamStatus
-    {
-        return m_status;
-    }
+    auto status() const noexcept -> DataStreamStatus;
 
-    void setStatus(DataStreamStatus status) noexcept
-    {
-        m_status = status;
-    }
+    auto setStatus(DataStreamStatus status) noexcept -> void;
 
-    void resetStatus() noexcept
-    {
-        m_status = DataStreamStatus::Ok;
-    }
+    auto resetStatus() noexcept -> void;
 
 private:
     DeviceType *m_device {};
@@ -72,9 +51,55 @@ private:
 };
 
 /*!
+ * DataStream inline methods
+ */
+template<typename DeviceType>
+inline DataStream<DeviceType>::DataStream(DeviceType *device) noexcept
+    : DisableCopy()
+    , m_device { device }
+{
+}
+
+template<typename DeviceType>
+inline auto DataStream<DeviceType>::device() const noexcept -> DeviceType *
+{
+    return m_device;
+}
+
+template<typename DeviceType>
+inline auto DataStream<DeviceType>::pos() const noexcept -> size_t
+{
+    return m_pos;
+}
+
+template<typename DeviceType>
+inline auto DataStream<DeviceType>::seek(size_t pos) noexcept -> void
+{
+    m_pos = pos;
+}
+
+template<typename DeviceType>
+inline auto DataStream<DeviceType>::status() const noexcept -> DataStreamStatus
+{
+    return m_status;
+}
+
+template<typename DeviceType>
+inline auto DataStream<DeviceType>::setStatus(DataStreamStatus status) noexcept -> void
+{
+    m_status = status;
+}
+
+template<typename DeviceType>
+inline auto DataStream<DeviceType>::resetStatus() noexcept -> void
+{
+    m_status = DataStreamStatus::Ok;
+}
+
+/*!
  * DataStream write function
  */
-inline auto dataStreamWrite(DataStream<buffer> &dataStream, const char *data, size_t size) noexcept -> size_t
+inline auto dataStreamWrite(DataStream<Buffer> &dataStream, const char *data, size_t size) noexcept -> size_t
 {
     try {
         auto overflow = 0;
@@ -85,7 +110,7 @@ inline auto dataStreamWrite(DataStream<buffer> &dataStream, const char *data, si
 
         dataStream.device()->resize(dataStream.device()->size() + overflow);
 
-        std::copy_n(data, size, std::next(dataStream.device()->begin(), dataStream.pos()));
+        std::copy_n(data, size, std::next(std::begin(*dataStream.device()), dataStream.pos()));
 
         dataStream.seek(pos);
 
@@ -100,7 +125,7 @@ inline auto dataStreamWrite(DataStream<buffer> &dataStream, const char *data, si
 /*!
  * DataStream read function
  */
-inline auto dataStreamRead(DataStream<buffer> &dataStream, char *data, size_t size) noexcept -> size_t
+inline auto dataStreamRead(DataStream<Buffer> &dataStream, char *data, size_t size) noexcept -> size_t
 {
     try {
         auto overflow = 0;
@@ -112,7 +137,7 @@ inline auto dataStreamRead(DataStream<buffer> &dataStream, char *data, size_t si
         size -= overflow;
         pos -= overflow;
 
-        std::copy_n(std::next(dataStream.device()->begin(), dataStream.pos()), size, data);
+        std::copy_n(std::next(std::begin(*dataStream.device()), dataStream.pos()), size, data);
 
         dataStream.seek(pos);
 

@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <vector>
 
-//! CalibriLibrary Includes
+//! Calibri-Library Includes
 #include "systemdetection.h"
 #include "compilerdetection.h"
 #include "processordetection.h"
@@ -39,23 +39,9 @@ using fdptr = intptr;
 using fdptr = int32;
 #endif
 
-using buffer = std::vector<char>;
-
-namespace Calibri
-{
-
-constexpr inline auto versionValue(uint16 major, uint16 minor, uint16 patch) noexcept -> uint64
-{
-    return major * 100000 + minor * 1000 + patch;
-}
-
-constexpr uint64 version = versionValue(2, 0, 0);
-
-constexpr inline auto versionCheck(uint16 major, uint16 minor, uint16 patch) noexcept -> bool
-{
-    return version >= versionValue(major, minor, patch);
-}
-
-}
+//! Defines
+#define VERSION_VALUE(major, minor, patch) (major * 100000 + minor * 1000 + patch)
+#define VERSION VERSION_VALUE(2, 0, 0)
+#define VERSION_CHECK(major, minor, patch) (VERSION >= VERSION_VALUE(major, minor, patch))
 
 #endif // GLOBAL_H

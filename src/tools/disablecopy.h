@@ -1,13 +1,12 @@
 #ifndef DISABLECOPY_H
 #define DISABLECOPY_H
 
-namespace Calibri
-{
+namespace Calibri {
 
 class DisableCopy
 {
 public:
-    constexpr explicit DisableCopy() noexcept = default;
+    constexpr DisableCopy() noexcept = default;
 
 private:
     DisableCopy(const DisableCopy &) = delete;
