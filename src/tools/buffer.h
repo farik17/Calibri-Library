@@ -4,7 +4,7 @@
 //! Std Includes
 #include <vector>
 #include <string>
-#include <ostream>
+#include <iostream>
 
 namespace Calibri {
 
@@ -18,11 +18,13 @@ public:
     operator const char *() const noexcept;
     operator const void *() const noexcept;
 
-    auto toHex(const Buffer &buffer) const noexcept -> Buffer;
+    auto toHex(bool *ok = nullptr) const noexcept -> Buffer;
+
+    static auto fromHex(const Buffer &buffer, bool *ok = nullptr) noexcept -> Buffer;
 };
 
 /*!
- * Buffer inline methods
+ *  Buffer inline methods
  */
 inline Buffer::Buffer() noexcept
     : std::vector<char>()
@@ -50,11 +52,16 @@ inline Buffer::operator const void *() const noexcept
 }
 
 /*!
- * ostream operators
+ *  ostream operators
  */
 inline std::ostream &operator <<(std::ostream &stream, const Buffer &buffer)
 {
-    return stream << buffer.data() << std::flush;
+    for (const auto &data : buffer)
+        stream << data;
+
+    stream << std::flush;
+
+    return stream;
 }
 
 } // namespace Calibri

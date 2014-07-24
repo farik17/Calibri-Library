@@ -51,7 +51,7 @@ private:
 };
 
 /*!
- * DataStream inline methods
+ *  DataStream inline methods
  */
 template<typename DeviceType>
 inline DataStream<DeviceType>::DataStream(DeviceType *device) noexcept
@@ -97,7 +97,7 @@ inline auto DataStream<DeviceType>::resetStatus() noexcept -> void
 }
 
 /*!
- * DataStream write function
+ *  DataStream write function
  */
 inline auto dataStreamWrite(DataStream<Buffer> &dataStream, const char *data, size_t size) noexcept -> size_t
 {
@@ -116,14 +116,14 @@ inline auto dataStreamWrite(DataStream<Buffer> &dataStream, const char *data, si
 
         return size;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         return 0;
     }
 }
 
 /*!
- * DataStream read function
+ *  DataStream read function
  */
 inline auto dataStreamRead(DataStream<Buffer> &dataStream, char *data, size_t size) noexcept -> size_t
 {
@@ -143,14 +143,14 @@ inline auto dataStreamRead(DataStream<Buffer> &dataStream, char *data, size_t si
 
         return size;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         return 0;
     }
 }
 
 /*!
- * DataStream write operators
+ *  DataStream write operators
  */
 template<typename DeviceType, typename DataType, typename std::enable_if<std::is_arithmetic<DataType>::value, class Enabler>::type... Enabler>
 inline auto operator <<(DataStream<DeviceType> &dataStream, DataType data) noexcept -> DataStream<DeviceType> &
@@ -338,7 +338,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered
 }
 
 /*!
- * DataStream read operators
+ *  DataStream read operators
  */
 template<typename DeviceType, typename DataType, typename std::enable_if<std::is_arithmetic<DataType>::value, class Enabler>::type... Enabler>
 inline auto operator >>(DataStream<DeviceType> &dataStream, DataType &data) noexcept -> DataStream<DeviceType> &
@@ -380,7 +380,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcep
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -410,7 +410,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::string &data) n
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -445,7 +445,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::vector<ValueTyp
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -479,7 +479,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::deque<ValueType
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -515,7 +515,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::forward_list<Va
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -549,7 +549,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::list<ValueType>
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -584,7 +584,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::set<ValueType> 
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -618,7 +618,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::multiset<ValueT
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -655,7 +655,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::map<KeyType, Va
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -692,7 +692,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::multimap<KeyTyp
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -729,7 +729,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_set<V
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -765,7 +765,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -804,7 +804,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_map<K
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
@@ -843,7 +843,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
 
         return dataStream;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << ex.what() << std::endl;
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
 
         dataStream.setStatus(DataStreamStatus::ReadError);
 
