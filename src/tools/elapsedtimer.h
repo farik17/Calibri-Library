@@ -38,7 +38,7 @@ private:
 };
 
 /*!
- * ElapsedTimer inline methods
+ *  ElapsedTimer inline methods
  */
 inline constexpr ElapsedTimer::ElapsedTimer() noexcept
 {
