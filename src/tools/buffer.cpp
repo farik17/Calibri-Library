@@ -13,7 +13,7 @@ namespace Constants {
 
 namespace Hex {
 
-constexpr const std::array<char, 16> encodedTable { { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' } };
+constexpr const std::array<char, 16> encodeTable { { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' } };
 
 } // namespace Hex
 
@@ -26,8 +26,8 @@ auto Buffer::toHex(bool *ok) const noexcept -> Buffer
         encodedData.reserve(size() * 2);
 
         for (auto it = std::begin(*this), end = std::end(*this); it != end; ++it) {
-            encodedData.push_back(Constants::Hex::encodedTable[*it >> 4 & 0xf]);
-            encodedData.push_back(Constants::Hex::encodedTable[*it & 0xf]);
+            encodedData.push_back(Constants::Hex::encodeTable[*it >> 4 & 0xf]);
+            encodedData.push_back(Constants::Hex::encodeTable[*it & 0xf]);
         }
 
         if (ok)
