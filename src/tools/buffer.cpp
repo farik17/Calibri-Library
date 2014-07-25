@@ -11,7 +11,11 @@ namespace Calibri {
 
 namespace Constants {
 
-constexpr const std::array<char, 16> hexAlphabet { { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' } };
+namespace Hex {
+
+constexpr const std::array<char, 16> encodedTable { { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' } };
+
+} // namespace Hex
 
 } // namespace Constants
 
@@ -22,8 +26,8 @@ auto Buffer::toHex(bool *ok) const noexcept -> Buffer
         encodedData.reserve(size() * 2);
 
         for (auto it = std::begin(*this), end = std::end(*this); it != end; ++it) {
-            encodedData.push_back(Constants::hexAlphabet[*it >> 4 & 0xF]);
-            encodedData.push_back(Constants::hexAlphabet[*it & 0xF]);
+            encodedData.push_back(Constants::Hex::encodedTable[*it >> 4 & 0xf]);
+            encodedData.push_back(Constants::Hex::encodedTable[*it & 0xf]);
         }
 
         if (ok)
@@ -56,11 +60,11 @@ auto Buffer::fromHex(const Buffer &buffer, bool *ok) noexcept -> Buffer
         for (auto it = std::begin(buffer), end = std::end(buffer); it != end; ++it) {
             char symbol {};
 
-            if (*it >= '0' && *it <= '9') {
+            if (std::isdigit(*it)) {
                 symbol = (*it - '0') << 4;
-            } else if (*it >= 'a' && *it <= 'f') {
+            } else if (std::islower(*it)) {
                 symbol = (*it - 'a' + 10) << 4;
-            } else if (*it >= 'A' && *it <= 'F') {
+            } else if (std::isupper(*it)) {
                 symbol = (*it - 'A' + 10) << 4;
             } else {
                 if (ok)
@@ -71,11 +75,11 @@ auto Buffer::fromHex(const Buffer &buffer, bool *ok) noexcept -> Buffer
 
             ++it;
 
-            if (*it >= '0' && *it <= '9') {
+            if (std::isdigit(*it)) {
                 symbol |= (*it - '0');
-            } else if (*it >= 'a' && *it <= 'f') {
+            } else if (std::islower(*it)) {
                 symbol |= (*it - 'a' + 10);
-            } else if (*it >= 'A' && *it <= 'F') {
+            } else if (std::isupper(*it)) {
                 symbol |= (*it - 'A' + 10);
             } else {
                 if (ok)

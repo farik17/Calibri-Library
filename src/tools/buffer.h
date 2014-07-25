@@ -12,6 +12,8 @@ class Buffer : public std::vector<char>
 {
 public:
     Buffer() noexcept;
+    Buffer(size_t size) noexcept;
+    Buffer(size_t size, char data) noexcept;
     Buffer(const char *ptr, size_t size) noexcept;
     Buffer(const char *ptr) noexcept;
 
@@ -28,6 +30,16 @@ public:
  */
 inline Buffer::Buffer() noexcept
     : std::vector<char>()
+{
+}
+
+inline Buffer::Buffer(size_t size) noexcept
+    : std::vector<char>(size)
+{
+}
+
+inline Buffer::Buffer(size_t size, char data) noexcept
+    : std::vector<char>(size, data)
 {
 }
 
@@ -56,10 +68,7 @@ inline Buffer::operator const void *() const noexcept
  */
 inline std::ostream &operator <<(std::ostream &stream, const Buffer &buffer)
 {
-    for (const auto &data : buffer)
-        stream << data;
-
-    stream << std::flush;
+    std::copy(std::begin(buffer), std::end(buffer), std::ostreambuf_iterator<char>(stream));
 
     return stream;
 }

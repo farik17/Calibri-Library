@@ -650,7 +650,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::map<KeyType, Va
                 break;
             }
 
-            data.insert(std::make_pair(std::move(key), std::move(value)));
+            data.emplace(std::move(key), std::move(value));
         }
 
         return dataStream;
@@ -687,7 +687,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::multimap<KeyTyp
                 break;
             }
 
-            data.insert(std::make_pair(std::move(key), std::move(value)));
+            data.emplace(std::move(key), std::move(value));
         }
 
         return dataStream;
@@ -799,7 +799,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_map<K
                 break;
             }
 
-            data.insert(std::make_pair(std::move(key), std::move(value)));
+            data.emplace(std::move(key), std::move(value));
         }
 
         return dataStream;
@@ -838,7 +838,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
                 break;
             }
 
-            data.insert(std::make_pair(std::move(key), std::move(value)));
+            data.emplace(std::move(key), std::move(value));
         }
 
         return dataStream;
