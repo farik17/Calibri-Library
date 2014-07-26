@@ -5,6 +5,10 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <algorithm>
+
+//! Calibri-Library Includes
+#include "global/global.h"
 
 namespace Calibri {
 
@@ -20,6 +24,8 @@ public:
     operator const char *() const noexcept;
     operator const void *() const noexcept;
 
+    auto toUpper() const noexcept -> Buffer;
+    auto toLower() const noexcept -> Buffer;
     auto toHex(bool *ok = nullptr) const noexcept -> Buffer;
 
     static auto fromHex(const Buffer &buffer, bool *ok = nullptr) noexcept -> Buffer;
@@ -61,6 +67,26 @@ inline Buffer::operator const char *() const noexcept
 inline Buffer::operator const void *() const noexcept
 {
     return data();
+}
+
+inline auto Buffer::toUpper() const noexcept -> Buffer
+{
+    Buffer transformedData {};
+    transformedData.reserve(size());
+
+    std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), std::ptr_fun<int32, int32>(std::toupper));
+
+    return transformedData;
+}
+
+inline auto Buffer::toLower() const noexcept -> Buffer
+{
+    Buffer transformedData {};
+    transformedData.reserve(size());
+
+    std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), std::ptr_fun<int32, int32>(std::tolower));
+
+    return transformedData;
 }
 
 /*!

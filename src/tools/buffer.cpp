@@ -1,12 +1,6 @@
 //! Self Includes
 #include "buffer.h"
 
-//! Std Includes
-#include <array>
-
-//! Calibri-Library Includes
-#include "global/global.h"
-
 namespace Calibri {
 
 namespace Constants {
