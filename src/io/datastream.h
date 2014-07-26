@@ -369,7 +369,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcep
         if (dataStream.status() != DataStreamStatus::Ok)
             return dataStream;
 
-        data = new char[meta_cast<size_t>(size + 1)] {};
+        data = new char[meta_cast<size_t>(size + 1)];
 
         if (dataStreamRead(dataStream, data, meta_cast<size_t>(size)) != meta_cast<size_t>(size)) {
             dataStream.setStatus(DataStreamStatus::ReadError);
@@ -377,6 +377,8 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcep
             delete[] data;
             data = nullptr;
         }
+
+        data[size] = '\0';
 
         return dataStream;
     } catch (const std::exception &ex) {
