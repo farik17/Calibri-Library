@@ -27,8 +27,10 @@ public:
     auto toUpper() const noexcept -> Buffer;
     auto toLower() const noexcept -> Buffer;
     auto toHex(bool *ok = nullptr) const noexcept -> Buffer;
+    auto toBase64(bool *ok = nullptr) const noexcept -> Buffer;
 
     static auto fromHex(const Buffer &buffer, bool *ok = nullptr) noexcept -> Buffer;
+    static auto fromBase64(const Buffer &buffer, bool *ok = nullptr) noexcept -> Buffer;
 };
 
 /*!
