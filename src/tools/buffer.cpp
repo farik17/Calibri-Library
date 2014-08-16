@@ -7,7 +7,7 @@ namespace Constants {
 
 namespace Hex {
 
-constexpr const std::array<char, 16> alphabet {
+constexpr std::array<char, 16> alphabet {
     {
         '0', '1', '2', '3',
         '4', '5', '6', '7',
@@ -20,7 +20,7 @@ constexpr const std::array<char, 16> alphabet {
 
 namespace Base64 {
 
-constexpr const std::array<char, 64> alphabet {
+constexpr std::array<char, 64> alphabet {
     {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
         'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',

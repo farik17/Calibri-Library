@@ -273,7 +273,7 @@ void tst_DataStream::testSeek()
 
     writeStream.seek(0);
 
-    writeStream << Calibri::meta_cast<uint32>(in.size());
+    writeStream << Calibri::metaCast<uint32>(in.size());
 
     uint32 size {};
     decltype(in) out {};
@@ -282,7 +282,7 @@ void tst_DataStream::testSeek()
     readStream >> size;
     readStream >> out;
 
-    QVERIFY2(Calibri::meta_cast<uint32>(in.size() == size), "seek failed.");
+    QVERIFY2(Calibri::metaCast<uint32>(in.size() == size), "seek failed.");
     QVERIFY2(in == out, "seek failed.");
 }
 

@@ -13,7 +13,7 @@
 
 //! Calibri-Library Includes
 #include "tools/disablecopy.h"
-#include "tools/meta_cast.h"
+#include "tools/metacast.h"
 #include "tools/buffer.h"
 
 namespace Calibri {
@@ -169,7 +169,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const char *data) no
 {
     auto size = std::char_traits<char>::length(data);
 
-    dataStream << meta_cast<uint32>(size);
+    dataStream << metaCast<uint32>(size);
 
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
@@ -183,7 +183,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const char *data) no
 template<typename DeviceType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::string &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
@@ -198,7 +198,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::string &d
 template<typename DeviceType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::vector<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &value : data)
         dataStream << value;
@@ -209,7 +209,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::vector<Va
 template<typename DeviceType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::deque<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &value : data)
         dataStream << value;
@@ -220,7 +220,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::deque<Val
 template<typename DeviceType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::forward_list<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(std::distance(std::begin(data), std::end(data)));
+    dataStream << metaCast<uint32>(std::distance(std::begin(data), std::end(data)));
 
     for (const auto &value : data)
         dataStream << value;
@@ -231,7 +231,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::forward_l
 template<typename DeviceType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::list<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &value : data)
         dataStream << value;
@@ -243,7 +243,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::list<Valu
 template<typename DeviceType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::set<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &value : data)
         dataStream << value;
@@ -254,7 +254,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::set<Value
 template<typename DeviceType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::multiset<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &value : data)
         dataStream << value;
@@ -265,7 +265,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::multiset<
 template<typename DeviceType, typename KeyType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::map<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &pair : data) {
         dataStream << pair.first;
@@ -278,7 +278,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::map<KeyTy
 template<typename DeviceType, typename KeyType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::multimap<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &pair : data) {
         dataStream << pair.first;
@@ -292,7 +292,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::multimap<
 template<typename DeviceType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered_set<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &value : data)
         dataStream << value;
@@ -303,7 +303,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered
 template<typename DeviceType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered_multiset<ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &value : data)
         dataStream << value;
@@ -314,7 +314,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered
 template<typename DeviceType, typename KeyType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered_map<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &pair : data) {
         dataStream << pair.first;
@@ -327,7 +327,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered
 template<typename DeviceType, typename KeyType, typename ValueType>
 inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered_multimap<KeyType, ValueType> &data) noexcept -> DataStream<DeviceType> &
 {
-    dataStream << meta_cast<uint32>(data.size());
+    dataStream << metaCast<uint32>(data.size());
 
     for (const auto &pair : data) {
         dataStream << pair.first;
@@ -369,9 +369,9 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcep
         if (dataStream.status() != DataStreamStatus::Ok)
             return dataStream;
 
-        data = new char[meta_cast<size_t>(size + 1)];
+        data = new char[metaCast<size_t>(size + 1)];
 
-        if (dataStreamRead(dataStream, data, meta_cast<size_t>(size)) != meta_cast<size_t>(size)) {
+        if (dataStreamRead(dataStream, data, metaCast<size_t>(size)) != metaCast<size_t>(size)) {
             dataStream.setStatus(DataStreamStatus::ReadError);
 
             delete[] data;
@@ -402,9 +402,9 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::string &data) n
         if (dataStream.status() != DataStreamStatus::Ok)
             return dataStream;
 
-        data.resize(meta_cast<size_t>(size));
+        data.resize(metaCast<size_t>(size));
 
-        if (dataStreamRead(dataStream, &data.front(), meta_cast<size_t>(size)) != meta_cast<size_t>(size)) {
+        if (dataStreamRead(dataStream, &data.front(), metaCast<size_t>(size)) != metaCast<size_t>(size)) {
             dataStream.setStatus(DataStreamStatus::ReadError);
 
             data.clear();
@@ -430,7 +430,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::vector<ValueTyp
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(meta_cast<size_t>(size));
+        data.reserve(metaCast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
             ValueType value {};
@@ -714,7 +714,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_set<V
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(meta_cast<size_t>(size));
+        data.reserve(metaCast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
             ValueType value {};
@@ -750,7 +750,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(meta_cast<size_t>(size));
+        data.reserve(metaCast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
             ValueType value {};
@@ -786,7 +786,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_map<K
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(meta_cast<size_t>(size));
+        data.reserve(metaCast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
             KeyType key {};
@@ -825,7 +825,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(meta_cast<size_t>(size));
+        data.reserve(metaCast<size_t>(size));
 
         for (auto i = 0; i < size; ++i) {
             KeyType key {};
