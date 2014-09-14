@@ -69,7 +69,9 @@ auto Buffer::toBase64(bool *ok) const noexcept -> Buffer
         auto paddingSize = 3 - moduloSize;
 
         Buffer encodedData {};
-        encodedData.reserve((size() / 3 + (paddingSize != 0 ? 1 : 0)) * 4);
+        encodedData.reserve((size() / 3 + (paddingSize != 0
+                ? 1
+                : 0)) * 4);
 
         std::array<char, 3> block;
 
@@ -202,7 +204,11 @@ auto Buffer::fromBase64(const Buffer &buffer, bool *ok) noexcept -> Buffer
             return {};
         }
 
-        auto paddingSize = *buffer.rbegin() == '=' ? (*std::next(buffer.rbegin()) == '=' ? 2 : 1) : 0;
+        auto paddingSize = *buffer.rbegin() == '='
+                ? (*std::next(buffer.rbegin()) == '='
+                   ? 2
+                   : 1)
+                : 0;
 
         Buffer decodedData {};
         decodedData.reserve((buffer.size() / 4) * 3 - paddingSize);
@@ -210,7 +216,9 @@ auto Buffer::fromBase64(const Buffer &buffer, bool *ok) noexcept -> Buffer
         std::array<char, 4> block;
 
         auto it = std::begin(buffer);
-        auto end = paddingSize != 0 ? std::prev(std::end(buffer), 4) : std::end(buffer);
+        auto end = paddingSize != 0
+                ? std::prev(std::end(buffer), 4)
+                : std::end(buffer);
 
         while (it != end) {
             for (auto i = 0; i < 4; ++i, ++it) {

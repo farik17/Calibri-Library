@@ -12,6 +12,13 @@ Product {
     ]
 
     Depends {
+        name: "Qt"
+        submodules: [
+            "testlib"
+        ]
+    }
+
+    Depends {
         name: "cpp"
     }
 
@@ -21,20 +28,18 @@ Product {
 
     Properties {
         condition: qbs.toolchain.contains("gcc") || qbs.toolchain.contains("mingw")
-        cpp.cxxFlags: [
-            "-std=c++11",
-            "-mtune=native",
-            "-march=native",
-            "-o3",
-            "-funroll-loops",
-            "-flto"
-        ]
-    }
 
-    Depends {
-        name: "Qt"
-        submodules: [
-            "testlib"
-        ]
+        cpp.cxxFlags: qbs.buildVariant === "debug"
+                      ? [
+                            "-std=c++11"
+                        ]
+                      : [
+                            "-std=c++11",
+                            "-o3",
+                            "-funroll-loops",
+                            "-flto",
+                            "-mtune=native",
+                            "-march=native"
+                        ]
     }
 }

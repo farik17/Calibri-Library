@@ -19,7 +19,7 @@
 namespace Calibri {
 
 enum class DataStreamStatus : uint8 {
-    Ok = 0,
+    Ok,
     ReadError,
     WriteError
 };
@@ -152,7 +152,7 @@ inline auto dataStreamRead(DataStream<Buffer> &dataStream, char *data, size_t si
 /*!
  *  DataStream write operators
  */
-template<typename DeviceType, typename DataType, typename std::enable_if<std::is_arithmetic<DataType>::value, class Enabler>::type... Enabler>
+template<typename DeviceType, typename DataType, typename std::enable_if<std::is_arithmetic<DataType>::value>::type... Enabler>
 inline auto operator <<(DataStream<DeviceType> &dataStream, DataType data) noexcept -> DataStream<DeviceType> &
 {
     if (dataStream.status() != DataStreamStatus::Ok)
@@ -340,7 +340,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::unordered
 /*!
  *  DataStream read operators
  */
-template<typename DeviceType, typename DataType, typename std::enable_if<std::is_arithmetic<DataType>::value, class Enabler>::type... Enabler>
+template<typename DeviceType, typename DataType, typename std::enable_if<std::is_arithmetic<DataType>::value>::type... Enabler>
 inline auto operator >>(DataStream<DeviceType> &dataStream, DataType &data) noexcept -> DataStream<DeviceType> &
 {
     data = 0;
