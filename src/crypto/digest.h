@@ -49,11 +49,11 @@ enum class DigestType : uint8 {
 #endif
 
 #if !defined(OPENSSL_NO_RIPEMD)
-    RIPEMD160,
+    RipeMD160,
 #endif
 
 #if !defined(OPENSSL_NO_WHIRLPOOL)
-    WHIRLPOOL,
+    Whirlpool,
 #endif
 
     Null
@@ -115,12 +115,12 @@ auto digestAlgorithm() -> const EVP_MD * { return EVP_mdc2(); }
 #endif
 
 #if !defined(OPENSSL_NO_RIPEMD)
-template<DigestType Type, typename std::enable_if<Type == DigestType::RIPEMD160>::type... Enabler>
+template<DigestType Type, typename std::enable_if<Type == DigestType::RipeMD160>::type... Enabler>
 auto digestAlgorithm() -> const EVP_MD * { return EVP_ripemd160(); }
 #endif
 
 #if !defined(OPENSSL_NO_WHIRLPOOL)
-template<DigestType Type, typename std::enable_if<Type == DigestType::WHIRLPOOL>::type... Enabler>
+template<DigestType Type, typename std::enable_if<Type == DigestType::Whirlpool>::type... Enabler>
 auto digestAlgorithm() -> const EVP_MD * { return EVP_whirlpool(); }
 #endif
 
