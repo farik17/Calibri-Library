@@ -51,7 +51,7 @@ void tst_DataStream::testInt8()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "int8 read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testUint8()
@@ -68,7 +68,7 @@ void tst_DataStream::testUint8()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "uint8 read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testInt16()
@@ -85,7 +85,7 @@ void tst_DataStream::testInt16()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "int16 read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testUint16()
@@ -102,7 +102,7 @@ void tst_DataStream::testUint16()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "uint16 read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testInt32()
@@ -119,7 +119,7 @@ void tst_DataStream::testInt32()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "int32 read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testUint32()
@@ -136,7 +136,7 @@ void tst_DataStream::testUint32()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "uint32 read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testInt64()
@@ -153,7 +153,7 @@ void tst_DataStream::testInt64()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "int64 read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testUint64()
@@ -170,7 +170,7 @@ void tst_DataStream::testUint64()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "uint64 read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testFloat()
@@ -187,7 +187,7 @@ void tst_DataStream::testFloat()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "float read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testDouble()
@@ -204,7 +204,7 @@ void tst_DataStream::testDouble()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "double read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testLongDouble()
@@ -221,7 +221,7 @@ void tst_DataStream::testLongDouble()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "longdouble read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testCString()
@@ -238,8 +238,8 @@ void tst_DataStream::testCString()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(out, "cstring read/write failed.");
-    QVERIFY2(strcmp(in, out) == 0, "cstring read/write failed.");
+    QVERIFY(out);
+    QCOMPARE(in, out);
 
     delete[] out;
 }
@@ -258,7 +258,7 @@ void tst_DataStream::testString()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "std::string read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testSeek()
@@ -282,8 +282,8 @@ void tst_DataStream::testSeek()
     readStream >> size;
     readStream >> out;
 
-    QVERIFY2(Calibri::metaCast<uint32>(in.size() == size), "seek failed.");
-    QVERIFY2(in == out, "seek failed.");
+    QCOMPARE(in.size(), size);
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testVector()
@@ -300,7 +300,7 @@ void tst_DataStream::testVector()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "vector read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testDeque()
@@ -317,7 +317,7 @@ void tst_DataStream::testDeque()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "deque read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testForwardList()
@@ -334,7 +334,7 @@ void tst_DataStream::testForwardList()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "forward list read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testList()
@@ -351,7 +351,7 @@ void tst_DataStream::testList()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "list read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testSet()
@@ -369,7 +369,7 @@ void tst_DataStream::testSet()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "set read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testMultiSet()
@@ -388,7 +388,7 @@ void tst_DataStream::testMultiSet()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "multiset read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testMap()
@@ -407,7 +407,7 @@ void tst_DataStream::testMap()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "map read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testMultiMap()
@@ -426,7 +426,7 @@ void tst_DataStream::testMultiMap()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "multimap read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testUnorderedSet()
@@ -444,7 +444,7 @@ void tst_DataStream::testUnorderedSet()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "unordered set read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testUnorderedMultiSet()
@@ -463,7 +463,7 @@ void tst_DataStream::testUnorderedMultiSet()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "unordered multiset read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testUnorderedMap()
@@ -482,7 +482,7 @@ void tst_DataStream::testUnorderedMap()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "unordered map read/write failed.");
+    QCOMPARE(in, out);
 }
 
 void tst_DataStream::testUnorderedMultiMap()
@@ -501,7 +501,7 @@ void tst_DataStream::testUnorderedMultiMap()
     decltype(writeStream) readStream(&data);
     readStream >> out;
 
-    QVERIFY2(in == out, "unordered multimap read/write failed.");
+    QCOMPARE(in, out);
 }
 
 QTEST_MAIN(tst_DataStream)

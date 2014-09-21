@@ -51,12 +51,12 @@ void tst_metacast::testStringToInt8()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to int8");
-    QVERIFY2(out == Calibri::metaCast<decltype(out)>(std::strtol("3", &end, 10)), "Failed to convert from std::string to int8");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::strtol("3", &end, 10)));
 
     out = Calibri::metaCast<decltype(out)>(L"3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to int8");
-    QVERIFY2(out == Calibri::metaCast<decltype(out)>(std::wcstol(L"3", &wend, 10)), "Failed to convert from std::wstring to int8");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::wcstol(L"3", &wend, 10)));
 }
 
 void tst_metacast::testStringToUInt8()
@@ -69,12 +69,12 @@ void tst_metacast::testStringToUInt8()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to uint8");
-    QVERIFY2(out == Calibri::metaCast<decltype(out)>(std::strtoul("3", &end, 10)), "Failed to convert from std::string to uint8");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::strtoul("3", &end, 10)));
 
     out = Calibri::metaCast<decltype(out)>(L"3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to uint8");
-    QVERIFY2(out == Calibri::metaCast<decltype(out)>(std::wcstoul(L"3", &wend, 10)), "Failed to convert from std::wstring to uint8");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::wcstoul(L"3", &wend, 10)));
 }
 
 void tst_metacast::testStringToInt16()
@@ -87,12 +87,12 @@ void tst_metacast::testStringToInt16()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to int16");
-    QVERIFY2(out == Calibri::metaCast<decltype(out)>(std::strtol("3", &end, 10)), "Failed to convert from std::string to int16");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::strtol("3", &end, 10)));
 
     out = Calibri::metaCast<decltype(out)>(L"3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to int16");
-    QVERIFY2(out == Calibri::metaCast<decltype(out)>(std::wcstol(L"3", &wend, 10)), "Failed to convert from std::wstring to int16");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::wcstol(L"3", &wend, 10)));
 }
 
 void tst_metacast::testStringToUInt16()
@@ -105,12 +105,12 @@ void tst_metacast::testStringToUInt16()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to uint16");
-    QVERIFY2(out == Calibri::metaCast<decltype(out)>(std::strtoul("3", &end, 10)), "Failed to convert from std::string to uint16");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::strtoul("3", &end, 10)));
 
     out = Calibri::metaCast<decltype(out)>(L"3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to uint16");
-    QVERIFY2(out == Calibri::metaCast<decltype(out)>(std::wcstoul(L"3", &wend, 10)), "Failed to convert from std::wstring to uint16");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::wcstoul(L"3", &wend, 10)));
 }
 
 void tst_metacast::testStringToInt32()
@@ -123,12 +123,12 @@ void tst_metacast::testStringToInt32()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to int32");
-    QVERIFY2(out == std::strtol("3", &end, 10), "Failed to convert from std::string to int32");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::strtol("3", &end, 10)));
 
     out = Calibri::metaCast<decltype(out)>(L"3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to int32");
-    QVERIFY2(out == std::wcstol(L"3", &wend, 10), "Failed to convert from std::wstring to int32");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::wcstol(L"3", &wend, 10)));
 }
 
 void tst_metacast::testStringToUInt32()
@@ -141,12 +141,12 @@ void tst_metacast::testStringToUInt32()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to uint32");
-    QVERIFY2(out == std::strtoul("3", &end, 10), "Failed to convert from std::string to uint32");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::strtoul("3", &end, 10)));
 
     out = Calibri::metaCast<decltype(out)>(L"3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to uint32");
-    QVERIFY2(out == std::wcstoul(L"3", &wend, 10), "Failed to convert from std::wstring to uint32");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::wcstoul(L"3", &wend, 10)));
 }
 
 void tst_metacast::testStringToInt64()
@@ -159,12 +159,12 @@ void tst_metacast::testStringToInt64()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to int64");
-    QVERIFY2(out == std::strtoll("3", &end, 10), "Failed to convert from std::string to int64");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::strtoll("3", &end, 10)));
 
     out = Calibri::metaCast<decltype(out)>(L"3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to int64");
-    QVERIFY2(out == std::wcstoll(L"3", &wend, 10), "Failed to convert from std::wstring to int64");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::wcstoll(L"3", &wend, 10)));
 }
 
 void tst_metacast::testStringToUInt64()
@@ -177,12 +177,12 @@ void tst_metacast::testStringToUInt64()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to uint64");
-    QVERIFY2(out == std::strtoull("3", &end, 10), "Failed to convert from std::string to uint64");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::strtoull("3", &end, 10)));
 
     out = Calibri::metaCast<decltype(out)>(L"3", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to uint64");
-    QVERIFY2(out == std::wcstoull(L"3", &wend, 10), "Failed to convert from std::wstring to uint64");
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::metaCast<decltype(out)>(std::wcstoull(L"3", &wend, 10)));
 }
 
 void tst_metacast::testStringToFloat()
@@ -195,12 +195,12 @@ void tst_metacast::testStringToFloat()
     wchar_t *wend {};;
 
     out = Calibri::metaCast<decltype(out)>("3.03", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to float");
-    QVERIFY2(out == std::strtof("3.03", &end), "Failed to convert from std::string to float");
+    QVERIFY(ok);
+    QCOMPARE(out, std::strtof("3.03", &end));
 
     out = Calibri::metaCast<decltype(out)>(L"3.03", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to float");
-    QVERIFY2(out == std::wcstof(L"3.03", &wend), "Failed to convert from std::wstring to float");
+    QVERIFY(ok);
+    QCOMPARE(out, std::wcstof(L"3.03", &wend));
 }
 
 void tst_metacast::testStringToDouble()
@@ -213,12 +213,12 @@ void tst_metacast::testStringToDouble()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3.003", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to double");
-    QVERIFY2(out == std::strtod("3.003", &end), "Failed to convert from std::string to double");
+    QVERIFY(ok);
+    QCOMPARE(out, std::strtod("3.003", &end));
 
     out = Calibri::metaCast<decltype(out)>(L"3.003", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to double");
-    QVERIFY2(out == std::wcstod(L"3.003", &wend), "Failed to convert from std::wstring to double");
+    QVERIFY(ok);
+    QCOMPARE(out, std::wcstod(L"3.003", &wend));
 }
 
 void tst_metacast::testStringToLongDouble()
@@ -231,110 +231,110 @@ void tst_metacast::testStringToLongDouble()
     wchar_t *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3.0003", &ok);
-    QVERIFY2(ok, "Failed to convert from std::string to longdouble");
-    QVERIFY2(out == std::strtold("3.0003", &end), "Failed to convert from std::string to longdouble");
+    QVERIFY(ok);
+    QCOMPARE(out, std::strtold("3.0003", &end));
 
     out = Calibri::metaCast<decltype(out)>(L"3.0003", &ok);
-    QVERIFY2(ok, "Failed to convert from std::wstring to longdouble");
-    QVERIFY2(out == std::wcstold(L"3.0003", &wend), "Failed to convert from std::wstring to longdouble");
+    QVERIFY(ok);
+    QCOMPARE(out, std::wcstold(L"3.0003", &wend));
 }
 
 void tst_metacast::testInt8ToString()
 {
     int8 in { 3 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from int8 to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from int8 to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testUInt8ToString()
 {
     uint8 in { 3 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from uint8 to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from uint8 to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testInt16ToString()
 {
     int16 in { 3 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from int16 to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from int16 to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testUInt16ToString()
 {
     uint16 in { 3 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from uint16 to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from uint16 to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testInt32ToString()
 {
     int32 in { 3 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from int32 to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from int32 to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testUInt32ToString()
 {
     uint32 in { 3 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from uint32 to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from uint32 to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testInt64ToString()
 {
     int64 in { 3 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from int64 to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from int64 to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testUInt64ToString()
 {
     uint64 in { 3 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from uint64 to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from uint64 to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testFloatToString()
 {
     float in { 3.03 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from float to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from float to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testDoubleToString()
 {
     double in { 3.003 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from double to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from double to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testLongDoubleToString()
 {
     longdouble in { 3.0003 };
 
-    QVERIFY2(Calibri::metaCast<std::string>(in) == std::to_string(in), "Failed to convert from longdouble to std::string");
-    QVERIFY2(Calibri::metaCast<std::wstring>(in) == std::to_wstring(in), "Failed to convert from longdouble to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::string>(in), std::to_string(in));
+    QCOMPARE(Calibri::metaCast<std::wstring>(in), std::to_wstring(in));
 }
 
 void tst_metacast::testStringToWString()
 {
-    QVERIFY2(Calibri::metaCast<std::wstring>("Some data") == L"Some data", "Failed to convert from std::string to std::wstring");
+    QCOMPARE(Calibri::metaCast<std::wstring>("Some data"), std::wstring(L"Some data"));
 }
 
 void tst_metacast::testWStringToString()
 {
-    QVERIFY2(Calibri::metaCast<std::string>(L"Some data") == "Some data", "Failed to convert from std::wstring to std::string");
+    QCOMPARE(Calibri::metaCast<std::string>(L"Some data"), std::string("Some data"));
 }
 
 void tst_metacast::testFailCases()
@@ -342,15 +342,15 @@ void tst_metacast::testFailCases()
     bool ok { false };
 
     auto outInteger = Calibri::metaCast<int8>("3Some data", &ok);
-    QVERIFY2 (!ok, "Failed to \"bad\" convert from std::string to int8");
-    QVERIFY2 (outInteger == 0, "Failed to \"bad\" convert from std::string to int8");
+    QVERIFY(!ok);
+    QCOMPARE(outInteger, Calibri::metaCast<decltype(outInteger)>(0));
 
     auto outFloatingPoint = Calibri::metaCast<float>("3.003Some data", &ok);
-    QVERIFY2 (!ok, "Failed to \"bad\" convert from std::string to float");
-    QVERIFY2 (outFloatingPoint == 0.0f, "Failed to \"bad\" convert from std::string to float");
+    QVERIFY(!ok);
+    QCOMPARE(outFloatingPoint, 0.0f);
 
     auto outOverflow = Calibri::metaCast<int8>(123456);
-    QVERIFY2 (outOverflow == static_cast<int8>(123456), "Failed to \"bad\" convert from int to int8");
+    QCOMPARE(outOverflow, static_cast<int8>(123456));
 }
 
 QTEST_MAIN(tst_metacast)
