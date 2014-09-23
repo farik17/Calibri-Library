@@ -2,6 +2,7 @@ import qbs
 
 Project {
     references: [
-        "metacast/metacast.qbs"
+        "metacast/metacast.qbs",
+        "buffer/buffer.qbs"
     ]
 }

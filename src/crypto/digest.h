@@ -63,74 +63,74 @@ namespace Internal {
 
 #if !defined(OPENSSL_NO_MD2)
 template<DigestType Type, typename std::enable_if<Type == DigestType::MD2>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_md2(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_md2(); }
 #endif
 
 #if !defined(OPENSSL_NO_MD4)
 template<DigestType Type, typename std::enable_if<Type == DigestType::MD4>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_md4(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_md4(); }
 #endif
 
 #if !defined(OPENSSL_NO_MD5)
 template<DigestType Type, typename std::enable_if<Type == DigestType::MD5>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_md5(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_md5(); }
 #endif
 
 #if !defined(OPENSSL_NO_SHA)
 template<DigestType Type, typename std::enable_if<Type == DigestType::SHA>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_sha(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_sha(); }
 
 template<DigestType Type, typename std::enable_if<Type == DigestType::SHA1>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_sha1(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_sha1(); }
 
 template<DigestType Type, typename std::enable_if<Type == DigestType::DSS>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_dss(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_dss(); }
 
 template<DigestType Type, typename std::enable_if<Type == DigestType::DSS1>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_dss1(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_dss1(); }
 
 template<DigestType Type, typename std::enable_if<Type == DigestType::ECDSA>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_ecdsa(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_ecdsa(); }
 #endif
 
 #if !defined(OPENSSL_NO_SHA256)
 template<DigestType Type, typename std::enable_if<Type == DigestType::SHA224>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_sha224(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_sha224(); }
 
 template<DigestType Type, typename std::enable_if<Type == DigestType::SHA256>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_sha256(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_sha256(); }
 #endif
 
 #if !defined(OPENSSL_NO_SHA512)
 template<DigestType Type, typename std::enable_if<Type == DigestType::SHA384>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_sha384(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_sha384(); }
 
 template<DigestType Type, typename std::enable_if<Type == DigestType::SHA512>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_sha512(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_sha512(); }
 #endif
 
 #if !defined(OPENSSL_NO_MDC2)
 template<DigestType Type, typename std::enable_if<Type == DigestType::MDC2>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_mdc2(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_mdc2(); }
 #endif
 
 #if !defined(OPENSSL_NO_RIPEMD)
 template<DigestType Type, typename std::enable_if<Type == DigestType::RipeMD160>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_ripemd160(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_ripemd160(); }
 #endif
 
 #if !defined(OPENSSL_NO_WHIRLPOOL)
 template<DigestType Type, typename std::enable_if<Type == DigestType::Whirlpool>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_whirlpool(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_whirlpool(); }
 #endif
 
 template<DigestType Type, typename std::enable_if<Type == DigestType::Null>::type... Enabler>
-auto digestAlgorithm() -> const EVP_MD * { return EVP_md_null(); }
+auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_md_null(); }
 
 } // namespace Internal
 
 template<DigestType Type>
-auto digest(const Buffer &data) -> Buffer
+auto digest(const Buffer &data) noexcept -> Buffer
 {
     auto digestAlgorithm = Internal::digestAlgorithm<Type>();
     Buffer digestData { metaCast<size_t>(EVP_MD_size(digestAlgorithm)) };

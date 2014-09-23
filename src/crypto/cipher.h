@@ -113,212 +113,212 @@ namespace Internal {
 
 #if !defined(OPENSSL_NO_DES)
 template<CipherType Type, typename std::enable_if<Type == CipherType::DESecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::DEScbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::DEScfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::DESofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ofb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::DoubleDESecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ede_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ede_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::DoubleDEScbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ede_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ede_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::DoubleDEScfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ede_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ede_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::DoubleDESofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ede_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ede_ofb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::TripleDESecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ede3_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ede3_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::TripleDEScbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ede3_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ede3_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::TripleDEScfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ede3_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ede3_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::TripleDESofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_des_ede3_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_des_ede3_ofb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::DESXcbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_desx_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_desx_cbc(); }
 #endif
 
 #if !defined(OPENSSL_NO_RC4)
 template<CipherType Type, typename std::enable_if<Type == CipherType::RC4>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_rc4(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_rc4(); }
 #endif
 
 #if !defined(OPENSSL_NO_IDEA)
 template<CipherType Type, typename std::enable_if<Type == CipherType::IDEAecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_idea_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_idea_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::IDEAcbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_idea_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_idea_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::IDEAcfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_idea_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_idea_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::IDEAofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_idea_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_idea_ofb(); }
 #endif
 
 #if !defined(OPENSSL_NO_RC2)
 template<CipherType Type, typename std::enable_if<Type == CipherType::RC2ecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_rc2_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_rc2_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::RC2cbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_rc2_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_rc2_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::RC2cfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_rc2_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_rc2_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::RC2ofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_rc2_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_rc2_ofb(); }
 #endif
 
 #if !defined(OPENSSL_NO_BF)
 template<CipherType Type, typename std::enable_if<Type == CipherType::BFecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_bf_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_bf_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::BFcbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_bf_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_bf_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::BFcfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_bf_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_bf_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::BFofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_bf_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_bf_ofb(); }
 #endif
 
 #if !defined(OPENSSL_NO_CAST)
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAST5ecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_cast5_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_cast5_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAST5cbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_cast5_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_cast5_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAST5cfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_cast5_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_cast5_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAST5ofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_cast5_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_cast5_ofb(); }
 #endif
 
 #if !defined(OPENSSL_NO_RC5)
 template<CipherType Type, typename std::enable_if<Type == CipherType::RC5ecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_rc5_32_12_16_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_rc5_32_12_16_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::RC5cbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_rc5_32_12_16_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_rc5_32_12_16_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::RC5cfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_rc5_32_12_16_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_rc5_32_12_16_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::RC5ofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_rc5_32_12_16_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_rc5_32_12_16_ofb(); }
 #endif
 
 #if !defined(OPENSSL_NO_AES)
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES128ecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_128_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_128_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES128cbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_128_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_128_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES128cfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_128_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_128_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES128ofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_128_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_128_ofb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES128ctr>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_128_ctr(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_128_ctr(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES192ecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_192_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_192_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES192cbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_192_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_192_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES192cfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_192_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_192_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES192ofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_192_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_192_ofb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES192ctr>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_192_ctr(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_192_ctr(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES256ecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_256_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_256_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES256cbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_256_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_256_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES256cfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_256_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_256_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES256ofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_256_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_256_ofb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::AES256ctr>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_aes_256_ctr(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_aes_256_ctr(); }
 #endif
 
 #if !defined(OPENSSL_NO_CAMELLIA)
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA128ecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_128_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_128_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA128cbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_128_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_128_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA128cfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_128_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_128_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA128ofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_128_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_128_ofb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA192ecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_192_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_192_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA192cbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_192_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_192_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA192cfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_192_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_192_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA192ofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_192_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_192_ofb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA256ecb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_256_ecb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_256_ecb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA256cbc>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_256_cbc(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_256_cbc(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA256cfb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_256_cfb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_256_cfb(); }
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::CAMELLIA256ofb>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_camellia_256_ofb(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_camellia_256_ofb(); }
 #endif
 
 template<CipherType Type, typename std::enable_if<Type == CipherType::Null>::type... Enabler>
-auto cipherAlgorithm() -> const EVP_CIPHER * { return EVP_enc_null(); }
+auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_enc_null(); }
 
 } // namespace Internal
 
 template<CipherType Type, CipherMode Mode, typename std::enable_if<Mode == CipherMode::Encrypt>::type... Enabler>
-auto cipher(const Buffer &data, Buffer &key, const Buffer &iv = "iv") -> Buffer
+auto cipher(const Buffer &data, Buffer &key, const Buffer &iv = "iv") noexcept -> Buffer
 {
     int32 processedBytes {};
     int32 encryptedBytes {};
@@ -346,7 +346,7 @@ auto cipher(const Buffer &data, Buffer &key, const Buffer &iv = "iv") -> Buffer
 }
 
 template<CipherType Type, CipherMode Mode, typename std::enable_if<Mode == CipherMode::Decrypt>::type... Enabler>
-auto cipher(const Buffer &data, const Buffer &key, const Buffer &iv = "iv") -> Buffer
+auto cipher(const Buffer &data, const Buffer &key, const Buffer &iv = "iv") noexcept -> Buffer
 {
     int32 processedBytes {};
     int32 decryptedBytes {};
