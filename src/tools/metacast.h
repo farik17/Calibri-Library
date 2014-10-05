@@ -322,13 +322,13 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_integral<CastType>::value>::type... Enabler>
 inline auto metaCast(const std::string &data, bool *ok = nullptr) noexcept -> CastType
 {
-    return metaCast<CastType, Base>(data.c_str(), ok);
+    return metaCast<CastType, Base>(data.data(), ok);
 }
 
 template<typename CastType, typename std::enable_if<std::is_floating_point<CastType>::value>::type... Enabler>
 inline auto metaCast(const std::string &data, bool *ok = nullptr) noexcept -> CastType
 {
-    return metaCast<CastType>(data.c_str(), ok);
+    return metaCast<CastType>(data.data(), ok);
 }
 
 //! Convert wcstring to arithmetic types
@@ -634,13 +634,13 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 template<typename CastType, int Base = 10, typename std::enable_if<std::is_integral<CastType>::value>::type... Enabler>
 inline auto metaCast(const std::wstring &data, bool *ok = nullptr) noexcept -> CastType
 {
-    return metaCast<CastType, Base>(data.c_str(), ok);
+    return metaCast<CastType, Base>(data.data(), ok);
 }
 
 template<typename CastType, typename std::enable_if<std::is_floating_point<CastType>::value>::type... Enabler>
 inline auto metaCast(const std::wstring &data, bool *ok = nullptr) noexcept -> CastType
 {
-    return metaCast<CastType>(data.c_str(), ok);
+    return metaCast<CastType>(data.data(), ok);
 }
 
 //! Convert arithmetic types to string
@@ -713,14 +713,14 @@ inline auto metaCast(const wchar_t *data) noexcept -> CastType
 template<typename CastType, typename std::enable_if<std::is_same<CastType, std::wstring>::value>::type... Enabler>
 inline auto metaCast(const std::string &data) noexcept -> CastType
 {
-    return metaCast<CastType>(data.c_str());
+    return metaCast<CastType>(data.data());
 }
 
 //! Convert wstring to string
 template<typename CastType, typename std::enable_if<std::is_same<CastType, std::string>::value>::type... Enabler>
 inline auto metaCast(const std::wstring &data) noexcept -> CastType
 {
-    return metaCast<CastType>(data.c_str());
+    return metaCast<CastType>(data.data());
 }
 
 } // namespace Calibri
