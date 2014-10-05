@@ -1,7 +1,7 @@
 import qbs
 
 Product {
-    name: "tst_buffer"
+    name: "tst_bytearray"
     consoleApplication: true
     type: [
         "application"

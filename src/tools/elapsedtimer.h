@@ -58,6 +58,9 @@ inline auto duration(const std::chrono::steady_clock::time_point &start, const s
 
 } // namespace Internal
 
+/*!
+ *  ElapsedTimer class
+ */
 class ElapsedTimer
 {
 public:

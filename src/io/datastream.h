@@ -12,11 +12,17 @@
 #include <iostream>
 
 //! Calibri-Library Includes
+#include "buffer.h"
 #include "tools/disablecopy.h"
 #include "tools/metacast.h"
-#include "tools/buffer.h"
 
 namespace Calibri {
+
+namespace Constants {
+
+constexpr char terminator { '\0' };
+
+} // namespace Constants
 
 enum class DataStreamStatus : uint8 {
     Ok,
@@ -24,17 +30,16 @@ enum class DataStreamStatus : uint8 {
     WriteError
 };
 
-template<typename DeviceType>
+/*!
+ *  DataStream class
+ */
+template<typename DeviceType, typename std::enable_if<std::is_base_of<IOInterface, DeviceType>::value>::type... Enabler>
 class DataStream : private DisableCopy
 {
 public:
     DataStream(DeviceType *device) noexcept;
 
     auto device() const noexcept -> DeviceType *;
-
-    auto pos() const noexcept -> size_t;
-
-    auto seek(size_t pos) noexcept -> void;
 
     auto status() const noexcept -> DataStreamStatus;
 
@@ -45,108 +50,41 @@ public:
 private:
     DeviceType *m_device {};
 
-    size_t m_pos {};
-
     DataStreamStatus m_status { DataStreamStatus::Ok };
 };
 
 /*!
  *  DataStream inline methods
  */
-template<typename DeviceType>
-inline DataStream<DeviceType>::DataStream(DeviceType *device) noexcept
+template<typename DeviceType, typename std::enable_if<std::is_base_of<IOInterface, DeviceType>::value>::type... Enabler>
+inline DataStream<DeviceType, Enabler...>::DataStream(DeviceType *device) noexcept
     : DisableCopy()
     , m_device { device }
 {
 }
 
-template<typename DeviceType>
-inline auto DataStream<DeviceType>::device() const noexcept -> DeviceType *
+template<typename DeviceType, typename std::enable_if<std::is_base_of<IOInterface, DeviceType>::value>::type... Enabler>
+inline auto DataStream<DeviceType, Enabler...>::device() const noexcept -> DeviceType *
 {
     return m_device;
 }
 
-template<typename DeviceType>
-inline auto DataStream<DeviceType>::pos() const noexcept -> size_t
-{
-    return m_pos;
-}
-
-template<typename DeviceType>
-inline auto DataStream<DeviceType>::seek(size_t pos) noexcept -> void
-{
-    m_pos = pos;
-}
-
-template<typename DeviceType>
-inline auto DataStream<DeviceType>::status() const noexcept -> DataStreamStatus
+template<typename DeviceType, typename std::enable_if<std::is_base_of<IOInterface, DeviceType>::value>::type... Enabler>
+inline auto DataStream<DeviceType, Enabler...>::status() const noexcept -> DataStreamStatus
 {
     return m_status;
 }
 
-template<typename DeviceType>
-inline auto DataStream<DeviceType>::setStatus(DataStreamStatus status) noexcept -> void
+template<typename DeviceType, typename std::enable_if<std::is_base_of<IOInterface, DeviceType>::value>::type... Enabler>
+inline auto DataStream<DeviceType, Enabler...>::setStatus(DataStreamStatus status) noexcept -> void
 {
     m_status = status;
 }
 
-template<typename DeviceType>
-inline auto DataStream<DeviceType>::resetStatus() noexcept -> void
+template<typename DeviceType, typename std::enable_if<std::is_base_of<IOInterface, DeviceType>::value>::type... Enabler>
+inline auto DataStream<DeviceType, Enabler...>::resetStatus() noexcept -> void
 {
     m_status = DataStreamStatus::Ok;
-}
-
-/*!
- *  DataStream write function
- */
-inline auto dataStreamWrite(DataStream<Buffer> &dataStream, const char *data, size_t size) noexcept -> size_t
-{
-    try {
-        auto overflow = 0;
-        auto pos = dataStream.pos() + size;
-
-        if (pos > dataStream.device()->size())
-            overflow = pos - dataStream.device()->size();
-
-        dataStream.device()->resize(dataStream.device()->size() + overflow);
-
-        std::copy_n(data, size, std::next(std::begin(*dataStream.device()), dataStream.pos()));
-
-        dataStream.seek(pos);
-
-        return size;
-    } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
-
-        return 0;
-    }
-}
-
-/*!
- *  DataStream read function
- */
-inline auto dataStreamRead(DataStream<Buffer> &dataStream, char *data, size_t size) noexcept -> size_t
-{
-    try {
-        auto overflow = 0;
-        auto pos = dataStream.pos() + size;
-
-        if (pos > dataStream.device()->size())
-            overflow = pos - dataStream.device()->size();
-
-        size -= overflow;
-        pos -= overflow;
-
-        std::copy_n(std::next(std::begin(*dataStream.device()), dataStream.pos()), size, data);
-
-        dataStream.seek(pos);
-
-        return size;
-    } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
-
-        return 0;
-    }
 }
 
 /*!
@@ -158,7 +96,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, DataType data) noexc
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
 
-    if (dataStreamWrite(dataStream, reinterpret_cast<const char *>(&data), sizeof(DataType)) != sizeof(DataType))
+    if (dataStream.device()->write(reinterpret_cast<const char *>(&data), sizeof(DataType)) != sizeof(DataType))
         dataStream.setStatus(DataStreamStatus::WriteError);
 
     return dataStream;
@@ -174,7 +112,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const char *data) no
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
 
-    if (dataStreamWrite(dataStream, data, size) != size)
+    if (dataStream.device()->write(data, size) != size)
         dataStream.setStatus(DataStreamStatus::WriteError);
 
     return dataStream;
@@ -188,7 +126,7 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::string &d
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
 
-    if (dataStreamWrite(dataStream, data.c_str(), data.size()) != data.size())
+    if (dataStream.device()->write(data.data(), data.size()) != data.size())
         dataStream.setStatus(DataStreamStatus::WriteError);
 
     return dataStream;
@@ -348,7 +286,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, DataType &data) noex
     if (dataStream.status() != DataStreamStatus::Ok)
         return dataStream;
 
-    if (dataStreamRead(dataStream, reinterpret_cast<char *>(&data), sizeof(DataType)) != sizeof(DataType)) {
+    if (dataStream.device()->read(reinterpret_cast<char *>(&data), sizeof(DataType)) != sizeof(DataType)) {
         dataStream.setStatus(DataStreamStatus::ReadError);
 
         data = 0;
@@ -371,14 +309,14 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcep
 
         data = new char[metaCast<size_t>(size + 1)];
 
-        if (dataStreamRead(dataStream, data, metaCast<size_t>(size)) != metaCast<size_t>(size)) {
+        if (dataStream.device()->read(data, metaCast<size_t>(size)) != metaCast<size_t>(size)) {
             dataStream.setStatus(DataStreamStatus::ReadError);
 
             delete[] data;
             data = nullptr;
         }
 
-        data[size] = '\0';
+        data[size] = Constants::terminator;
 
         return dataStream;
     } catch (const std::exception &ex) {
@@ -404,7 +342,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::string &data) n
 
         data.resize(metaCast<size_t>(size));
 
-        if (dataStreamRead(dataStream, &data.front(), metaCast<size_t>(size)) != metaCast<size_t>(size)) {
+        if (dataStream.device()->read(&data.front(), metaCast<size_t>(size)) != metaCast<size_t>(size)) {
             dataStream.setStatus(DataStreamStatus::ReadError);
 
             data.clear();

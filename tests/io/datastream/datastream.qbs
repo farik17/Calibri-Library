@@ -25,6 +25,16 @@ Product {
     cpp.includePaths: [
         "../../../src"
     ]
+    cpp.libraryPaths: [
+        buildDirectory
+    ]
+    cpp.dynamicLibraries: qbs.buildVariant === "debug"
+                          ? [
+                                "calibrid"
+                            ]
+                          : [
+                                "calibri"
+                            ]
 
     Properties {
         condition: qbs.toolchain.contains("gcc") || qbs.toolchain.contains("mingw")

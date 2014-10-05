@@ -3,6 +3,6 @@ import qbs
 Project {
     references: [
         "metacast/metacast.qbs",
-        "buffer/buffer.qbs"
+        "bytearray/bytearray.qbs"
     ]
 }

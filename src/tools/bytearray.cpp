@@ -1,5 +1,5 @@
 //! Self Includes
-#include "buffer.h"
+#include "bytearray.h"
 
 namespace Calibri {
 
@@ -37,10 +37,10 @@ constexpr std::array<char, 64> alphabet {
 
 } // namespace Constants
 
-auto Buffer::toHex(bool *ok) const noexcept -> Buffer
+auto ByteArray::toHex(bool *ok) const noexcept -> ByteArray
 {
     try {
-        Buffer encodedData {};
+        ByteArray encodedData {};
         encodedData.reserve(size() * 2);
 
         for (auto it = std::begin(*this), end = std::end(*this); it != end; ++it) {
@@ -62,13 +62,13 @@ auto Buffer::toHex(bool *ok) const noexcept -> Buffer
     }
 }
 
-auto Buffer::toBase64(bool *ok) const noexcept -> Buffer
+auto ByteArray::toBase64(bool *ok) const noexcept -> ByteArray
 {
     try {
         auto moduloSize = size() % 3;
         auto paddingSize = 3 - moduloSize;
 
-        Buffer encodedData {};
+        ByteArray encodedData {};
         encodedData.reserve((size() / 3 + (paddingSize != 0
                 ? 1
                 : 0)) * 4);
@@ -133,20 +133,20 @@ auto Buffer::toBase64(bool *ok) const noexcept -> Buffer
     }
 }
 
-auto Buffer::fromHex(const Buffer &buffer, bool *ok) noexcept -> Buffer
+auto ByteArray::fromHex(const ByteArray &data, bool *ok) noexcept -> ByteArray
 {
     try {
-        if (buffer.size() % 2 != 0) {
+        if (data.size() % 2 != 0) {
             if (ok)
                 *ok = false;
 
             return {};
         }
 
-        Buffer decodedData {};
-        decodedData.reserve(buffer.size() / 2);
+        ByteArray decodedData {};
+        decodedData.reserve(data.size() / 2);
 
-        for (auto it = std::begin(buffer), end = std::end(buffer); it != end; ++it) {
+        for (auto it = std::begin(data), end = std::end(data); it != end; ++it) {
             char symbol {};
 
             if (std::isdigit(*it)) {
@@ -194,31 +194,31 @@ auto Buffer::fromHex(const Buffer &buffer, bool *ok) noexcept -> Buffer
     }
 }
 
-auto Buffer::fromBase64(const Buffer &buffer, bool *ok) noexcept -> Buffer
+auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArray
 {
     try {
-        if (buffer.size() % 4 != 0) {
+        if (data.size() % 4 != 0) {
             if (ok)
                 *ok = false;
 
             return {};
         }
 
-        auto paddingSize = *buffer.rbegin() == '='
-                ? (*std::next(buffer.rbegin()) == '='
+        auto paddingSize = *data.rbegin() == '='
+                ? (*std::next(data.rbegin()) == '='
                    ? 2
                    : 1)
                 : 0;
 
-        Buffer decodedData {};
-        decodedData.reserve((buffer.size() / 4) * 3 - paddingSize);
+        ByteArray decodedData {};
+        decodedData.reserve((data.size() / 4) * 3 - paddingSize);
 
         std::array<char, 4> block;
 
-        auto it = std::begin(buffer);
+        auto it = std::begin(data);
         auto end = paddingSize != 0
-                ? std::prev(std::end(buffer), 4)
-                : std::end(buffer);
+                ? std::prev(std::end(data), 4)
+                : std::end(data);
 
         while (it != end) {
             for (auto i = 0; i < 4; ++i, ++it) {

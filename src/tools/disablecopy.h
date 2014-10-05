@@ -3,6 +3,9 @@
 
 namespace Calibri {
 
+/*!
+ *  DisableCopy class
+ */
 class DisableCopy
 {
 public:
