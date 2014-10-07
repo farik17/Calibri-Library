@@ -8,7 +8,7 @@
 #include <openssl/evp.h>
 
 //! Calibri-Library Includes
-#include "tools/buffer.h"
+#include "tools/bytearray.h"
 
 namespace Calibri {
 
@@ -318,13 +318,13 @@ auto cipherAlgorithm() noexcept -> const EVP_CIPHER * { return EVP_enc_null(); }
 } // namespace Internal
 
 template<CipherType Type, CipherMode Mode, typename std::enable_if<Mode == CipherMode::Encrypt>::type... Enabler>
-auto cipher(const Buffer &data, Buffer &key, const Buffer &iv = "iv") noexcept -> Buffer
+auto cipher(const ByteArray &data, ByteArray &key, const ByteArray &iv = "iv") noexcept -> ByteArray
 {
     int32 processedBytes {};
     int32 encryptedBytes {};
 
     auto cipherAlgorithm = Internal::cipherAlgorithm<Type>();
-    Buffer encryptedData { data.size() + EVP_CIPHER_block_size(cipherAlgorithm) - 1 };
+    ByteArray encryptedData { data.size() + EVP_CIPHER_block_size(cipherAlgorithm) - 1 };
 
     EVP_CIPHER_CTX cipherContext;
     EVP_CIPHER_CTX_init(&cipherContext);
@@ -346,13 +346,13 @@ auto cipher(const Buffer &data, Buffer &key, const Buffer &iv = "iv") noexcept -
 }
 
 template<CipherType Type, CipherMode Mode, typename std::enable_if<Mode == CipherMode::Decrypt>::type... Enabler>
-auto cipher(const Buffer &data, const Buffer &key, const Buffer &iv = "iv") noexcept -> Buffer
+auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv = "iv") noexcept -> ByteArray
 {
     int32 processedBytes {};
     int32 decryptedBytes {};
 
     auto cipherAlgorithm = Internal::cipherAlgorithm<Type>();
-    Buffer decryptedData { data.size() + EVP_CIPHER_block_size(cipherAlgorithm) };
+    ByteArray decryptedData { data.size() + EVP_CIPHER_block_size(cipherAlgorithm) };
 
     EVP_CIPHER_CTX cipherContext;
     EVP_CIPHER_CTX_init(&cipherContext);

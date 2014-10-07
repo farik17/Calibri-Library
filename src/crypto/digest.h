@@ -8,7 +8,7 @@
 #include <openssl/evp.h>
 
 //! Calibri-Library Includes
-#include "tools/buffer.h"
+#include "tools/bytearray.h"
 #include "tools/metacast.h"
 
 namespace Calibri {
@@ -130,10 +130,10 @@ auto digestAlgorithm() noexcept -> const EVP_MD * { return EVP_md_null(); }
 } // namespace Internal
 
 template<DigestType Type>
-auto digest(const Buffer &data) noexcept -> Buffer
+auto digest(const ByteArray &data) noexcept -> ByteArray
 {
     auto digestAlgorithm = Internal::digestAlgorithm<Type>();
-    Buffer digestData { metaCast<size_t>(EVP_MD_size(digestAlgorithm)) };
+    ByteArray digestData { metaCast<size_t>(EVP_MD_size(digestAlgorithm)) };
 
     EVP_MD_CTX digestContext;
     EVP_MD_CTX_init(&digestContext);

@@ -77,7 +77,7 @@ public:
 
     auto pos() const noexcept -> size_t;
     auto seek(size_t pos) noexcept -> bool;
-    auto reset() noexcept -> bool;
+    auto reset() noexcept -> void;
 
     auto readLine(char *data, size_t size, bool *ok = nullptr) noexcept -> size_t;
 
@@ -111,9 +111,9 @@ inline auto IORandomAccessInterface::seek(size_t pos) noexcept -> bool
     return seekData(pos);
 }
 
-inline auto IORandomAccessInterface::reset() noexcept -> bool
+inline auto IORandomAccessInterface::reset() noexcept -> void
 {
-    return seek(0);
+    setPos(0);
 }
 
 inline auto IORandomAccessInterface::readLine(char *data, size_t size, bool *ok) noexcept -> size_t

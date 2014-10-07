@@ -16,7 +16,7 @@ inline auto Buffer::read(size_t size, bool *ok) noexcept -> ByteArray
 
         bool success {};
 
-        auto processedBytes = IORandomAccessInterface::read(data, size, &success);
+        auto processedBytes = read(data, size, &success);
 
         if (ok)
             *ok = success;
@@ -39,7 +39,7 @@ inline auto Buffer::read(size_t size, bool *ok) noexcept -> ByteArray
 
 inline auto Buffer::write(const ByteArray &data, bool *ok) noexcept -> size_t
 {
-    return IORandomAccessInterface::write(data, data.size(), ok);
+    return write(data, data.size(), ok);
 }
 
 auto Buffer::canReadLine() const noexcept -> bool
@@ -61,16 +61,11 @@ auto Buffer::atEnd() const noexcept -> bool
 auto Buffer::readData(char *data, size_t size, bool *ok) noexcept -> size_t
 {
     try {
-        auto nextPos = pos() + size;
-
-        if (nextPos > m_byteArray.size()) {
-            size -= nextPos - m_byteArray.size();
-            nextPos = m_byteArray.size();
-        }
+        size = std::min<decltype(size)>(m_byteArray.size() - pos(), size);
 
         std::copy_n(std::next(std::begin(m_byteArray), pos()), size, data);
 
-        setPos(nextPos);
+        setPos(pos() + size);
 
         if (ok)
             *ok = true;
