@@ -1,7 +1,8 @@
 import qbs
 
 Product {
-    name: "tst_metacast"
+    name: "MetaCastTest"
+    targetName: "tst_metacast"
     consoleApplication: true
     type: [
         "application"
@@ -10,6 +11,7 @@ Product {
         "*.h",
         "*.cpp"
     ]
+    destinationDirectory: project.sourceDirectory.concat("/bin")
 
     Depends {
         name: "Qt"

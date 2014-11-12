@@ -1,7 +1,8 @@
 import qbs
 
 Product {
-    name: "tst_bytearray"
+    name: "ByteArrayTest"
+    targetName: "tst_bytearray"
     consoleApplication: true
     type: [
         "application"
@@ -10,6 +11,7 @@ Product {
         "*.h",
         "*.cpp"
     ]
+    destinationDirectory: project.sourceDirectory.concat("/bin")
 
     Depends {
         name: "Qt"
@@ -26,7 +28,7 @@ Product {
         "../../../src"
     ]
     cpp.libraryPaths: [
-        buildDirectory
+        project.sourceDirectory.concat("/lib")
     ]
     cpp.dynamicLibraries: qbs.buildVariant === "debug"
                           ? [

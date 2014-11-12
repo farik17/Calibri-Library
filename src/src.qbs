@@ -1,13 +1,15 @@
 import qbs
 
 Product {
-    name: qbs.buildVariant === "debug"
-          ? "calibrid"
-          : "calibri"
+    name: "Source"
+    targetName: qbs.buildVariant === "debug"
+                ? "calibrid"
+                : "calibri"
     type: [
         "staticlibrary",
         "dynamiclibrary"
     ]
+    destinationDirectory: project.sourceDirectory.concat("/lib")
 
     Depends {
         name: "cpp"
