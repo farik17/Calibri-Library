@@ -1,4 +1,4 @@
-//! Self Includes
+//! Self includes
 #include "buffer.h"
 
 namespace Calibri {
@@ -7,7 +7,7 @@ namespace Constants {
 
 constexpr char endOfLine { '\n' };
 
-} // namespace Constants
+} // end namespace Constants
 
 inline auto Buffer::read(size_t size, bool *ok) noexcept -> ByteArray
 {
@@ -146,4 +146,4 @@ auto Buffer::seekData(size_t pos) noexcept -> bool
     return true;
 }
 
-} // namespace Calibri
+} // end namespace Calibri

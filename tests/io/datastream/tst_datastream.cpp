@@ -1,7 +1,7 @@
-//! Qt Includes
+//! Qt includes
 #include <QtTest/QtTest>
 
-//! Calibri-Library Includes
+//! Calibri-Library includes
 #include "io/datastream.h"
 
 class tst_DataStream : public QObject

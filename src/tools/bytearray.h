@@ -1,13 +1,13 @@
 #ifndef BYTEARRAY_H
 #define BYTEARRAY_H
 
-//! Std Includes
+//! Std includes
 #include <vector>
 #include <string>
 #include <iostream>
 #include <algorithm>
 
-//! Calibri-Library Includes
+//! Calibri-Library includes
 #include "global/global.h"
 
 namespace Calibri {
@@ -144,6 +144,6 @@ inline auto operator <<(std::ostream &stream, const ByteArray &byteArray) noexce
     return stream;
 }
 
-} // namespace Calibri
+} // end namespace Calibri
 
 #endif // BYTEARRAY_H

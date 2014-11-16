@@ -1,10 +1,10 @@
-//! Qt Includes
+//! Qt includes
 #include <QtTest/QtTest>
 
-//! Std Includes
+//! Std includes
 #include <iostream>
 
-//! Calibri-Library Includes
+//! Calibri-Library includes
 #include "tools/bytearray.h"
 
 class tst_bytearray : public QObject

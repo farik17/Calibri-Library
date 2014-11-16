@@ -1,7 +1,7 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-//! Calibri-Library Includes
+//! Calibri-Library includes
 #include "iointerface.h"
 #include "tools/bytearray.h"
 
@@ -102,6 +102,6 @@ inline auto operator <<(std::ostream &stream, const Buffer &buffer) noexcept -> 
     return stream << buffer.data();
 }
 
-} // namespace Calibri
+} // end namespace Calibri
 
 #endif // BUFFER_H

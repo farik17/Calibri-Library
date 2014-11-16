@@ -1,7 +1,7 @@
 #ifndef IOINTERFACE_H
 #define IOINTERFACE_H
 
-//! Std Includes
+//! Std includes
 #include <cstddef>
 #include <string>
 
@@ -126,6 +126,6 @@ inline auto IORandomAccessInterface::setPos(size_t pos) noexcept -> void
     m_pos = pos;
 }
 
-} // namespace Calibri
+} // end namespace Calibri
 
 #endif // IOINTERFACE_H

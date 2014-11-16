@@ -1,10 +1,10 @@
-//! Qt Includes
+//! Qt includes
 #include <QtTest/QtTest>
 
-//! Std Includes
+//! Std includes
 #include <iostream>
 
-//! Calibri-Library Includes
+//! Calibri-Library includes
 #include "tools/metacast.h"
 
 class tst_metacast : public QObject

@@ -1,11 +1,11 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-//! Std Includes
+//! Std includes
 #include <cstdint>
 #include <vector>
 
-//! Calibri-Library Includes
+//! Calibri-Library includes
 #include "systemdetection.h"
 #include "compilerdetection.h"
 #include "processordetection.h"

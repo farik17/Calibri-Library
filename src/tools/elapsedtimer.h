@@ -1,10 +1,10 @@
 #ifndef ELAPSEDTIMER_H
 #define ELAPSEDTIMER_H
 
-//! Std Includes
+//! Std includes
 #include <chrono>
 
-//! Calibri-Library Includes
+//! Calibri-Library includes
 #include "global/global.h"
 
 namespace Calibri {
@@ -20,43 +20,49 @@ enum class ElapsedTimerMetric : uint8 {
 
 namespace Internal {
 
-template<ElapsedTimerMetric Metric, typename std::enable_if<Metric == ElapsedTimerMetric::Hours>::type... Enabler>
+template<ElapsedTimerMetric Metric,
+         typename std::enable_if<Metric == ElapsedTimerMetric::Hours>::type... Enabler>
 inline auto duration(const std::chrono::steady_clock::time_point &start, const std::chrono::steady_clock::time_point &finish) -> uint64
 {
     return std::chrono::duration_cast<std::chrono::hours>(finish - start).count();
 }
 
-template<ElapsedTimerMetric Metric, typename std::enable_if<Metric == ElapsedTimerMetric::Minutes>::type... Enabler>
+template<ElapsedTimerMetric Metric,
+         typename std::enable_if<Metric == ElapsedTimerMetric::Minutes>::type... Enabler>
 inline auto duration(const std::chrono::steady_clock::time_point &start, const std::chrono::steady_clock::time_point &finish) -> uint64
 {
     return std::chrono::duration_cast<std::chrono::minutes>(finish - start).count();
 }
 
-template<ElapsedTimerMetric Metric, typename std::enable_if<Metric == ElapsedTimerMetric::Seconds>::type... Enabler>
+template<ElapsedTimerMetric Metric,
+         typename std::enable_if<Metric == ElapsedTimerMetric::Seconds>::type... Enabler>
 inline auto duration(const std::chrono::steady_clock::time_point &start, const std::chrono::steady_clock::time_point &finish) -> uint64
 {
     return std::chrono::duration_cast<std::chrono::seconds>(finish - start).count();
 }
 
-template<ElapsedTimerMetric Metric, typename std::enable_if<Metric == ElapsedTimerMetric::Miliseconds>::type... Enabler>
+template<ElapsedTimerMetric Metric,
+         typename std::enable_if<Metric == ElapsedTimerMetric::Miliseconds>::type... Enabler>
 inline auto duration(const std::chrono::steady_clock::time_point &start, const std::chrono::steady_clock::time_point &finish) -> uint64
 {
     return std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
 }
 
-template<ElapsedTimerMetric Metric, typename std::enable_if<Metric == ElapsedTimerMetric::Microseconds>::type... Enabler>
+template<ElapsedTimerMetric Metric,
+         typename std::enable_if<Metric == ElapsedTimerMetric::Microseconds>::type... Enabler>
 inline auto duration(const std::chrono::steady_clock::time_point &start, const std::chrono::steady_clock::time_point &finish) -> uint64
 {
     return std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
 }
 
-template<ElapsedTimerMetric Metric, typename std::enable_if<Metric == ElapsedTimerMetric::Nanoseconds>::type... Enabler>
+template<ElapsedTimerMetric Metric,
+         typename std::enable_if<Metric == ElapsedTimerMetric::Nanoseconds>::type... Enabler>
 inline auto duration(const std::chrono::steady_clock::time_point &start, const std::chrono::steady_clock::time_point &finish) -> uint64
 {
     return std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start).count();
 }
 
-} // namespace Internal
+} // end namespace Internal
 
 /*!
  *  ElapsedTimer class
@@ -122,6 +128,6 @@ inline auto ElapsedTimer<Metric>::hasExpired(uint64 timeout) const noexcept -> b
     return timeout < elapsed<Metric>();
 }
 
-} // namespace Calibri
+} // end namespace Calibri
 
 #endif // ELAPSEDTIMER_H

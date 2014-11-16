@@ -1,4 +1,4 @@
-//! Self Includes
+//! Self includes
 #include "bytearray.h"
 
 namespace Calibri {
@@ -16,7 +16,7 @@ constexpr std::array<char, 16> alphabet {
     }
 };
 
-} // namespace Hex
+} // end namespace Hex
 
 namespace Base64 {
 
@@ -33,9 +33,9 @@ constexpr std::array<char, 64> alphabet {
     }
 };
 
-} // namespace Base64
+} // end namespace Base64
 
-} // namespace Constants
+} // end namespace Constants
 
 auto ByteArray::toHex(bool *ok) const noexcept -> ByteArray
 {
@@ -313,4 +313,4 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
     }
 }
 
-} // namespace Calibri
+} // end namespace Calibri
