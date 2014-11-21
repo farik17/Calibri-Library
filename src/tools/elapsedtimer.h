@@ -105,8 +105,8 @@ inline auto ElapsedTimer::reset() noexcept -> void
     m_startPoint = std::chrono::steady_clock::time_point();
 }
 
-template<ElapsedTimerMetric Metric = ElapsedTimerMetric::Miliseconds>
-inline auto ElapsedTimer<Metric>::restart() noexcept -> uint64
+template<ElapsedTimerMetric Metric>
+inline auto ElapsedTimer::restart() noexcept -> uint64
 {
     auto finishPoint = std::chrono::steady_clock::now();
     auto duration = Internal::duration<Metric>(m_startPoint, finishPoint);
@@ -116,14 +116,14 @@ inline auto ElapsedTimer<Metric>::restart() noexcept -> uint64
     return duration;
 }
 
-template<ElapsedTimerMetric Metric = ElapsedTimerMetric::Miliseconds>
-inline auto ElapsedTimer<Metric>::elapsed() const noexcept -> uint64
+template<ElapsedTimerMetric Metric>
+inline auto ElapsedTimer::elapsed() const noexcept -> uint64
 {
     return Internal::duration<Metric>(m_startPoint, std::chrono::steady_clock::now());
 }
 
-template<ElapsedTimerMetric Metric = ElapsedTimerMetric::Miliseconds>
-inline auto ElapsedTimer<Metric>::hasExpired(uint64 timeout) const noexcept -> bool
+template<ElapsedTimerMetric Metric>
+inline auto ElapsedTimer::hasExpired(uint64 timeout) const noexcept -> bool
 {
     return timeout < elapsed<Metric>();
 }
