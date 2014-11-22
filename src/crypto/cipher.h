@@ -12,6 +12,7 @@
 
 namespace Calibri {
 
+//! Enumerations
 enum class CipherAlgorithm : uint8 {
 #if !defined(OPENSSL_NO_DES)
     DESecb,

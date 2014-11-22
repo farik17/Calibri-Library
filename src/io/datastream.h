@@ -18,17 +18,18 @@
 
 namespace Calibri {
 
-namespace Constants {
-
-constexpr char terminator { '\0' };
-
-} // end namespace Constants
-
+//! Enumerations
 enum class DataStreamStatus : uint8 {
     Ok,
     ReadError,
     WriteError
 };
+
+namespace Constants {
+
+constexpr char terminator { '\0' };
+
+} // end namespace Constants
 
 /*!
  *  DataStream class

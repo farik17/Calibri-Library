@@ -13,6 +13,7 @@
 
 namespace Calibri {
 
+//! Enumerations
 enum class DigestAlgorithm : uint8 {
 #if !defined(OPENSSL_NO_MD2)
     MD2,

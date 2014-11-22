@@ -9,6 +9,7 @@
 
 namespace Calibri {
 
+//! Enumerations
 enum class ElapsedTimerMetric : uint8 {
     Hours,
     Minutes,
