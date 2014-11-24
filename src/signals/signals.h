@@ -183,7 +183,7 @@ public:
     auto disconnected(SignalObserver *observer) noexcept -> bool;
 
 private:
-    std::list<std::pair<SignalObserver *, size_t>> m_observers {};
+    std::vector<std::pair<SignalObserver *, size_t>> m_observers {};
 
     SpinLock m_context {};
 };
