@@ -13,7 +13,7 @@ namespace Calibri {
 class Buffer : public IORandomAccessInterface
 {
 public:
-    Buffer() noexcept;
+    Buffer() noexcept = default;
     Buffer(const ByteArray &data) noexcept;
     Buffer(const char *data, size_t size) noexcept;
     Buffer(const char *data) noexcept;
@@ -46,27 +46,23 @@ private:
 /*!
  *  Buffer inline methods
  */
-inline Buffer::Buffer() noexcept
+inline Buffer::Buffer(const ByteArray &data) noexcept :
+    m_byteArray { data }
 {
 }
 
-inline Buffer::Buffer(const ByteArray &data) noexcept
-    : m_byteArray { data }
+inline Buffer::Buffer(const char *data, size_t size) noexcept :
+    m_byteArray { data, size }
 {
 }
 
-inline Buffer::Buffer(const char *data, size_t size) noexcept
-    : m_byteArray { data, size }
+inline Buffer::Buffer(const char *data) noexcept :
+    m_byteArray { data }
 {
 }
 
-inline Buffer::Buffer(const char *data) noexcept
-    : m_byteArray { data }
-{
-}
-
-inline Buffer::Buffer(Buffer &&other) noexcept
-    : m_byteArray { std::move(other.m_byteArray) }
+inline Buffer::Buffer(Buffer &&other) noexcept :
+    m_byteArray { std::move(other.m_byteArray) }
 {
     setPos(other.pos());
 

@@ -64,6 +64,15 @@ Product {
     }
 
     Group {
+        name: "thread"
+        prefix: "thread/"
+        files: [
+            "*.h",
+            "*.cpp"
+        ]
+    }
+
+    Group {
         condition: qbs.targetOS.contains("windows")
                    ? qbs.getEnv("OPENSSL_PATH") !== undefined
                    : true

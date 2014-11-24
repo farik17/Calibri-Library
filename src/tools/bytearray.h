@@ -41,28 +41,28 @@ public:
 /*!
  *  ByteArray inline methods
  */
-inline ByteArray::ByteArray() noexcept
-    : std::vector<char>()
+inline ByteArray::ByteArray() noexcept :
+    std::vector<char>()
 {
 }
 
-inline ByteArray::ByteArray(size_t size) noexcept
-    : std::vector<char>(size)
+inline ByteArray::ByteArray(size_t size) noexcept :
+    std::vector<char>(size)
 {
 }
 
-inline ByteArray::ByteArray(size_t size, char data) noexcept
-    : std::vector<char>(size, data)
+inline ByteArray::ByteArray(size_t size, char data) noexcept :
+    std::vector<char>(size, data)
 {
 }
 
-inline ByteArray::ByteArray(const char *ptr, size_t size) noexcept
-    : std::vector<char>(ptr, std::next(ptr, size))
+inline ByteArray::ByteArray(const char *ptr, size_t size) noexcept :
+    std::vector<char>(ptr, std::next(ptr, size))
 {
 }
 
-inline ByteArray::ByteArray(const char *ptr) noexcept
-    : ByteArray(ptr, std::char_traits<char>::length(ptr))
+inline ByteArray::ByteArray(const char *ptr) noexcept :
+    ByteArray(ptr, std::char_traits<char>::length(ptr))
 {
 }
 

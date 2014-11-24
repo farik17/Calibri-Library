@@ -13,7 +13,7 @@
 
 //! Calibri-Library includes
 #include "buffer.h"
-#include "tools/disablecopy.h"
+#include "tools/disablecopyable.h"
 #include "tools/metacast.h"
 
 namespace Calibri {
@@ -36,7 +36,7 @@ constexpr char terminator { '\0' };
  */
 template<typename DeviceType,
          typename std::enable_if<std::is_base_of<IOInterface, DeviceType>::value>::type... Enabler>
-class DataStream : private DisableCopy
+class DataStream : private DisableCopyable
 {
 public:
     DataStream(DeviceType *device) noexcept;
@@ -60,9 +60,9 @@ private:
  */
 template<typename DeviceType,
          typename std::enable_if<std::is_base_of<IOInterface, DeviceType>::value>::type... Enabler>
-inline DataStream<DeviceType, Enabler...>::DataStream(DeviceType *device) noexcept
-    : DisableCopy()
-    , m_device { device }
+inline DataStream<DeviceType, Enabler...>::DataStream(DeviceType *device) noexcept :
+    DisableCopyable(),
+    m_device { device }
 {
 }
 

@@ -71,7 +71,7 @@ inline auto duration(const std::chrono::steady_clock::time_point &start, const s
 class ElapsedTimer
 {
 public:
-    constexpr ElapsedTimer() noexcept;
+    constexpr ElapsedTimer() noexcept = default;
 
     auto start() noexcept -> void;
     auto reset() noexcept -> void;
@@ -92,10 +92,6 @@ private:
 /*!
  *  ElapsedTimer inline methods
  */
-inline constexpr ElapsedTimer::ElapsedTimer() noexcept
-{
-}
-
 inline auto ElapsedTimer::start() noexcept -> void
 {
     m_startPoint = std::chrono::steady_clock::now();

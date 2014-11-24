@@ -13,7 +13,7 @@ namespace Calibri {
 class IOInterface
 {
 public:
-    constexpr IOInterface() noexcept;
+    constexpr IOInterface() noexcept = default;
 
     auto read(char *data, size_t size, bool *ok = nullptr) noexcept -> size_t;
 
@@ -32,10 +32,6 @@ protected:
 /*!
  *  IOInterface inline methods
  */
-inline constexpr IOInterface::IOInterface() noexcept
-{
-}
-
 inline auto IOInterface::read(char *data, size_t size, bool *ok) noexcept -> size_t
 {
     return readData(data, size, ok);
