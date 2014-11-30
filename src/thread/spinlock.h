@@ -5,12 +5,20 @@
 #include <atomic>
 #include <thread>
 
-//! System includes
-#include <xmmintrin.h>
-
 //! Calibri-Library includes
 #include "global/global.h"
 #include "tools/disablecopyable.h"
+
+#if defined(CC_GNU) && defined(__SSE__)
+//! Platform includes
+#   include <x86intrin.h>
+
+//! Defines
+#   define SMT_PAUSE _mm_pause();
+#else
+//! Defines
+#   define SMT_PAUSE
+#endif
 
 namespace Calibri {
 
@@ -20,7 +28,7 @@ inline void yield(uint32 spin) noexcept
 {
     if (spin < 4) {
     } else if (spin < 16) {
-        _mm_pause();
+        SMT_PAUSE
     } else if (spin < 32) {
         std::this_thread::yield();
     } else {

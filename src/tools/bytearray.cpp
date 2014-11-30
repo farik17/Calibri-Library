@@ -1,6 +1,9 @@
 //! Self includes
 #include "bytearray.h"
 
+//! Std includes
+#include <array>
+
 namespace Calibri {
 
 namespace Constants {
