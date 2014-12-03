@@ -9,26 +9,27 @@
 #include "global/global.h"
 #include "tools/disablecopyable.h"
 
+//! Compiler includes
 #if defined(CC_GNU) && defined(__SSE__)
-//! Platform includes
 #   include <x86intrin.h>
-
-//! Defines
-#   define SMT_PAUSE _mm_pause();
-#else
-//! Defines
-#   define SMT_PAUSE
 #endif
 
 namespace Calibri {
 
 namespace Internal {
 
+inline void smtPause() noexcept
+{
+#if defined(CC_GNU) && defined(__SSE__)
+    _mm_pause();
+#endif
+}
+
 inline void yield(uint32 spin) noexcept
 {
-    if (spin < 4) {
+    if (spin < 8) {
     } else if (spin < 16) {
-        SMT_PAUSE
+        smtPause();
     } else if (spin < 32) {
         std::this_thread::yield();
     } else {

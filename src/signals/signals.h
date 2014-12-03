@@ -304,18 +304,6 @@ public:
     auto connect(CallableType *callable) noexcept -> Connection *;
 
     template<SignalConnectionMode ConnectionMode = SignalConnectionMode::DefaultConnection,
-             typename CallableType,
-             typename std::enable_if<(Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value
-                                     && ConnectionMode == SignalConnectionMode::DefaultConnection)>::type ...Enabler>
-    auto connect(CallableType &callable) noexcept -> Connection *;
-
-    template<SignalConnectionMode ConnectionMode = SignalConnectionMode::DefaultConnection,
-             typename CallableType,
-             typename std::enable_if<(Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value
-                                     && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
-    auto connect(CallableType &callable) noexcept -> Connection *;
-
-    template<SignalConnectionMode ConnectionMode = SignalConnectionMode::DefaultConnection,
              typename ObjectType,
              typename CallableType,
              typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
@@ -330,42 +318,16 @@ public:
                                      && std::is_base_of<EnableSignals, ObjectType>::value
                                      && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
     auto connect(ObjectType *object, CallableType callable) noexcept -> Connection *;
-
-    template<SignalConnectionMode ConnectionMode = SignalConnectionMode::DefaultConnection,
-             typename ObjectType,
-             typename CallableType,
-             typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
-                                     && std::is_base_of<EnableSignals, ObjectType>::value
-                                     && ConnectionMode == SignalConnectionMode::DefaultConnection)>::type ...Enabler>
-    auto connect(ObjectType &object, CallableType callable) noexcept -> Connection *;
-
-    template<SignalConnectionMode ConnectionMode = SignalConnectionMode::DefaultConnection,
-             typename ObjectType,
-             typename CallableType,
-             typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
-                                     && std::is_base_of<EnableSignals, ObjectType>::value
-                                     && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
-    auto connect(ObjectType &object, CallableType callable) noexcept -> Connection *;
 
     template<typename CallableType,
              typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
     auto disconnect(CallableType *callable) noexcept -> bool;
-
-    template<typename CallableType,
-             typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-    auto disconnect(CallableType &callable) noexcept -> bool;
 
     template<typename ObjectType,
              typename CallableType,
              typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
                                      && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
     auto disconnect(ObjectType *object, CallableType callable) noexcept -> bool;
-
-    template<typename ObjectType,
-             typename CallableType,
-             typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
-                                     && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
-    auto disconnect(ObjectType &object, CallableType callable) noexcept -> bool;
 
     auto disconnect(Connection *signalConnection) noexcept -> bool;
 
@@ -391,10 +353,6 @@ private:
         Connection(CallableType *callable) noexcept;
 
         template<typename CallableType,
-                 typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-        Connection(CallableType &callable) noexcept;
-
-        template<typename CallableType,
                  typename std::enable_if<Internal::IsFunctionCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
         Connection(CallableType *callable) noexcept;
 
@@ -412,12 +370,6 @@ private:
                                          && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
         Connection(ObjectType *object, CallableType callable) noexcept;
 
-        template<typename ObjectType,
-                 typename CallableType,
-                 typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
-                                         && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
-        Connection(ObjectType &object, CallableType callable) noexcept;
-
         ~Connection() noexcept;
 
         auto operator !=(const Connection &other) const noexcept -> bool;
@@ -427,18 +379,10 @@ private:
         template<typename CallableType>
         auto isConnectedTo(CallableType *callable) const noexcept -> bool;
 
-        template<typename CallableType>
-        auto isConnectedTo(CallableType &callable) const noexcept -> bool;
-
         template<typename ObjectType,
                  typename CallableReturnType,
                  typename ...CallableArgumentsType>
         auto isConnectedTo(ObjectType *object, Aliases::MemberFunctionPointer<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunctionPointer) const noexcept -> bool;
-
-        template<typename ObjectType,
-                 typename CallableReturnType,
-                 typename ...CallableArgumentsType>
-        auto isConnectedTo(ObjectType &object, Aliases::MemberFunctionPointer<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunctionPointer) const noexcept -> bool;
 
     private:
         void *m_callable {};
@@ -545,28 +489,6 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 template<typename ReturnType,
          typename ...ArgumentsType>
 template<SignalConnectionMode ConnectionMode,
-         typename CallableType,
-         typename std::enable_if<(Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value
-                                 && ConnectionMode == SignalConnectionMode::DefaultConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType &callable) noexcept -> Connection *
-{
-    return connect(&callable);
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
-template<SignalConnectionMode ConnectionMode,
-         typename CallableType,
-         typename std::enable_if<(Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value
-                                 && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType &callable) noexcept -> Connection *
-{
-    return connect<ConnectionMode>(&callable);
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
-template<SignalConnectionMode ConnectionMode,
          typename ObjectType,
          typename CallableType,
          typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
@@ -623,32 +545,6 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-template<SignalConnectionMode ConnectionMode,
-         typename ObjectType,
-         typename CallableType,
-         typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
-                                 && std::is_base_of<EnableSignals, ObjectType>::value
-                                 && ConnectionMode == SignalConnectionMode::DefaultConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(ObjectType &object, CallableType callable) noexcept -> Connection *
-{
-    return connect(&object, callable);
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
-template<SignalConnectionMode ConnectionMode,
-         typename ObjectType,
-         typename CallableType,
-         typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
-                                 && std::is_base_of<EnableSignals, ObjectType>::value
-                                 && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(ObjectType &object, CallableType callable) noexcept -> Connection *
-{
-    return connect<ConnectionMode>(&object, callable);
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
 template<typename CallableType,
          typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
 inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(CallableType *callable) noexcept -> bool
@@ -674,15 +570,6 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
 
         return false;
     }
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
-template<typename CallableType,
-         typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(CallableType &callable) noexcept -> bool
-{
-    return disconnect(&callable);
 }
 
 template<typename ReturnType,
@@ -714,17 +601,6 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
 
         return false;
     }
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
-template<typename ObjectType,
-         typename CallableType,
-         typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
-                                 && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(ObjectType &object, CallableType callable) noexcept -> bool
-{
-    return disconnect(&object, callable);
 }
 
 template<typename ReturnType,
@@ -784,15 +660,6 @@ inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connecti
     m_invoker = [](void *callable, ArgumentsType &&...arguments) noexcept(false) -> ReturnType {
         return (*reinterpret_cast<SignalType *>(callable))(std::forward<ArgumentsType>(arguments) ...);
     };
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
-template<typename CallableType,
-         typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(CallableType &callable) noexcept :
-    Connection(&callable)
-{
 }
 
 template<typename ReturnType,
@@ -874,17 +741,6 @@ inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connecti
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-template<typename ObjectType,
-         typename CallableType,
-         typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
-                                 && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
-inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(ObjectType &object, CallableType callable) noexcept :
-    Connection(&object, callable)
-{
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
 inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::~Connection() noexcept
 {
     if (m_deleter)
@@ -934,14 +790,6 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Con
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-template<typename CallableType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::isConnectedTo(CallableType &callable) const noexcept -> bool
-{
-    return isConnectedTo(&callable);
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
 template<typename ObjectType,
          typename CallableReturnType,
          typename ...CallableArgumentsType>
@@ -955,17 +803,6 @@ isConnectedTo(ObjectType *object, Aliases::MemberFunctionPointer<CallableReturnT
     }
 
     return false;
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
-template<typename ObjectType,
-         typename CallableReturnType,
-         typename ...CallableArgumentsType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::
-isConnectedTo(ObjectType &object, Aliases::MemberFunctionPointer<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunctionPointer) const noexcept -> bool
-{
-    return isConnectedTo(&object, memberFunctionPointer);
 }
 
 } // end namespace Calibri

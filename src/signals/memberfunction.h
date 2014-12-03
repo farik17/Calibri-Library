@@ -30,7 +30,6 @@ class MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ClassType, Argum
 {
 public:
     constexpr MemberFunction(ClassType *object, Aliases::MemberFunctionPointer<ReturnType, ClassType, ArgumentsType ...> memberFunctionPointer) noexcept;
-    constexpr MemberFunction(ClassType &object, Aliases::MemberFunctionPointer<ReturnType, ClassType, ArgumentsType ...> memberFunctionPointer) noexcept;
 
     auto object() const noexcept -> ClassType *;
     auto memberFunctionPointer() const noexcept -> const Aliases::MemberFunctionPointer<ReturnType, ClassType, ArgumentsType ...> &;
@@ -54,15 +53,6 @@ inline constexpr MemberFunction<Aliases::MemberFunctionPointer<ReturnType, Class
 MemberFunction(ClassType *object, Aliases::MemberFunctionPointer<ReturnType, ClassType, ArgumentsType ...> memberFunctionPointer) noexcept :
     m_object { object },
     m_memberFunctionPointer { memberFunctionPointer }
-{
-}
-
-template<typename ReturnType,
-         typename ClassType,
-         typename ...ArgumentsType>
-inline constexpr MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ClassType, ArgumentsType ...>>::
-MemberFunction(ClassType &object, Aliases::MemberFunctionPointer<ReturnType, ClassType, ArgumentsType ...> memberFunctionPointer) noexcept :
-    MemberFunction { &object, memberFunctionPointer }
 {
 }
 
