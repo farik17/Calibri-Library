@@ -18,18 +18,13 @@ namespace Calibri {
 
 namespace Internal {
 
-inline void smtPause() noexcept
-{
-#if defined(CC_GNU) && defined(__SSE__)
-    _mm_pause();
-#endif
-}
-
 inline void yield(uint32 spin) noexcept
 {
     if (spin < 8) {
     } else if (spin < 16) {
-        smtPause();
+#if defined(CC_GNU) && defined(__SSE__)
+        _mm_pause();
+#endif
     } else if (spin < 32) {
         std::this_thread::yield();
     } else {
@@ -45,8 +40,6 @@ inline void yield(uint32 spin) noexcept
 class SpinLock : private DisableCopyable
 {
 public:
-    virtual ~SpinLock() noexcept;
-
     auto lock() noexcept -> void;
     auto unlock() noexcept -> void;
 
@@ -59,11 +52,6 @@ private:
 /*!
  *  SpinLock inline methods
  */
-inline SpinLock::~SpinLock() noexcept
-{
-    unlock();
-}
-
 inline auto SpinLock::lock() noexcept -> void
 {
     for (uint32 spin = 0; !tryLock(); ++spin)

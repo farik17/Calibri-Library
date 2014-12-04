@@ -8,7 +8,6 @@
 #include "global/global.h"
 #include "tools/disableconstructible.h"
 #include "thread/spinlock.h"
-#include "memberfunction.h"
 
 namespace Calibri {
 
@@ -30,6 +29,11 @@ namespace Aliases {
 template<typename ReturnType,
          typename ...ArgumentsType>
 using SignalSignature = ReturnType (ArgumentsType ...);
+
+template<typename ReturnType,
+         typename ClassType,
+         typename ...ArgumentsType>
+using MemberFunctionPointer = ReturnType (ClassType::*)(ArgumentsType ...);
 
 } // end namespace Aliases
 
@@ -158,6 +162,88 @@ public:
     static constexpr auto value = (std::is_same<std::true_type, decltype(isCallable<MemberFunctionPointerType, ReturnType, ClassType, ArgumentsType ...>(MemberFunctionPointerCase()))>::value
                                    && std::is_member_function_pointer<MemberFunctionPointerType>::value);
 };
+
+/*!
+ *  MemberFunction class
+ */
+template<typename ...>
+class MemberFunction : private DisableConstructible
+{
+};
+
+template<typename ObjectType,
+         typename ReturnType,
+         typename ...ArgumentsType>
+class MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>
+{
+public:
+    constexpr MemberFunction(ObjectType *object, Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> memberFunctionPointer) noexcept;
+
+    auto object() const noexcept -> ObjectType *;
+    auto memberFunctionPointer() const noexcept -> const Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> &;
+
+    auto operator ()(ArgumentsType &&...arguments) const noexcept(false) -> ReturnType;
+    auto operator ==(const MemberFunction &other) const noexcept -> bool;
+    auto operator !=(const MemberFunction &other) const noexcept -> bool;
+
+private:
+    ObjectType *m_object {};
+    Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> m_memberFunctionPointer {};
+};
+
+/*!
+ *  MemberFunction inline methods
+ */
+template<typename ObjectType,
+         typename ReturnType,
+         typename ...ArgumentsType>
+inline constexpr MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::
+MemberFunction(ObjectType *object, Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> memberFunctionPointer) noexcept :
+    m_object { object },
+    m_memberFunctionPointer { memberFunctionPointer }
+{
+}
+
+template<typename ObjectType,
+         typename ReturnType,
+         typename ...ArgumentsType>
+inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::object() const noexcept -> ObjectType *
+{
+    return m_object;
+}
+
+template<typename ObjectType,
+         typename ReturnType,
+         typename ...ArgumentsType>
+inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::
+memberFunctionPointer() const noexcept -> const Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> &
+{
+    return m_memberFunctionPointer;
+}
+
+template<typename ObjectType,
+         typename ReturnType,
+         typename ...ArgumentsType>
+inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::operator ()(ArgumentsType &&...arguments) const noexcept(false) -> ReturnType
+{
+    return (m_object->*m_memberFunctionPointer)(std::forward<ArgumentsType>(arguments) ...);
+}
+
+template<typename ObjectType,
+         typename ReturnType,
+         typename ...ArgumentsType>
+inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::operator ==(const MemberFunction &other) const noexcept -> bool
+{
+    return m_object == other.m_object && m_memberFunctionPointer == other.m_memberFunctionPointer;
+}
+
+template<typename ObjectType,
+         typename ReturnType,
+         typename ...ArgumentsType>
+inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::operator !=(const MemberFunction &other) const noexcept -> bool
+{
+    return m_object != other.m_object || m_memberFunctionPointer != other.m_memberFunctionPointer;
+}
 
 //! Forward declarations
 class SignalTrackableObject;
@@ -723,7 +809,7 @@ template<typename ObjectType,
                                  && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
 inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(ObjectType *object, CallableType callable) noexcept
 {
-    using MemberFunctionType = MemberFunction<CallableType>;
+    using MemberFunctionType = Internal::MemberFunction<CallableType>;
 
     m_callable = new MemberFunctionType(object, callable);
     m_invoker = [](void *callable, ArgumentsType &&...arguments) noexcept(false) -> ReturnType {
@@ -797,7 +883,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Con
 isConnectedTo(ObjectType *object, Aliases::MemberFunctionPointer<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunctionPointer) const noexcept -> bool
 {
     if (m_comparator) {
-        auto memberFunction = MemberFunction<decltype(memberFunctionPointer)>(object, memberFunctionPointer);
+        auto memberFunction = Internal::MemberFunction<decltype(memberFunctionPointer)>(object, memberFunctionPointer);
 
         return m_comparator(m_callable, reinterpret_cast<decltype(m_callable)>(&memberFunction));
     }
