@@ -44,10 +44,6 @@ class Signal;
 
 namespace Internal {
 
-class FunctionCase
-{
-};
-
 class FunctionPointerOrFunctionObjectCase
 {
 };
@@ -55,12 +51,6 @@ class FunctionPointerOrFunctionObjectCase
 class MemberFunctionPointerCase
 {
 };
-
-template<typename CallableType,
-         typename ReturnType,
-         typename ...ArgumentsType,
-         typename std::enable_if<std::is_convertible<typename std::result_of<CallableType &(ArgumentsType ...)>::type, ReturnType>::value>::type ...Enabler>
-constexpr auto isCallable(FunctionCase) noexcept -> std::true_type;
 
 template<typename CallableType,
          typename ReturnType,
@@ -107,19 +97,6 @@ class IsSignalCallable : private DisableConstructible
 public:
     static constexpr auto value = (std::is_same<std::true_type, decltype(isCallable<SignalType, ReturnType, ArgumentsType ...>(FunctionPointerOrFunctionObjectCase()))>::value
                                    && IsSignal<SignalType>::value);
-};
-
-/*!
- *  IsFunctionCallable class
- */
-template<typename FunctionType,
-         typename ReturnType,
-         typename ...ArgumentsType>
-class IsFunctionCallable : private DisableConstructible
-{
-public:
-    static constexpr auto value = (std::is_same<std::true_type, decltype(isCallable<FunctionType, ReturnType, ArgumentsType ...>(FunctionCase()))>::value
-                                   && std::is_function<FunctionType>::value);
 };
 
 /*!
@@ -294,7 +271,7 @@ inline auto SignalTrackableObject::connected(SignalObserver *observer) noexcept 
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [observer](const std::pair<SignalObserver *, size_t> &pair) {
+        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<SignalObserver *, size_t> &pair) {
             return pair.first == observer;
         });
 
@@ -316,7 +293,7 @@ inline auto SignalTrackableObject::disconnected(SignalObserver *observer) noexce
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [observer](const std::pair<SignalObserver *, size_t> &pair) {
+        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<SignalObserver *, size_t> &pair) {
             return pair.first == observer;
         });
 
@@ -405,6 +382,18 @@ public:
                                      && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
     auto connect(ObjectType *object, CallableType callable) noexcept -> Connection *;
 
+    template<SignalConnectionMode ConnectionMode = SignalConnectionMode::DefaultConnection,
+             typename CallableType,
+             typename std::enable_if<(Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value
+                                     && ConnectionMode == SignalConnectionMode::DefaultConnection)>::type ...Enabler>
+    auto connect(CallableType callable) noexcept -> Connection *;
+
+    template<SignalConnectionMode ConnectionMode = SignalConnectionMode::DefaultConnection,
+             typename CallableType,
+             typename std::enable_if<(Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value
+                                     && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
+    auto connect(CallableType callable) noexcept -> Connection *;
+
     template<typename CallableType,
              typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
     auto disconnect(CallableType *callable) noexcept -> bool;
@@ -414,6 +403,10 @@ public:
              typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
                                      && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
     auto disconnect(ObjectType *object, CallableType callable) noexcept -> bool;
+
+    template<typename CallableType,
+             typename std::enable_if<Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
+    auto disconnect(CallableType callable) noexcept -> bool;
 
     auto disconnect(Connection *signalConnection) noexcept -> bool;
 
@@ -436,10 +429,6 @@ private:
     public:
         template<typename CallableType,
                  typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-        Connection(CallableType *callable) noexcept;
-
-        template<typename CallableType,
-                 typename std::enable_if<Internal::IsFunctionCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
         Connection(CallableType *callable) noexcept;
 
         template<typename CallableType,
@@ -489,8 +478,10 @@ inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::~Signal(
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        for (const auto &pair : m_connections)
-            (pair.second)->disconnected(this);
+        for (const auto &pair : m_connections) {
+            if (pair.second)
+                pair.second->disconnected(this);
+        }
     } catch (const std::exception &ex) {
         std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
     }
@@ -553,7 +544,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [callable](const std::pair<Connection, SignalTrackableObject *> &pair) {
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<Connection, SignalTrackableObject *> &pair) {
             return pair.first.isConnectedTo(callable);
         });
 
@@ -610,7 +601,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [object, &callable](const std::pair<Connection, SignalTrackableObject *> &pair) {
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ object, &callable ](const std::pair<Connection, SignalTrackableObject *> &pair) {
             return pair.first.isConnectedTo(object, callable);
         });
 
@@ -631,6 +622,55 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 
 template<typename ReturnType,
          typename ...ArgumentsType>
+template<SignalConnectionMode ConnectionMode,
+         typename CallableType,
+         typename std::enable_if<(Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value
+                                 && ConnectionMode == SignalConnectionMode::DefaultConnection)>::type ...Enabler>
+inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType callable) noexcept -> Connection *
+{
+    try {
+        std::lock_guard<SpinLock> locker { m_context };
+
+        auto it = m_connections.emplace(std::end(m_connections), std::piecewise_construct, std::forward_as_tuple(callable), std::forward_as_tuple(nullptr));
+
+        return &((*it).first);
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+
+        return nullptr;
+    }
+}
+
+template<typename ReturnType,
+         typename ...ArgumentsType>
+template<SignalConnectionMode ConnectionMode,
+         typename CallableType,
+         typename std::enable_if<(Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value
+                                 && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
+inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType callable) noexcept -> Connection *
+{
+    try {
+        std::lock_guard<SpinLock> locker { m_context };
+
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<Connection, SignalTrackableObject *> &pair) {
+            return pair.first.isConnectedTo(callable);
+        });
+
+        if (it != std::end(m_connections))
+            return nullptr;
+
+        it = m_connections.emplace(std::end(m_connections), std::piecewise_construct, std::forward_as_tuple(callable), std::forward_as_tuple(nullptr));
+
+        return &((*it).first);
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+
+        return nullptr;
+    }
+}
+
+template<typename ReturnType,
+         typename ...ArgumentsType>
 template<typename CallableType,
          typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
 inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(CallableType *callable) noexcept -> bool
@@ -638,7 +678,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [callable](const std::pair<Connection, SignalTrackableObject *> &pair) {
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<Connection, SignalTrackableObject *> &pair) {
             return pair.first.isConnectedTo(callable);
         });
 
@@ -669,7 +709,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [object, &callable](const std::pair<Connection, SignalTrackableObject *> &pair) {
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ object, &callable ](const std::pair<Connection, SignalTrackableObject *> &pair) {
             return pair.first.isConnectedTo(object, callable);
         });
 
@@ -691,12 +731,39 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
 
 template<typename ReturnType,
          typename ...ArgumentsType>
+template<typename CallableType,
+         typename std::enable_if<Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
+inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(CallableType callable) noexcept -> bool
+{
+    try {
+        std::lock_guard<SpinLock> locker { m_context };
+
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<Connection, SignalTrackableObject *> &pair) {
+            return pair.first.isConnectedTo(callable);
+        });
+
+        if (it != std::end(m_connections)) {
+            m_connections.erase(it);
+
+            return true;
+        }
+
+        return false;
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+
+        return false;
+    }
+}
+
+template<typename ReturnType,
+         typename ...ArgumentsType>
 inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(Connection *signalConnection) noexcept -> bool
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [signalConnection](const std::pair<Connection, SignalTrackableObject *> &pair) {
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ signalConnection ](const std::pair<Connection, SignalTrackableObject *> &pair) {
             return pair.first == *signalConnection;
         });
 
@@ -723,7 +790,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::des
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        m_connections.remove_if([trackableObject](const std::pair<Connection, SignalTrackableObject *> &pair) {
+        m_connections.remove_if([ trackableObject ](const std::pair<Connection, SignalTrackableObject *> &pair) {
             return pair.second == trackableObject;
         });
     } catch (const std::exception &ex) {
@@ -745,22 +812,6 @@ inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connecti
     m_callable = reinterpret_cast<decltype(m_callable)>(callable);
     m_invoker = [](void *callable, ArgumentsType &&...arguments) noexcept(false) -> ReturnType {
         return (*reinterpret_cast<SignalType *>(callable))(std::forward<ArgumentsType>(arguments) ...);
-    };
-}
-
-template<typename ReturnType,
-         typename ...ArgumentsType>
-template<typename CallableType,
-         typename std::enable_if<Internal::IsFunctionCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(CallableType *callable) noexcept
-{
-    using FunctionType = CallableType;
-
-    m_callable = reinterpret_cast<decltype(m_callable)>(callable);
-    m_invoker = [](void *callable, ArgumentsType &&...arguments) noexcept(false) -> ReturnType {
-        std::lock_guard<SpinLock> locker { Constants::globalContext };
-
-        return reinterpret_cast<FunctionType *>(callable)(std::forward<ArgumentsType>(arguments) ...);
     };
 }
 
