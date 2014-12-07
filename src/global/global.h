@@ -3,7 +3,6 @@
 
 //! Std includes
 #include <cstdint>
-#include <vector>
 
 //! Calibri-Library includes
 #include "systemdetection.h"

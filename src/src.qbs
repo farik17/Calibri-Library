@@ -37,7 +37,7 @@ Product {
     }
 
     Group {
-        name: "global"
+        name: "Global"
         prefix: "global/"
         files: [
             "*.h",
@@ -46,7 +46,7 @@ Product {
     }
 
     Group {
-        name: "io"
+        name: "Io"
         prefix: "io/"
         files: [
             "*.h",
@@ -55,7 +55,7 @@ Product {
     }
 
     Group {
-        name: "tools"
+        name: "Tools"
         prefix: "tools/"
         files: [
             "*.h",
@@ -64,8 +64,17 @@ Product {
     }
 
     Group {
-        name: "thread"
+        name: "Thread"
         prefix: "thread/"
+        files: [
+            "*.h",
+            "*.cpp"
+        ]
+    }
+
+    Group {
+        name: "Signals"
+        prefix: "signals/"
         files: [
             "*.h",
             "*.cpp"
@@ -76,7 +85,7 @@ Product {
         condition: qbs.targetOS.contains("windows")
                    ? qbs.getEnv("OPENSSL_PATH") !== undefined
                    : true
-        name: "crypto"
+        name: "Crypto"
         prefix: "crypto/"
         files: [
             "*.h",
