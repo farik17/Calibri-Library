@@ -395,6 +395,10 @@ public:
     auto connect(CallableType callable) noexcept -> Connection *;
 
     template<typename CallableType,
+             typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::remove_reference<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
+    auto connect(CallableType &&callable) noexcept -> Connection *;
+
+    template<typename CallableType,
              typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
     auto disconnect(CallableType *callable) noexcept -> bool;
 
@@ -660,6 +664,25 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
             return nullptr;
 
         it = m_connections.emplace(std::end(m_connections), std::piecewise_construct, std::forward_as_tuple(callable), std::forward_as_tuple(nullptr));
+
+        return &((*it).first);
+    } catch (const std::exception &ex) {
+        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+
+        return nullptr;
+    }
+}
+
+template<typename ReturnType,
+         typename ...ArgumentsType>
+template<typename CallableType,
+         typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::remove_reference<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
+inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType &&callable) noexcept -> Connection *
+{
+    try {
+        std::lock_guard<SpinLock> locker { m_context };
+
+        auto it = m_connections.emplace(std::end(m_connections), std::piecewise_construct, std::forward_as_tuple(std::forward<CallableType>(callable)), std::forward_as_tuple(nullptr));
 
         return &((*it).first);
     } catch (const std::exception &ex) {
