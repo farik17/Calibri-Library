@@ -28,7 +28,7 @@ inline auto Buffer::read(size_t size, bool *ok) noexcept -> ByteArray
 
         return data;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
@@ -47,7 +47,7 @@ auto Buffer::canReadLine() const noexcept -> bool
     try {
         return std::find(std::next(std::begin(m_byteArray), pos()), std::end(m_byteArray), Constants::endOfLine) != std::end(m_byteArray);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return false;
     }
@@ -72,7 +72,7 @@ auto Buffer::readData(char *data, size_t size, bool *ok) noexcept -> size_t
 
         return size;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
@@ -98,7 +98,7 @@ auto Buffer::writeData(const char *data, size_t size, bool *ok) noexcept -> size
 
         return size;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
@@ -127,7 +127,7 @@ auto Buffer::readLineData(char *data, size_t size, bool *ok) noexcept -> size_t
 
         return size;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;

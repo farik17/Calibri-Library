@@ -262,7 +262,7 @@ inline SignalTrackableObject::~SignalTrackableObject() noexcept
         for (const auto &pair : m_observers)
             (pair.first)->destroyed(this);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
     }
 }
 
@@ -282,7 +282,7 @@ inline auto SignalTrackableObject::connected(SignalObserver *observer) noexcept 
 
         return true;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return false;
     }
@@ -306,7 +306,7 @@ inline auto SignalTrackableObject::disconnected(SignalObserver *observer) noexce
 
         return false;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return false;
     }
@@ -487,7 +487,7 @@ inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::~Signal(
                 pair.second->disconnected(this);
         }
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
     }
 }
 
@@ -508,7 +508,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::ope
 
         return ReturnType();
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return ReturnType();
     }
@@ -531,7 +531,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 
         return &((*it).first);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return nullptr;
     }
@@ -561,7 +561,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 
         return &((*it).first);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return nullptr;
     }
@@ -586,7 +586,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 
         return &((*it).first);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return nullptr;
     }
@@ -618,7 +618,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 
         return &((*it).first);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return nullptr;
     }
@@ -639,7 +639,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 
         return &((*it).first);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return nullptr;
     }
@@ -667,7 +667,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 
         return &((*it).first);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return nullptr;
     }
@@ -686,7 +686,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::con
 
         return &((*it).first);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return nullptr;
     }
@@ -715,7 +715,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
 
         return false;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return false;
     }
@@ -746,7 +746,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
 
         return false;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return false;
     }
@@ -773,7 +773,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
 
         return false;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return false;
     }
@@ -800,7 +800,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
 
         return false;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return false;
     }
@@ -817,7 +817,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::des
             return pair.second == trackableObject;
         });
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
     }
 }
 
@@ -855,7 +855,7 @@ inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connecti
             delete reinterpret_cast<FunctionObjectType *>(callable);
         };
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
     }
 }
 
@@ -934,7 +934,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Con
     try {
         return m_invoker(m_callable, std::forward<ArgumentsType>(arguments) ...);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return ReturnType();
     }

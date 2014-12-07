@@ -32,7 +32,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -66,7 +66,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -102,7 +102,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -142,7 +142,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -178,7 +178,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -212,7 +212,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -245,7 +245,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -278,7 +278,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -311,7 +311,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -362,7 +362,7 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -396,7 +396,7 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -432,7 +432,7 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -472,7 +472,7 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -508,7 +508,7 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -542,7 +542,7 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -575,7 +575,7 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -608,7 +608,7 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -641,7 +641,7 @@ inline auto metaCast(const wchar_t *data, bool *ok = nullptr) noexcept -> CastTy
 
     switch (errno) {
     case ERANGE:
-        std::cerr << FUNC_INFO << " : " << std::strerror(errno) << std::endl;
+        std::cerr << __func__ << " : " << std::strerror(errno) << std::endl;
 
         if (ok)
             *ok = false;
@@ -691,7 +691,7 @@ inline auto metaCast(DataType data) noexcept -> CastType
     try {
         return std::to_string(data);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return {};
     }
@@ -707,7 +707,7 @@ inline auto metaCast(DataType data) noexcept -> CastType
     try {
         return std::to_wstring(data);
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return {};
     }
@@ -727,7 +727,7 @@ inline auto metaCast(const char *data) noexcept -> CastType
 
         return castedData;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return {};
     }
@@ -747,7 +747,7 @@ inline auto metaCast(const wchar_t *data) noexcept -> CastType
 
         return castedData;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         return {};
     }

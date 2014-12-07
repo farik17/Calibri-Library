@@ -99,7 +99,7 @@ inline auto ByteArray::toUpper(bool *ok) const noexcept -> ByteArray
 
         return transformedData;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
@@ -121,7 +121,7 @@ inline auto ByteArray::toLower(bool *ok) const noexcept -> ByteArray
 
         return transformedData;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
@@ -138,7 +138,7 @@ inline auto operator <<(std::ostream &stream, const ByteArray &byteArray) noexce
     try {
         std::copy(std::begin(byteArray), std::end(byteArray), std::ostreambuf_iterator<char>(stream));
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
     }
 
     return stream;

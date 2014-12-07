@@ -56,7 +56,7 @@ auto ByteArray::toHex(bool *ok) const noexcept -> ByteArray
 
         return encodedData;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
@@ -127,7 +127,7 @@ auto ByteArray::toBase64(bool *ok) const noexcept -> ByteArray
 
         return encodedData;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
@@ -188,7 +188,7 @@ auto ByteArray::fromHex(const ByteArray &data, bool *ok) noexcept -> ByteArray
 
         return decodedData;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
@@ -307,7 +307,7 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
 
         return decodedData;
     } catch (const std::exception &ex) {
-        std::cerr << FUNC_INFO << " : " << ex.what() << std::endl;
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
