@@ -9,11 +9,6 @@
 #include "global/global.h"
 #include "tools/disablecopyable.h"
 
-//! Compiler includes
-#if defined(CC_GNU) && defined(__SSE__)
-#   include <x86intrin.h>
-#endif
-
 namespace Calibri {
 
 namespace Internal {
@@ -22,9 +17,7 @@ inline void yield(uint32 spin) noexcept
 {
     if (spin < 8) {
     } else if (spin < 16) {
-#if defined(CC_GNU) && defined(__SSE__)
-        _mm_pause();
-#endif
+        __asm__ __volatile__( "rep; nop" : : : "memory" );
     } else if (spin < 32) {
         std::this_thread::yield();
     } else {
