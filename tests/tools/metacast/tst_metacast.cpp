@@ -1,9 +1,6 @@
 //! Qt includes
 #include <QtTest/QtTest>
 
-//! Std includes
-#include <iostream>
-
 //! Calibri-Library includes
 #include "tools/metacast.h"
 
