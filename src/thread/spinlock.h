@@ -15,7 +15,7 @@ namespace Internal {
 
 inline void yield(uint32 spin) noexcept
 {
-    if (spin < 8) {
+    if (spin < 4) {
     } else if (spin < 16) {
         __asm__ __volatile__( "rep; nop" : : : "memory" );
     } else if (spin < 32) {
