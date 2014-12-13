@@ -3,6 +3,7 @@ import qbs
 Product {
     name: "ByteArrayTest"
     targetName: "tst_bytearray"
+    destinationDirectory: project.binaryDestinationDirectory
     consoleApplication: true
     type: [
         "application"
@@ -11,7 +12,6 @@ Product {
         "*.h",
         "*.cpp"
     ]
-    destinationDirectory: project.sourceDirectory.concat("/bin")
 
     Depends {
         name: "Qt"
@@ -25,33 +25,13 @@ Product {
     }
 
     cpp.includePaths: [
-        "../../../src"
+        project.libraryDirectory
     ]
     cpp.libraryPaths: [
-        project.sourceDirectory.concat("/lib")
+        project.libraryDestinationDirectory
     ]
-    cpp.dynamicLibraries: qbs.buildVariant === "debug"
-                          ? [
-                                "calibrid"
-                            ]
-                          : [
-                                "calibri"
-                            ]
-
-    Properties {
-        condition: qbs.toolchain.contains("gcc") || qbs.toolchain.contains("mingw")
-
-        cpp.cxxFlags: qbs.buildVariant === "debug"
-                      ? [
-                            "-std=c++11"
-                        ]
-                      : [
-                            "-std=c++11",
-                            "-o3",
-                            "-funroll-loops",
-                            "-flto",
-                            "-mtune=native",
-                            "-march=native"
-                        ]
-    }
+    cpp.dynamicLibraries: [
+        project.libraryName
+    ]
+    cpp.cxxFlags: project.compilerFlags
 }

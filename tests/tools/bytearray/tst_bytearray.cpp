@@ -22,11 +22,6 @@ void tst_bytearray::testUpper()
     auto out = Calibri::ByteArray("some data").toUpper(&ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("SOME DATA"));
-
-    auto in = Calibri::ByteArray("some data");
-    in.toUpper(&ok);
-    QVERIFY(ok);
-    QCOMPARE(in, Calibri::ByteArray("SOME DATA"));
 }
 
 void tst_bytearray::testLower()
@@ -36,11 +31,6 @@ void tst_bytearray::testLower()
     auto out = Calibri::ByteArray("SOME DATA").toLower(&ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("some data"));
-
-    auto in = Calibri::ByteArray("SOME DATA");
-    in.toLower(&ok);
-    QVERIFY(ok);
-    QCOMPARE(in, Calibri::ByteArray("some data"));
 }
 
 void tst_bytearray::testHex()

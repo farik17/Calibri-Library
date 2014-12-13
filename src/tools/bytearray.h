@@ -29,10 +29,8 @@ public:
     operator char *() noexcept;
     operator void *() noexcept;
 
-    auto toUpper(bool *ok = nullptr) & noexcept -> ByteArray &;
-    auto toUpper(bool *ok = nullptr) const && noexcept -> ByteArray;
-    auto toLower(bool *ok = nullptr) & noexcept -> ByteArray &;
-    auto toLower(bool *ok = nullptr) const && noexcept -> ByteArray;
+    auto toUpper(bool *ok = nullptr) const noexcept -> ByteArray;
+    auto toLower(bool *ok = nullptr) const noexcept -> ByteArray;
     auto toHex(bool *ok = nullptr) const noexcept -> ByteArray;
     auto toBase64(bool *ok = nullptr) const noexcept -> ByteArray;
 
@@ -88,26 +86,7 @@ inline ByteArray::operator void *() noexcept
     return data();
 }
 
-inline auto ByteArray::toUpper(bool *ok) & noexcept -> ByteArray &
-{
-    try {
-        std::transform(std::begin(*this), std::end(*this), std::begin(*this), std::ptr_fun<int32, int32>(std::toupper));
-
-        if (ok)
-            *ok = true;
-
-        return *this;
-    } catch (const std::exception &ex) {
-        std::cerr << __func__ << " : " << ex.what() << std::endl;
-
-        if (ok)
-            *ok = false;
-
-        return *this;
-    }
-}
-
-inline auto ByteArray::toUpper(bool *ok) const && noexcept -> ByteArray
+inline auto ByteArray::toUpper(bool *ok) const noexcept -> ByteArray
 {
     try {
         ByteArray transformedData {};
@@ -129,26 +108,7 @@ inline auto ByteArray::toUpper(bool *ok) const && noexcept -> ByteArray
     }
 }
 
-inline auto ByteArray::toLower(bool *ok) & noexcept -> ByteArray &
-{
-    try {
-        std::transform(std::begin(*this), std::end(*this), std::begin(*this), std::ptr_fun<int32, int32>(std::tolower));
-
-        if (ok)
-            *ok = true;
-
-        return *this;
-    } catch (const std::exception &ex) {
-        std::cerr << __func__ << " : " << ex.what() << std::endl;
-
-        if (ok)
-            *ok = false;
-
-        return *this;
-    }
-}
-
-inline auto ByteArray::toLower(bool *ok) const && noexcept -> ByteArray
+inline auto ByteArray::toLower(bool *ok) const noexcept -> ByteArray
 {
     try {
         ByteArray transformedData {};
