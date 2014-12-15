@@ -69,7 +69,7 @@ inline auto IOInterface::putChar(char character) noexcept -> bool
 class IORandomAccessInterface : public IOInterface
 {
 public:
-    constexpr IORandomAccessInterface() noexcept;
+    constexpr IORandomAccessInterface() noexcept = default;
 
     auto pos() const noexcept -> size_t;
     auto seek(size_t pos) noexcept -> bool;
@@ -93,10 +93,6 @@ private:
 /*!
  *  IORandomAccessInterface inline methods
  */
-inline constexpr IORandomAccessInterface::IORandomAccessInterface() noexcept
-{
-}
-
 inline auto IORandomAccessInterface::pos() const noexcept -> size_t
 {
     return m_pos;

@@ -17,11 +17,11 @@ inline void yield(uint32 spin) noexcept
 {
     if (spin < 4) {
     } else if (spin < 16) {
-        __asm__ __volatile__( "rep; nop" : : : "memory" );
+        __asm__ __volatile__("rep; nop" : : : "memory");
     } else if (spin < 32) {
         std::this_thread::yield();
     } else {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::microseconds(1));
     }
 }
 
@@ -33,6 +33,8 @@ inline void yield(uint32 spin) noexcept
 class SpinLock : private DisableCopyable
 {
 public:
+    constexpr SpinLock() noexcept = default;
+
     auto lock() noexcept -> void;
     auto unlock() noexcept -> void;
 
