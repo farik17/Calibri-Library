@@ -166,8 +166,9 @@ public:
     auto operator !=(const MemberFunction &other) const noexcept -> bool;
 
 private:
-    ObjectType *m_object {};
     Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> m_memberFunctionPointer {};
+
+    ObjectType *m_object {};
 };
 
 /*!
