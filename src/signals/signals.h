@@ -249,7 +249,7 @@ public:
     auto disconnected(SignalObserver *observer) noexcept -> bool;
 
 private:
-    std::vector<std::pair<SignalObserver *, size_t>> m_observers {};
+    std::vector<std::pair<SignalObserver *, uint32>> m_observers {};
 
     SpinLock m_context {};
 };
@@ -274,7 +274,7 @@ inline auto SignalTrackableObject::connected(SignalObserver *observer) noexcept 
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<SignalObserver *, size_t> &pair) {
+        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<SignalObserver *, uint32> &pair) {
             return pair.first == observer;
         });
 
@@ -296,7 +296,7 @@ inline auto SignalTrackableObject::disconnected(SignalObserver *observer) noexce
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<SignalObserver *, size_t> &pair) {
+        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<SignalObserver *, uint32> &pair) {
             return pair.first == observer;
         });
 

@@ -580,7 +580,7 @@ auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv, bo
     EVP_CIPHER_CTX cipherContext;
     EVP_CIPHER_CTX_init(&cipherContext);
 
-    if (EVP_EncryptInit(&cipherContext, cipherAlgorithm, reinterpret_cast<const unsigned char *>(key.data()), reinterpret_cast<const unsigned char *>(iv.data())) != 1) {
+    if (EVP_EncryptInit(&cipherContext, cipherAlgorithm, reinterpret_cast<const uchar *>(key.data()), reinterpret_cast<const uchar *>(iv.data())) != 1) {
         EVP_CIPHER_CTX_cleanup(&cipherContext);
 
         if (ok)
@@ -589,7 +589,7 @@ auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv, bo
         return {};
     }
 
-    if (EVP_EncryptUpdate(&cipherContext, reinterpret_cast<unsigned char *>(encryptedData.data()), &processedBytes, reinterpret_cast<const unsigned char *>(data.data()), data.size()) != 1) {
+    if (EVP_EncryptUpdate(&cipherContext, reinterpret_cast<uchar *>(encryptedData.data()), &processedBytes, reinterpret_cast<const uchar *>(data.data()), data.size()) != 1) {
         EVP_CIPHER_CTX_cleanup(&cipherContext);
 
         if (ok)
@@ -600,7 +600,7 @@ auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv, bo
 
     encryptedBytes += processedBytes;
 
-    if (EVP_EncryptFinal(&cipherContext, reinterpret_cast<unsigned char *>(encryptedData.data() + encryptedBytes), &processedBytes) != 1) {
+    if (EVP_EncryptFinal(&cipherContext, reinterpret_cast<uchar *>(encryptedData.data() + encryptedBytes), &processedBytes) != 1) {
         EVP_CIPHER_CTX_cleanup(&cipherContext);
 
         if (ok)
@@ -635,7 +635,7 @@ auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv, bo
     EVP_CIPHER_CTX cipherContext;
     EVP_CIPHER_CTX_init(&cipherContext);
 
-    if (EVP_DecryptInit(&cipherContext, cipherAlgorithm, reinterpret_cast<const unsigned char *>(key.data()), reinterpret_cast<const unsigned char *>(iv.data())) != 1) {
+    if (EVP_DecryptInit(&cipherContext, cipherAlgorithm, reinterpret_cast<const uchar *>(key.data()), reinterpret_cast<const uchar *>(iv.data())) != 1) {
         EVP_CIPHER_CTX_cleanup(&cipherContext);
 
         if (ok)
@@ -644,7 +644,7 @@ auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv, bo
         return {};
     }
 
-    if (EVP_DecryptUpdate(&cipherContext, reinterpret_cast<unsigned char *>(decryptedData.data()), &processedBytes, reinterpret_cast<const unsigned char *>(data.data()), data.size()) != 1) {
+    if (EVP_DecryptUpdate(&cipherContext, reinterpret_cast<uchar *>(decryptedData.data()), &processedBytes, reinterpret_cast<const uchar *>(data.data()), data.size()) != 1) {
         EVP_CIPHER_CTX_cleanup(&cipherContext);
 
         if (ok)
@@ -655,7 +655,7 @@ auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv, bo
 
     decryptedBytes += processedBytes;
 
-    if (EVP_DecryptFinal(&cipherContext, reinterpret_cast<unsigned char *>(decryptedData.data() + decryptedBytes), &processedBytes) != 1) {
+    if (EVP_DecryptFinal(&cipherContext, reinterpret_cast<uchar *>(decryptedData.data() + decryptedBytes), &processedBytes) != 1) {
         EVP_CIPHER_CTX_cleanup(&cipherContext);
 
         if (ok)

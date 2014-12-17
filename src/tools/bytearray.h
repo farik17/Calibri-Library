@@ -19,9 +19,9 @@ class ByteArray : public std::vector<char>
 {
 public:
     ByteArray() noexcept;
-    ByteArray(size_t size) noexcept;
-    ByteArray(size_t size, char data) noexcept;
-    ByteArray(const char *ptr, size_t size) noexcept;
+    ByteArray(sizeinfo size) noexcept;
+    ByteArray(sizeinfo size, char data) noexcept;
+    ByteArray(const char *ptr, sizeinfo size) noexcept;
     ByteArray(const char *ptr) noexcept;
 
     operator const char *() const noexcept;
@@ -46,17 +46,17 @@ inline ByteArray::ByteArray() noexcept :
 {
 }
 
-inline ByteArray::ByteArray(size_t size) noexcept :
+inline ByteArray::ByteArray(sizeinfo size) noexcept :
     std::vector<char>(size)
 {
 }
 
-inline ByteArray::ByteArray(size_t size, char data) noexcept :
+inline ByteArray::ByteArray(sizeinfo size, char data) noexcept :
     std::vector<char>(size, data)
 {
 }
 
-inline ByteArray::ByteArray(const char *ptr, size_t size) noexcept :
+inline ByteArray::ByteArray(const char *ptr, sizeinfo size) noexcept :
     std::vector<char>(ptr, std::next(ptr, size))
 {
 }

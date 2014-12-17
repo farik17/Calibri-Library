@@ -15,29 +15,29 @@ class Buffer : public IORandomAccessInterface
 public:
     Buffer() noexcept = default;
     Buffer(const ByteArray &data) noexcept;
-    Buffer(const char *data, size_t size) noexcept;
+    Buffer(const char *data, sizeinfo size) noexcept;
     Buffer(const char *data) noexcept;
     Buffer(Buffer &&other) noexcept;
 
     auto operator =(Buffer &&other) noexcept -> Buffer &;
 
     auto data() const noexcept -> const ByteArray &;
-    auto size() const noexcept -> size_t;
+    auto size() const noexcept -> sizeinfo;
 
     using IORandomAccessInterface::read;
-    auto read(size_t size, bool *ok = nullptr) noexcept -> ByteArray;
+    auto read(sizeinfo size, bool *ok = nullptr) noexcept -> ByteArray;
 
     using IORandomAccessInterface::write;
-    auto write(const ByteArray &data, bool *ok = nullptr) noexcept -> size_t;
+    auto write(const ByteArray &data, bool *ok = nullptr) noexcept -> sizeinfo;
 
     virtual auto canReadLine() const noexcept -> bool override;
     virtual auto atEnd() const noexcept -> bool override;
 
 protected:
-    virtual auto readData(char *data, size_t size, bool *ok = nullptr) noexcept -> size_t override;
-    virtual auto writeData(const char *data, size_t size, bool *ok = nullptr) noexcept -> size_t override;
-    virtual auto readLineData(char *data, size_t size, bool *ok = nullptr) noexcept -> size_t override;
-    virtual auto seekData(size_t pos) noexcept -> bool override;
+    virtual auto readData(char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo override;
+    virtual auto writeData(const char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo override;
+    virtual auto readLineData(char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo override;
+    virtual auto seekData(sizeinfo pos) noexcept -> bool override;
 
 private:
     ByteArray m_byteArray {};
@@ -51,7 +51,7 @@ inline Buffer::Buffer(const ByteArray &data) noexcept :
 {
 }
 
-inline Buffer::Buffer(const char *data, size_t size) noexcept :
+inline Buffer::Buffer(const char *data, sizeinfo size) noexcept :
     m_byteArray { data, size }
 {
 }
@@ -85,7 +85,7 @@ inline auto Buffer::data() const noexcept -> const ByteArray &
     return m_byteArray;
 }
 
-inline auto Buffer::size() const noexcept -> size_t
+inline auto Buffer::size() const noexcept -> sizeinfo
 {
     return m_byteArray.size();
 }

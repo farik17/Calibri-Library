@@ -198,7 +198,7 @@ template<DigestAlgorithm Type>
 auto digest(const ByteArray &data, bool *ok = nullptr) noexcept -> ByteArray
 {
     auto digestAlgorithm = Internal::digestAlgorithm<Type>();
-    ByteArray digestData { metaCast<size_t>(EVP_MD_size(digestAlgorithm)) };
+    ByteArray digestData { metaCast<sizeinfo>(EVP_MD_size(digestAlgorithm)) };
 
     EVP_MD_CTX digestContext;
     EVP_MD_CTX_init(&digestContext);
@@ -212,7 +212,7 @@ auto digest(const ByteArray &data, bool *ok = nullptr) noexcept -> ByteArray
         return {};
     }
 
-    if (EVP_DigestUpdate(&digestContext, reinterpret_cast<const unsigned char *>(data.data()), data.size()) != 1) {
+    if (EVP_DigestUpdate(&digestContext, reinterpret_cast<const uchar *>(data.data()), data.size()) != 1) {
         EVP_MD_CTX_cleanup(&digestContext);
 
         if (ok)
@@ -221,7 +221,7 @@ auto digest(const ByteArray &data, bool *ok = nullptr) noexcept -> ByteArray
         return {};
     }
 
-    if (EVP_DigestFinal(&digestContext, reinterpret_cast<unsigned char *>(digestData.data()), nullptr) != 1) {
+    if (EVP_DigestFinal(&digestContext, reinterpret_cast<uchar *>(digestData.data()), nullptr) != 1) {
         EVP_MD_CTX_cleanup(&digestContext);
 
         if (ok)
