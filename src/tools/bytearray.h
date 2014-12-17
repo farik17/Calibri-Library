@@ -20,9 +20,9 @@ class ByteArray : public std::vector<char>
 public:
     ByteArray() noexcept;
     ByteArray(sizeinfo size) noexcept;
-    ByteArray(sizeinfo size, char data) noexcept;
-    ByteArray(const char *ptr, sizeinfo size) noexcept;
-    ByteArray(const char *ptr) noexcept;
+    ByteArray(sizeinfo size, char symbol) noexcept;
+    ByteArray(const char *data, sizeinfo size) noexcept;
+    ByteArray(const char *data) noexcept;
 
     operator const char *() const noexcept;
     operator const void *() const noexcept;
@@ -51,18 +51,18 @@ inline ByteArray::ByteArray(sizeinfo size) noexcept :
 {
 }
 
-inline ByteArray::ByteArray(sizeinfo size, char data) noexcept :
-    std::vector<char>(size, data)
+inline ByteArray::ByteArray(sizeinfo size, char symbol) noexcept :
+    std::vector<char>(size, symbol)
 {
 }
 
-inline ByteArray::ByteArray(const char *ptr, sizeinfo size) noexcept :
-    std::vector<char>(ptr, std::next(ptr, size))
+inline ByteArray::ByteArray(const char *data, sizeinfo size) noexcept :
+    std::vector<char>(data, std::next(data, size))
 {
 }
 
-inline ByteArray::ByteArray(const char *ptr) noexcept :
-    ByteArray(ptr, std::char_traits<char>::length(ptr))
+inline ByteArray::ByteArray(const char *data) noexcept :
+    ByteArray(data, std::char_traits<char>::length(data))
 {
 }
 
