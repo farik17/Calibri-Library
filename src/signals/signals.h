@@ -19,15 +19,7 @@ enum class SignalConnectionMode : uint8 {
     UniqueConnection
 };
 
-namespace Constants {
-
-thread_local SpinLock threadContext {};
-SpinLock globalContext {};
-
-} // end namespace Constants
-
-namespace Aliases {
-
+//! Aliases
 template<typename ReturnType,
          typename ...ArgumentsType>
 using SignalSignature = ReturnType (ArgumentsType ...);
@@ -37,19 +29,34 @@ template<typename ReturnType,
          typename ...ArgumentsType>
 using MemberFunctionPointer = ReturnType (ClassType::*)(ArgumentsType ...);
 
-} // end namespace Aliases
-
 //! Forward declarations
 class EnableSignals;
+
 template<typename ...>
 class Signal;
 
+namespace Constants {
+
+thread_local SpinLock threadContext {};
+SpinLock globalContext {};
+
+} // end namespace Constants
+
 namespace Internal {
 
+//! Forward declarations
+class SignalTrackableObject;
+
+/*!
+ *  FunctionPointerOrFunctionObjectCase class
+ */
 class FunctionPointerOrFunctionObjectCase
 {
 };
 
+/*!
+ *  MemberFunctionPointerCase class
+ */
 class MemberFunctionPointerCase
 {
 };
@@ -153,20 +160,20 @@ class MemberFunction : private DisableConstructible
 template<typename ObjectType,
          typename ReturnType,
          typename ...ArgumentsType>
-class MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>
+class MemberFunction<MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>
 {
 public:
-    constexpr MemberFunction(ObjectType *object, Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> memberFunctionPointer) noexcept;
+    constexpr MemberFunction(ObjectType *object, MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> memberFunctionPointer) noexcept;
 
     auto object() const noexcept -> ObjectType *;
-    auto memberFunctionPointer() const noexcept -> const Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> &;
+    auto memberFunctionPointer() const noexcept -> const MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> &;
 
     auto operator ()(ArgumentsType &&...arguments) const noexcept(false) -> ReturnType;
     auto operator ==(const MemberFunction &other) const noexcept -> bool;
     auto operator !=(const MemberFunction &other) const noexcept -> bool;
 
 private:
-    Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> m_memberFunctionPointer {};
+    MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> m_memberFunctionPointer {};
 
     ObjectType *m_object {};
 };
@@ -177,17 +184,17 @@ private:
 template<typename ObjectType,
          typename ReturnType,
          typename ...ArgumentsType>
-inline constexpr MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::
-MemberFunction(ObjectType *object, Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> memberFunctionPointer) noexcept :
-    m_object { object },
-    m_memberFunctionPointer { memberFunctionPointer }
+inline constexpr MemberFunction<MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::
+MemberFunction(ObjectType *object, MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> memberFunctionPointer) noexcept :
+    m_memberFunctionPointer { memberFunctionPointer },
+    m_object { object }
 {
 }
 
 template<typename ObjectType,
          typename ReturnType,
          typename ...ArgumentsType>
-inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::object() const noexcept -> ObjectType *
+inline auto MemberFunction<MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::object() const noexcept -> ObjectType *
 {
     return m_object;
 }
@@ -195,8 +202,8 @@ inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType
 template<typename ObjectType,
          typename ReturnType,
          typename ...ArgumentsType>
-inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::
-memberFunctionPointer() const noexcept -> const Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> &
+inline auto MemberFunction<MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::
+memberFunctionPointer() const noexcept -> const MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...> &
 {
     return m_memberFunctionPointer;
 }
@@ -204,7 +211,7 @@ memberFunctionPointer() const noexcept -> const Aliases::MemberFunctionPointer<R
 template<typename ObjectType,
          typename ReturnType,
          typename ...ArgumentsType>
-inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::operator ()(ArgumentsType &&...arguments) const noexcept(false) -> ReturnType
+inline auto MemberFunction<MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::operator ()(ArgumentsType &&...arguments) const noexcept(false) -> ReturnType
 {
     return (m_object->*m_memberFunctionPointer)(std::forward<ArgumentsType>(arguments) ...);
 }
@@ -212,7 +219,7 @@ inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType
 template<typename ObjectType,
          typename ReturnType,
          typename ...ArgumentsType>
-inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::operator ==(const MemberFunction &other) const noexcept -> bool
+inline auto MemberFunction<MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::operator ==(const MemberFunction &other) const noexcept -> bool
 {
     return m_object == other.m_object && m_memberFunctionPointer == other.m_memberFunctionPointer;
 }
@@ -220,13 +227,10 @@ inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType
 template<typename ObjectType,
          typename ReturnType,
          typename ...ArgumentsType>
-inline auto MemberFunction<Aliases::MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::operator !=(const MemberFunction &other) const noexcept -> bool
+inline auto MemberFunction<MemberFunctionPointer<ReturnType, ObjectType, ArgumentsType ...>>::operator !=(const MemberFunction &other) const noexcept -> bool
 {
     return m_object != other.m_object || m_memberFunctionPointer != other.m_memberFunctionPointer;
 }
-
-//! Forward declarations
-class SignalTrackableObject;
 
 /*!
  *  SignalObserver class
@@ -347,7 +351,7 @@ class Signal : private DisableConstructible
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-class Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>> : private DisableCopyable, public Internal::SignalTrackableObject, public Internal::SignalObserver
+class Signal<SignalSignature<ReturnType, ArgumentsType ...>> : private DisableCopyable, public Internal::SignalTrackableObject, public Internal::SignalObserver
 {
     //! Forward declarations
     class Connection;
@@ -464,7 +468,7 @@ private:
         template<typename ObjectType,
                  typename CallableReturnType,
                  typename ...CallableArgumentsType>
-        auto isConnectedTo(ObjectType *object, Aliases::MemberFunctionPointer<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunctionPointer) const noexcept -> bool;
+        auto isConnectedTo(ObjectType *object, MemberFunctionPointer<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunctionPointer) const noexcept -> bool;
 
     private:
         void *m_callable {};
@@ -480,7 +484,7 @@ private:
  */
 template<typename ReturnType,
          typename ...ArgumentsType>
-inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::~Signal() noexcept
+inline Signal<SignalSignature<ReturnType, ArgumentsType ...>>::~Signal() noexcept
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -496,7 +500,7 @@ inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::~Signal(
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::operator ()(ArgumentsType &&...arguments) noexcept -> ReturnType
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::operator ()(ArgumentsType &&...arguments) noexcept -> ReturnType
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -523,7 +527,7 @@ template<SignalConnectionMode ConnectionMode,
          typename CallableType,
          typename std::enable_if<(Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value
                                  && ConnectionMode == SignalConnectionMode::DefaultConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType *callable) noexcept -> Connection *
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType *callable) noexcept -> Connection *
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -546,7 +550,7 @@ template<SignalConnectionMode ConnectionMode,
          typename CallableType,
          typename std::enable_if<(Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value
                                  && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType *callable) noexcept -> Connection *
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType *callable) noexcept -> Connection *
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -578,7 +582,7 @@ template<SignalConnectionMode ConnectionMode,
          typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
                                  && std::is_base_of<EnableSignals, ObjectType>::value
                                  && ConnectionMode == SignalConnectionMode::DefaultConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(ObjectType *object, CallableType callable) noexcept -> Connection *
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(ObjectType *object, CallableType callable) noexcept -> Connection *
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -603,7 +607,7 @@ template<SignalConnectionMode ConnectionMode,
          typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
                                  && std::is_base_of<EnableSignals, ObjectType>::value
                                  && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(ObjectType *object, CallableType callable) noexcept -> Connection *
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(ObjectType *object, CallableType callable) noexcept -> Connection *
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -633,7 +637,7 @@ template<SignalConnectionMode ConnectionMode,
          typename CallableType,
          typename std::enable_if<(Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value
                                  && ConnectionMode == SignalConnectionMode::DefaultConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType callable) noexcept -> Connection *
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType callable) noexcept -> Connection *
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -654,7 +658,7 @@ template<SignalConnectionMode ConnectionMode,
          typename CallableType,
          typename std::enable_if<(Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value
                                  && ConnectionMode == SignalConnectionMode::UniqueConnection)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType callable) noexcept -> Connection *
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType callable) noexcept -> Connection *
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -680,7 +684,7 @@ template<typename ReturnType,
          typename ...ArgumentsType>
 template<typename CallableType,
          typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::remove_reference<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType &&callable) noexcept -> Connection *
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(CallableType &&callable) noexcept -> Connection *
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -699,7 +703,7 @@ template<typename ReturnType,
          typename ...ArgumentsType>
 template<typename CallableType,
          typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(CallableType *callable) noexcept -> bool
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(CallableType *callable) noexcept -> bool
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -730,7 +734,7 @@ template<typename ObjectType,
          typename CallableType,
          typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
                                  && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(ObjectType *object, CallableType callable) noexcept -> bool
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(ObjectType *object, CallableType callable) noexcept -> bool
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -759,7 +763,7 @@ template<typename ReturnType,
          typename ...ArgumentsType>
 template<typename CallableType,
          typename std::enable_if<Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(CallableType callable) noexcept -> bool
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(CallableType callable) noexcept -> bool
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -784,7 +788,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(Connection *signalConnection) noexcept -> bool
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(Connection *signalConnection) noexcept -> bool
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -811,7 +815,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::dis
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::destroyed(Internal::SignalTrackableObject *trackableObject) noexcept -> void
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::destroyed(Internal::SignalTrackableObject *trackableObject) noexcept -> void
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
@@ -831,7 +835,7 @@ template<typename ReturnType,
          typename ...ArgumentsType>
 template<typename CallableType,
          typename std::enable_if<Internal::IsSignalCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(CallableType *callable) noexcept
+inline Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(CallableType *callable) noexcept
 {
     using SignalType = CallableType;
 
@@ -845,7 +849,7 @@ template<typename ReturnType,
          typename ...ArgumentsType>
 template<typename CallableType,
          typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::remove_reference<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(CallableType &&callable) noexcept
+inline Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(CallableType &&callable) noexcept
 {
     try {
         using FunctionObjectType = typename std::remove_reference<CallableType>::type;
@@ -866,7 +870,7 @@ template<typename ReturnType,
          typename ...ArgumentsType>
 template<typename CallableType,
          typename std::enable_if<Internal::IsFunctionPointerCallable<CallableType, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
-inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(CallableType callable) noexcept
+inline Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(CallableType callable) noexcept
 {
     using FunctionPointerType = CallableType;
 
@@ -884,7 +888,7 @@ template<typename ObjectType,
          typename CallableType,
          typename std::enable_if<(Internal::IsMemberFunctionPointerCallable<CallableType, ReturnType, ObjectType, ArgumentsType ...>::value
                                  && std::is_base_of<EnableSignals, ObjectType>::value)>::type ...Enabler>
-inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(ObjectType *object, CallableType callable) noexcept
+inline Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::Connection(ObjectType *object, CallableType callable) noexcept
 {
     using MemberFunctionType = Internal::MemberFunction<CallableType>;
 
@@ -904,7 +908,7 @@ inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connecti
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::~Connection() noexcept
+inline Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::~Connection() noexcept
 {
     if (m_deleter)
         m_deleter(m_callable);
@@ -912,7 +916,7 @@ inline Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connecti
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::operator !=(const Connection &other) const noexcept -> bool
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::operator !=(const Connection &other) const noexcept -> bool
 {
     if (m_comparator)
         return !m_comparator(m_callable, other.m_callable);
@@ -922,7 +926,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Con
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::operator ==(const Connection &other) const noexcept -> bool
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::operator ==(const Connection &other) const noexcept -> bool
 {
     if (m_comparator)
         return m_comparator(m_callable, other.m_callable);
@@ -932,7 +936,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Con
 
 template<typename ReturnType,
          typename ...ArgumentsType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::operator ()(ArgumentsType &&...arguments) const noexcept -> ReturnType
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::operator ()(ArgumentsType &&...arguments) const noexcept -> ReturnType
 {
     try {
         return m_invoker(m_callable, std::forward<ArgumentsType>(arguments) ...);
@@ -946,7 +950,7 @@ inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Con
 template<typename ReturnType,
          typename ...ArgumentsType>
 template<typename CallableType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::isConnectedTo(CallableType *callable) const noexcept -> bool
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::isConnectedTo(CallableType *callable) const noexcept -> bool
 {
     return m_callable == callable;
 }
@@ -956,8 +960,8 @@ template<typename ReturnType,
 template<typename ObjectType,
          typename CallableReturnType,
          typename ...CallableArgumentsType>
-inline auto Signal<Aliases::SignalSignature<ReturnType, ArgumentsType ...>>::Connection::
-isConnectedTo(ObjectType *object, Aliases::MemberFunctionPointer<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunctionPointer) const noexcept -> bool
+inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::Connection::
+isConnectedTo(ObjectType *object, MemberFunctionPointer<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunctionPointer) const noexcept -> bool
 {
     if (m_comparator) {
         auto memberFunction = Internal::MemberFunction<decltype(memberFunctionPointer)>(object, memberFunctionPointer);
