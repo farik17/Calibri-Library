@@ -32,12 +32,6 @@ enum class DigestAlgorithm : uint8 {
     Whirlpool
 };
 
-namespace Constants {
-
-auto nullDigestAlgorithm = EVP_md_null();
-
-} // end namespace Constants
-
 namespace Internal {
 
 template<DigestAlgorithm Algorithm,
@@ -49,7 +43,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL MD2 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -62,7 +56,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL MD4 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -75,7 +69,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL MD5 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -88,7 +82,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL SHA algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -101,7 +95,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL SHA1 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -114,7 +108,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL DSS algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -127,7 +121,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL DSS1 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -140,7 +134,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL ECDSA algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -153,7 +147,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL SHA224 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -166,7 +160,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL SHA256 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -179,7 +173,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL SHA384 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -192,7 +186,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL SHA512 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -205,7 +199,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL MDC2 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -218,7 +212,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL RipeMD160 algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -231,7 +225,7 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 #else
     std::cerr << "OpenSSL Whirlpool algorithm unavailable" << std::endl;
 
-    return Constants::nullDigestAlgorithm;
+    return EVP_md_null();
 #endif
 }
 
@@ -240,53 +234,62 @@ auto digestAlgorithm() noexcept -> const EVP_MD *
 template<DigestAlgorithm Type>
 auto digest(const ByteArray &data, bool *ok = nullptr) noexcept -> ByteArray
 {
-    auto digestAlgorithm = Internal::digestAlgorithm<Type>();
+    try {
+        auto digestAlgorithm = Internal::digestAlgorithm<Type>();
 
-    if (UNLIKELY(digestAlgorithm == Constants::nullDigestAlgorithm)) {
-        if (ok)
-            *ok = false;
+        if (UNLIKELY(digestAlgorithm == EVP_md_null())) {
+            if (ok)
+                *ok = false;
 
-        return {};
-    }
+            return {};
+        }
 
-    ByteArray digestData { metaCast<sizeinfo>(EVP_MD_size(digestAlgorithm)) };
+        ByteArray digestData { metaCast<sizeinfo>(EVP_MD_size(digestAlgorithm)) };
 
-    EVP_MD_CTX digestContext;
-    EVP_MD_CTX_init(&digestContext);
+        EVP_MD_CTX digestContext;
+        EVP_MD_CTX_init(&digestContext);
 
-    if (UNLIKELY(EVP_DigestInit(&digestContext, digestAlgorithm) != 1)) {
+        if (UNLIKELY(EVP_DigestInit(&digestContext, digestAlgorithm) != 1)) {
+            EVP_MD_CTX_cleanup(&digestContext);
+
+            if (ok)
+                *ok = false;
+
+            return {};
+        }
+
+        if (UNLIKELY(EVP_DigestUpdate(&digestContext, reinterpret_cast<const uchar *>(data.data()), data.size()) != 1)) {
+            EVP_MD_CTX_cleanup(&digestContext);
+
+            if (ok)
+                *ok = false;
+
+            return {};
+        }
+
+        if (UNLIKELY(EVP_DigestFinal(&digestContext, reinterpret_cast<uchar *>(digestData.data()), nullptr) != 1)) {
+            EVP_MD_CTX_cleanup(&digestContext);
+
+            if (ok)
+                *ok = false;
+
+            return {};
+        }
+
         EVP_MD_CTX_cleanup(&digestContext);
 
         if (ok)
-            *ok = false;
+            *ok = true;
 
-        return {};
-    }
-
-    if (UNLIKELY(EVP_DigestUpdate(&digestContext, reinterpret_cast<const uchar *>(data.data()), data.size()) != 1)) {
-        EVP_MD_CTX_cleanup(&digestContext);
+        return digestData;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
 
         return {};
     }
-
-    if (UNLIKELY(EVP_DigestFinal(&digestContext, reinterpret_cast<uchar *>(digestData.data()), nullptr) != 1)) {
-        EVP_MD_CTX_cleanup(&digestContext);
-
-        if (ok)
-            *ok = false;
-
-        return {};
-    }
-
-    EVP_MD_CTX_cleanup(&digestContext);
-
-    if (ok)
-        *ok = true;
-
-    return digestData;
 }
 
 } // end namespace Calibri

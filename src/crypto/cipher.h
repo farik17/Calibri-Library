@@ -571,54 +571,63 @@ template<CipherAlgorithm Type,
          typename std::enable_if<Mode == CipherMode::Encrypt>::type... Enabler>
 auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv, bool *ok = nullptr) noexcept -> ByteArray
 {
-    int32 processedBytes {};
-    int32 encryptedBytes {};
+    try {
+        int32 processedBytes {};
+        int32 encryptedBytes {};
 
-    auto cipherAlgorithm = Internal::cipherAlgorithm<Type>();
-    ByteArray encryptedData { data.size() + EVP_CIPHER_block_size(cipherAlgorithm) - 1 };
+        auto cipherAlgorithm = Internal::cipherAlgorithm<Type>();
+        ByteArray encryptedData { data.size() + EVP_CIPHER_block_size(cipherAlgorithm) - 1 };
 
-    EVP_CIPHER_CTX cipherContext;
-    EVP_CIPHER_CTX_init(&cipherContext);
+        EVP_CIPHER_CTX cipherContext;
+        EVP_CIPHER_CTX_init(&cipherContext);
 
-    if (EVP_EncryptInit(&cipherContext, cipherAlgorithm, reinterpret_cast<const uchar *>(key.data()), reinterpret_cast<const uchar *>(iv.data())) != 1) {
+        if (EVP_EncryptInit(&cipherContext, cipherAlgorithm, reinterpret_cast<const uchar *>(key.data()), reinterpret_cast<const uchar *>(iv.data())) != 1) {
+            EVP_CIPHER_CTX_cleanup(&cipherContext);
+
+            if (ok)
+                *ok = false;
+
+            return {};
+        }
+
+        if (EVP_EncryptUpdate(&cipherContext, reinterpret_cast<uchar *>(encryptedData.data()), &processedBytes, reinterpret_cast<const uchar *>(data.data()), data.size()) != 1) {
+            EVP_CIPHER_CTX_cleanup(&cipherContext);
+
+            if (ok)
+                *ok = false;
+
+            return {};
+        }
+
+        encryptedBytes += processedBytes;
+
+        if (EVP_EncryptFinal(&cipherContext, reinterpret_cast<uchar *>(encryptedData.data() + encryptedBytes), &processedBytes) != 1) {
+            EVP_CIPHER_CTX_cleanup(&cipherContext);
+
+            if (ok)
+                *ok = false;
+
+            return {};
+        }
+
+        encryptedBytes += processedBytes;
+
         EVP_CIPHER_CTX_cleanup(&cipherContext);
+
+        encryptedData.resize(encryptedBytes);
+
+        if (ok)
+            *ok = true;
+
+        return encryptedData;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
 
         return {};
     }
-
-    if (EVP_EncryptUpdate(&cipherContext, reinterpret_cast<uchar *>(encryptedData.data()), &processedBytes, reinterpret_cast<const uchar *>(data.data()), data.size()) != 1) {
-        EVP_CIPHER_CTX_cleanup(&cipherContext);
-
-        if (ok)
-            *ok = false;
-
-        return {};
-    }
-
-    encryptedBytes += processedBytes;
-
-    if (EVP_EncryptFinal(&cipherContext, reinterpret_cast<uchar *>(encryptedData.data() + encryptedBytes), &processedBytes) != 1) {
-        EVP_CIPHER_CTX_cleanup(&cipherContext);
-
-        if (ok)
-            *ok = false;
-
-        return {};
-    }
-
-    encryptedBytes += processedBytes;
-
-    EVP_CIPHER_CTX_cleanup(&cipherContext);
-
-    encryptedData.resize(encryptedBytes);
-
-    if (ok)
-        *ok = true;
-
-    return encryptedData;
 }
 
 template<CipherAlgorithm Type,
@@ -626,54 +635,63 @@ template<CipherAlgorithm Type,
          typename std::enable_if<Mode == CipherMode::Decrypt>::type... Enabler>
 auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv, bool *ok = nullptr) noexcept -> ByteArray
 {
-    int32 processedBytes {};
-    int32 decryptedBytes {};
+    try {
+        int32 processedBytes {};
+        int32 decryptedBytes {};
 
-    auto cipherAlgorithm = Internal::cipherAlgorithm<Type>();
-    ByteArray decryptedData { data.size() + EVP_CIPHER_block_size(cipherAlgorithm) };
+        auto cipherAlgorithm = Internal::cipherAlgorithm<Type>();
+        ByteArray decryptedData { data.size() + EVP_CIPHER_block_size(cipherAlgorithm) };
 
-    EVP_CIPHER_CTX cipherContext;
-    EVP_CIPHER_CTX_init(&cipherContext);
+        EVP_CIPHER_CTX cipherContext;
+        EVP_CIPHER_CTX_init(&cipherContext);
 
-    if (EVP_DecryptInit(&cipherContext, cipherAlgorithm, reinterpret_cast<const uchar *>(key.data()), reinterpret_cast<const uchar *>(iv.data())) != 1) {
+        if (EVP_DecryptInit(&cipherContext, cipherAlgorithm, reinterpret_cast<const uchar *>(key.data()), reinterpret_cast<const uchar *>(iv.data())) != 1) {
+            EVP_CIPHER_CTX_cleanup(&cipherContext);
+
+            if (ok)
+                *ok = false;
+
+            return {};
+        }
+
+        if (EVP_DecryptUpdate(&cipherContext, reinterpret_cast<uchar *>(decryptedData.data()), &processedBytes, reinterpret_cast<const uchar *>(data.data()), data.size()) != 1) {
+            EVP_CIPHER_CTX_cleanup(&cipherContext);
+
+            if (ok)
+                *ok = false;
+
+            return {};
+        }
+
+        decryptedBytes += processedBytes;
+
+        if (EVP_DecryptFinal(&cipherContext, reinterpret_cast<uchar *>(decryptedData.data() + decryptedBytes), &processedBytes) != 1) {
+            EVP_CIPHER_CTX_cleanup(&cipherContext);
+
+            if (ok)
+                *ok = false;
+
+            return {};
+        }
+
+        decryptedBytes += processedBytes;
+
         EVP_CIPHER_CTX_cleanup(&cipherContext);
+
+        decryptedData.resize(decryptedBytes);
+
+        if (ok)
+            *ok = true;
+
+        return decryptedData;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
 
         if (ok)
             *ok = false;
 
         return {};
     }
-
-    if (EVP_DecryptUpdate(&cipherContext, reinterpret_cast<uchar *>(decryptedData.data()), &processedBytes, reinterpret_cast<const uchar *>(data.data()), data.size()) != 1) {
-        EVP_CIPHER_CTX_cleanup(&cipherContext);
-
-        if (ok)
-            *ok = false;
-
-        return {};
-    }
-
-    decryptedBytes += processedBytes;
-
-    if (EVP_DecryptFinal(&cipherContext, reinterpret_cast<uchar *>(decryptedData.data() + decryptedBytes), &processedBytes) != 1) {
-        EVP_CIPHER_CTX_cleanup(&cipherContext);
-
-        if (ok)
-            *ok = false;
-
-        return {};
-    }
-
-    decryptedBytes += processedBytes;
-
-    EVP_CIPHER_CTX_cleanup(&cipherContext);
-
-    decryptedData.resize(decryptedBytes);
-
-    if (ok)
-        *ok = true;
-
-    return decryptedData;
 }
 
 } // end namespace Calibri

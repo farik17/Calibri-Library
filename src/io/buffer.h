@@ -13,10 +13,10 @@ namespace Calibri {
 class Buffer : public IORandomAccessInterface
 {
 public:
-    Buffer() noexcept = default;
-    Buffer(const ByteArray &data) noexcept;
-    Buffer(const char *data, sizeinfo size) noexcept;
-    Buffer(const char *data) noexcept;
+    Buffer() = default;
+    Buffer(const ByteArray &data);
+    Buffer(const char *data, sizeinfo size);
+    Buffer(const char *data);
     Buffer(Buffer &&other) noexcept;
 
     auto operator =(Buffer &&other) noexcept -> Buffer &;
@@ -46,17 +46,17 @@ private:
 /*!
  *  Buffer inline methods
  */
-inline Buffer::Buffer(const ByteArray &data) noexcept :
+inline Buffer::Buffer(const ByteArray &data) :
     m_byteArray { data }
 {
 }
 
-inline Buffer::Buffer(const char *data, sizeinfo size) noexcept :
+inline Buffer::Buffer(const char *data, sizeinfo size) :
     m_byteArray { data, size }
 {
 }
 
-inline Buffer::Buffer(const char *data) noexcept :
+inline Buffer::Buffer(const char *data) :
     m_byteArray { data }
 {
 }

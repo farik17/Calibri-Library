@@ -18,11 +18,11 @@ namespace Calibri {
 class ByteArray : public std::vector<char>
 {
 public:
-    ByteArray() noexcept;
-    ByteArray(sizeinfo size) noexcept;
-    ByteArray(sizeinfo size, char symbol) noexcept;
-    ByteArray(const char *data, sizeinfo size) noexcept;
-    ByteArray(const char *data) noexcept;
+    ByteArray() = default;
+    ByteArray(sizeinfo size);
+    ByteArray(sizeinfo size, char symbol);
+    ByteArray(const char *data, sizeinfo size);
+    ByteArray(const char *data);
 
     operator const char *() const noexcept;
     operator const void *() const noexcept;
@@ -41,27 +41,22 @@ public:
 /*!
  *  ByteArray inline methods
  */
-inline ByteArray::ByteArray() noexcept :
-    std::vector<char>()
-{
-}
-
-inline ByteArray::ByteArray(sizeinfo size) noexcept :
+inline ByteArray::ByteArray(sizeinfo size) :
     std::vector<char>(size)
 {
 }
 
-inline ByteArray::ByteArray(sizeinfo size, char symbol) noexcept :
+inline ByteArray::ByteArray(sizeinfo size, char symbol) :
     std::vector<char>(size, symbol)
 {
 }
 
-inline ByteArray::ByteArray(const char *data, sizeinfo size) noexcept :
+inline ByteArray::ByteArray(const char *data, sizeinfo size) :
     std::vector<char>(data, std::next(data, size))
 {
 }
 
-inline ByteArray::ByteArray(const char *data) noexcept :
+inline ByteArray::ByteArray(const char *data) :
     ByteArray(data, std::char_traits<char>::length(data))
 {
 }
