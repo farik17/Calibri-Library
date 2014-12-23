@@ -3,7 +3,6 @@
 
 //! Std includes
 #include <vector>
-#include <string>
 #include <iostream>
 #include <algorithm>
 
@@ -87,7 +86,7 @@ inline auto ByteArray::toUpper(bool *ok) const noexcept -> ByteArray
         ByteArray transformedData {};
         transformedData.reserve(size());
 
-        std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), std::ptr_fun<int32, int32>(std::toupper));
+        std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), ::toupper);
 
         if (ok)
             *ok = true;
@@ -109,7 +108,7 @@ inline auto ByteArray::toLower(bool *ok) const noexcept -> ByteArray
         ByteArray transformedData {};
         transformedData.reserve(size());
 
-        std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), std::ptr_fun<int32, int32>(std::tolower));
+        std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), ::tolower);
 
         if (ok)
             *ok = true;
