@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include "tools/metacast.h"
+#include <tools/metacast.h>
 
 class tst_metacast : public QObject
 {

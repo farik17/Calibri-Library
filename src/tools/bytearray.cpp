@@ -152,11 +152,11 @@ auto ByteArray::fromHex(const ByteArray &data, bool *ok) noexcept -> ByteArray
         for (auto it = std::begin(data), end = std::end(data); it != end; ++it) {
             char symbol {};
 
-            if (std::isdigit(*it)) {
+            if (::isdigit(*it)) {
                 symbol = (*it - '0') << 4;
-            } else if (std::islower(*it)) {
+            } else if (::islower(*it)) {
                 symbol = (*it - 'a' + 10) << 4;
-            } else if (std::isupper(*it)) {
+            } else if (::isupper(*it)) {
                 symbol = (*it - 'A' + 10) << 4;
             } else {
                 if (ok)
@@ -167,11 +167,11 @@ auto ByteArray::fromHex(const ByteArray &data, bool *ok) noexcept -> ByteArray
 
             ++it;
 
-            if (std::isdigit(*it)) {
+            if (::isdigit(*it)) {
                 symbol |= (*it - '0');
-            } else if (std::islower(*it)) {
+            } else if (::islower(*it)) {
                 symbol |= (*it - 'a' + 10);
-            } else if (std::isupper(*it)) {
+            } else if (::isupper(*it)) {
                 symbol |= (*it - 'A' + 10);
             } else {
                 if (ok)
@@ -225,11 +225,11 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
 
         while (it != end) {
             for (auto i = 0; i < 4; ++i, ++it) {
-                if (std::isupper(*it)) {
+                if (::isupper(*it)) {
                     block[i] = *it - 'A';
-                } else if (std::islower(*it)) {
+                } else if (::islower(*it)) {
                     block[i] = *it - 'a' + 26;
-                } else if (std::isdigit(*it)) {
+                } else if (::isdigit(*it)) {
                     block[i] = *it - '0' + 52;
                 } else if (*it == '+') {
                     block[i] = 62;
@@ -251,11 +251,11 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
         switch (paddingSize) {
         case 1:
             for (auto i = 0; i < 3; ++i, ++it) {
-                if (std::isupper(*it)) {
+                if (::isupper(*it)) {
                     block[i] = *it - 'A';
-                } else if (std::islower(*it)) {
+                } else if (::islower(*it)) {
                     block[i] = *it - 'a' + 26;
-                } else if (std::isdigit(*it)) {
+                } else if (::isdigit(*it)) {
                     block[i] = *it - '0' + 52;
                 } else if (*it == '+') {
                     block[i] = 62;
@@ -276,11 +276,11 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
 
         case 2:
             for (auto i = 0; i < 2; ++i, ++it) {
-                if (std::isupper(*it)) {
+                if (::isupper(*it)) {
                     block[i] = *it - 'A';
-                } else if (std::islower(*it)) {
+                } else if (::islower(*it)) {
                     block[i] = *it - 'a' + 26;
-                } else if (std::isdigit(*it)) {
+                } else if (::isdigit(*it)) {
                     block[i] = *it - '0' + 52;
                 } else if (*it == '+') {
                     block[i] = 62;

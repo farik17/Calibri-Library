@@ -36,6 +36,8 @@ Product {
 
         if (qbs.targetOS.contains("windows"))
             dynamicLibraries.push("eay32")
+        else if (qbs.targetOS.contains("linux"))
+            dynamicLibraries.push("crypto")
 
         return dynamicLibraries
     }
