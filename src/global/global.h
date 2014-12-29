@@ -10,27 +10,36 @@
 #include "processordetection.h"
 
 //! Aliases
-using wchar = wchar_t;
-using longlong = long long;
-using int8 = char;
-using int16 = short;
-using int32 = int;
-using int64 = longlong;
+using int8 = int8_t;
+using int16 = int16_t;
+using int32 = int32_t;
+using int64 = int64_t;
+using intmax = intmax_t;
 using intptr = intptr_t;
+using longlong = long long;
+
+using uint8 = uint8_t;
+using uint16 = uint16_t;
+using uint32 = uint32_t;
+using uint64 = uint64_t;
+using uintmax = uintmax_t;
+using uintptr = uintptr_t;
+using ulonglong = unsigned long long;
+
+using longdouble = long double;
+
+using char16 = char16_t;
+using char32 = char32_t;
+
+using wchar = wchar_t;
 
 using uchar = unsigned char;
 using uwchar = unsigned wchar_t;
 using ushort = unsigned short;
 using uint = unsigned int;
 using ulong = unsigned long;
-using ulonglong = unsigned long long;
-using uint8 = unsigned char;
-using uint16 = unsigned short;
-using uint32 = unsigned int;
-using uint64 = ulonglong;
-using uintptr = uintptr_t;
 
-using longdouble = long double;
+using sizeinfo = size_t;
 
 #if defined(OS_WINDOWS)
 using fdptr = intptr;

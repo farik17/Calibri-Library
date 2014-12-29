@@ -4,6 +4,7 @@ Project {
     name: "Tests"
     references: [
         "io/io.qbs",
-        "tools/tools.qbs"
+        "tools/tools.qbs",
+        "crypto/crypto.qbs"
     ]
 }

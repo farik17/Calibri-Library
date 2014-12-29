@@ -5,6 +5,9 @@
 #include <cstddef>
 #include <string>
 
+//! Calibri-Library includes
+#include "global/global.h"
+
 namespace Calibri {
 
 /*!
@@ -15,34 +18,34 @@ class IOInterface
 public:
     constexpr IOInterface() noexcept = default;
 
-    auto read(char *data, size_t size, bool *ok = nullptr) noexcept -> size_t;
+    auto read(char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo;
 
-    auto write(const char *data, size_t size, bool *ok = nullptr) noexcept -> size_t;
-    auto write(const char *data, bool *ok = nullptr) noexcept -> size_t;
+    auto write(const char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo;
+    auto write(const char *data, bool *ok = nullptr) noexcept -> sizeinfo;
 
     auto getChar(char *character) noexcept -> bool;
 
     auto putChar(char character) noexcept -> bool;
 
 protected:
-    virtual auto readData(char *data, size_t size, bool *ok = nullptr) noexcept -> size_t = 0;
-    virtual auto writeData(const char *data, size_t size, bool *ok = nullptr) noexcept -> size_t = 0;
+    virtual auto readData(char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo = 0;
+    virtual auto writeData(const char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo = 0;
 };
 
 /*!
  *  IOInterface inline methods
  */
-inline auto IOInterface::read(char *data, size_t size, bool *ok) noexcept -> size_t
+inline auto IOInterface::read(char *data, sizeinfo size, bool *ok) noexcept -> sizeinfo
 {
     return readData(data, size, ok);
 }
 
-inline auto IOInterface::write(const char *data, size_t size, bool *ok) noexcept -> size_t
+inline auto IOInterface::write(const char *data, sizeinfo size, bool *ok) noexcept -> sizeinfo
 {
     return writeData(data, size, ok);
 }
 
-inline auto IOInterface::write(const char *data, bool *ok) noexcept -> size_t
+inline auto IOInterface::write(const char *data, bool *ok) noexcept -> sizeinfo
 {
     return write(data, std::char_traits<char>::length(data), ok);
 }
@@ -71,34 +74,34 @@ class IORandomAccessInterface : public IOInterface
 public:
     constexpr IORandomAccessInterface() noexcept = default;
 
-    auto pos() const noexcept -> size_t;
-    auto seek(size_t pos) noexcept -> bool;
+    auto pos() const noexcept -> sizeinfo;
+    auto seek(sizeinfo pos) noexcept -> bool;
     auto reset() noexcept -> void;
 
-    auto readLine(char *data, size_t size, bool *ok = nullptr) noexcept -> size_t;
+    auto readLine(char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo;
 
     virtual auto canReadLine() const noexcept -> bool = 0;
     virtual auto atEnd() const noexcept -> bool = 0;
 
 protected:
-    auto setPos(size_t pos) noexcept -> void;
+    auto setPos(sizeinfo pos) noexcept -> void;
 
-    virtual auto readLineData(char *data, size_t size, bool *ok = nullptr) noexcept -> size_t = 0;
-    virtual auto seekData(size_t pos) noexcept -> bool = 0;
+    virtual auto readLineData(char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo = 0;
+    virtual auto seekData(sizeinfo pos) noexcept -> bool = 0;
 
 private:
-    size_t m_pos {};
+    sizeinfo m_pos {};
 };
 
 /*!
  *  IORandomAccessInterface inline methods
  */
-inline auto IORandomAccessInterface::pos() const noexcept -> size_t
+inline auto IORandomAccessInterface::pos() const noexcept -> sizeinfo
 {
     return m_pos;
 }
 
-inline auto IORandomAccessInterface::seek(size_t pos) noexcept -> bool
+inline auto IORandomAccessInterface::seek(sizeinfo pos) noexcept -> bool
 {
     return seekData(pos);
 }
@@ -108,12 +111,12 @@ inline auto IORandomAccessInterface::reset() noexcept -> void
     setPos(0);
 }
 
-inline auto IORandomAccessInterface::readLine(char *data, size_t size, bool *ok) noexcept -> size_t
+inline auto IORandomAccessInterface::readLine(char *data, sizeinfo size, bool *ok) noexcept -> sizeinfo
 {
     return readLineData(data, size, ok);
 }
 
-inline auto IORandomAccessInterface::setPos(size_t pos) noexcept -> void
+inline auto IORandomAccessInterface::setPos(sizeinfo pos) noexcept -> void
 {
     m_pos = pos;
 }

@@ -3,7 +3,6 @@
 
 //! Std includes
 #include <vector>
-#include <string>
 #include <iostream>
 #include <algorithm>
 
@@ -18,19 +17,21 @@ namespace Calibri {
 class ByteArray : public std::vector<char>
 {
 public:
-    ByteArray() noexcept;
-    ByteArray(size_t size) noexcept;
-    ByteArray(size_t size, char data) noexcept;
-    ByteArray(const char *ptr, size_t size) noexcept;
-    ByteArray(const char *ptr) noexcept;
+    ByteArray() = default;
+    ByteArray(sizeinfo size);
+    ByteArray(sizeinfo size, char symbol);
+    ByteArray(const char *data, sizeinfo size);
+    ByteArray(const char *data);
 
     operator const char *() const noexcept;
     operator const void *() const noexcept;
     operator char *() noexcept;
     operator void *() noexcept;
 
-    auto toUpper(bool *ok = nullptr) const noexcept -> ByteArray;
-    auto toLower(bool *ok = nullptr) const noexcept -> ByteArray;
+    auto toUpper(bool *ok = nullptr) const & noexcept -> ByteArray;
+    auto toUpper(bool *ok = nullptr) && noexcept -> ByteArray &&;
+    auto toLower(bool *ok = nullptr) const & noexcept -> ByteArray;
+    auto toLower(bool *ok = nullptr) && noexcept -> ByteArray &&;
     auto toHex(bool *ok = nullptr) const noexcept -> ByteArray;
     auto toBase64(bool *ok = nullptr) const noexcept -> ByteArray;
 
@@ -41,28 +42,23 @@ public:
 /*!
  *  ByteArray inline methods
  */
-inline ByteArray::ByteArray() noexcept :
-    std::vector<char>()
-{
-}
-
-inline ByteArray::ByteArray(size_t size) noexcept :
+inline ByteArray::ByteArray(sizeinfo size) :
     std::vector<char>(size)
 {
 }
 
-inline ByteArray::ByteArray(size_t size, char data) noexcept :
-    std::vector<char>(size, data)
+inline ByteArray::ByteArray(sizeinfo size, char symbol) :
+    std::vector<char>(size, symbol)
 {
 }
 
-inline ByteArray::ByteArray(const char *ptr, size_t size) noexcept :
-    std::vector<char>(ptr, std::next(ptr, size))
+inline ByteArray::ByteArray(const char *data, sizeinfo size) :
+    std::vector<char>(data, std::next(data, size))
 {
 }
 
-inline ByteArray::ByteArray(const char *ptr) noexcept :
-    ByteArray(ptr, std::char_traits<char>::length(ptr))
+inline ByteArray::ByteArray(const char *data) :
+    ByteArray(data, std::char_traits<char>::length(data))
 {
 }
 
@@ -86,13 +82,13 @@ inline ByteArray::operator void *() noexcept
     return data();
 }
 
-inline auto ByteArray::toUpper(bool *ok) const noexcept -> ByteArray
+inline auto ByteArray::toUpper(bool *ok) const & noexcept -> ByteArray
 {
     try {
         ByteArray transformedData {};
         transformedData.reserve(size());
 
-        std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), std::ptr_fun<int32, int32>(std::toupper));
+        std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), ::toupper);
 
         if (ok)
             *ok = true;
@@ -108,13 +104,32 @@ inline auto ByteArray::toUpper(bool *ok) const noexcept -> ByteArray
     }
 }
 
-inline auto ByteArray::toLower(bool *ok) const noexcept -> ByteArray
+inline auto ByteArray::toUpper(bool *ok) && noexcept -> ByteArray &&
+{
+    try {
+        std::transform(std::begin(*this), std::end(*this), std::begin(*this), ::toupper);
+
+        if (ok)
+            *ok = true;
+
+        return std::move(*this);
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        if (ok)
+            *ok = false;
+
+        return std::move(*this);
+    }
+}
+
+inline auto ByteArray::toLower(bool *ok) const & noexcept -> ByteArray
 {
     try {
         ByteArray transformedData {};
         transformedData.reserve(size());
 
-        std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), std::ptr_fun<int32, int32>(std::tolower));
+        std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), ::tolower);
 
         if (ok)
             *ok = true;
@@ -127,6 +142,25 @@ inline auto ByteArray::toLower(bool *ok) const noexcept -> ByteArray
             *ok = false;
 
         return {};
+    }
+}
+
+inline auto ByteArray::toLower(bool *ok) && noexcept -> ByteArray &&
+{
+    try {
+        std::transform(std::begin(*this), std::end(*this), std::begin(*this), ::tolower);
+
+        if (ok)
+            *ok = true;
+
+        return std::move(*this);
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        if (ok)
+            *ok = false;
+
+        return std::move(*this);
     }
 }
 

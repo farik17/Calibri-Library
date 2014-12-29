@@ -334,9 +334,9 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcep
         if (dataStream.status() != DataStreamStatus::Ok)
             return dataStream;
 
-        data = new char[ metaCast<size_t>(size + 1) ];
+        data = new char[ metaCast<sizeinfo>(size + 1) ];
 
-        if (dataStream.device()->read(data, metaCast<size_t>(size)) != metaCast<size_t>(size)) {
+        if (dataStream.device()->read(data, metaCast<sizeinfo>(size)) != metaCast<sizeinfo>(size)) {
             dataStream.setStatus(DataStreamStatus::ReadError);
 
             delete[] data;
@@ -367,9 +367,9 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::string &data) n
         if (dataStream.status() != DataStreamStatus::Ok)
             return dataStream;
 
-        data.resize(metaCast<size_t>(size));
+        data.resize(metaCast<sizeinfo>(size));
 
-        if (dataStream.device()->read(&data.front(), metaCast<size_t>(size)) != metaCast<size_t>(size)) {
+        if (dataStream.device()->read(&data.front(), metaCast<sizeinfo>(size)) != metaCast<sizeinfo>(size)) {
             dataStream.setStatus(DataStreamStatus::ReadError);
 
             data.clear();
@@ -396,7 +396,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::vector<ValueTyp
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(metaCast<size_t>(size));
+        data.reserve(metaCast<sizeinfo>(size));
 
         for (decltype(size) i = 0; i < size; ++i) {
             ValueType value {};
@@ -408,7 +408,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::vector<ValueTyp
                 break;
             }
 
-            data.push_back(std::move(value));
+            data.emplace_back(std::move(value));
         }
 
         return dataStream;
@@ -443,7 +443,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::deque<ValueType
                 break;
             }
 
-            data.push_back(std::move(value));
+            data.emplace_back(std::move(value));
         }
 
         return dataStream;
@@ -480,7 +480,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::forward_list<Va
                 break;
             }
 
-            it = data.insert_after(it, std::move(value));
+            it = data.emplace_after(it, std::move(value));
         }
 
         return dataStream;
@@ -515,7 +515,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::list<ValueType>
                 break;
             }
 
-            data.push_back(std::move(value));
+            data.emplace_back(std::move(value));
         }
 
         return dataStream;
@@ -551,7 +551,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::set<ValueType> 
                 break;
             }
 
-            data.insert(std::move(value));
+            data.emplace(std::move(value));
         }
 
         return dataStream;
@@ -586,7 +586,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::multiset<ValueT
                 break;
             }
 
-            data.insert(std::move(value));
+            data.emplace(std::move(value));
         }
 
         return dataStream;
@@ -690,7 +690,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_set<V
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(metaCast<size_t>(size));
+        data.reserve(metaCast<sizeinfo>(size));
 
         for (decltype(size) i = 0; i < size; ++i) {
             ValueType value {};
@@ -702,7 +702,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_set<V
                 break;
             }
 
-            data.insert(std::move(value));
+            data.emplace(std::move(value));
         }
 
         return dataStream;
@@ -727,7 +727,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(metaCast<size_t>(size));
+        data.reserve(metaCast<sizeinfo>(size));
 
         for (decltype(size) i = 0; i < size; ++i) {
             ValueType value {};
@@ -739,7 +739,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
                 break;
             }
 
-            data.insert(std::move(value));
+            data.emplace(std::move(value));
         }
 
         return dataStream;
@@ -765,7 +765,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_map<K
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(metaCast<size_t>(size));
+        data.reserve(metaCast<sizeinfo>(size));
 
         for (decltype(size) i = 0; i < size; ++i) {
             KeyType key {};
@@ -806,7 +806,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(metaCast<size_t>(size));
+        data.reserve(metaCast<sizeinfo>(size));
 
         for (decltype(size) i = 0; i < size; ++i) {
             KeyType key {};

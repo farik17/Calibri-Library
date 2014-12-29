@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include "tools/metacast.h"
+#include <tools/metacast.h>
 
 class tst_metacast : public QObject
 {
@@ -45,7 +45,7 @@ void tst_metacast::testStringToInt8()
     int8 out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
     QVERIFY(ok);
@@ -63,7 +63,7 @@ void tst_metacast::testStringToUInt8()
     uint8 out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
     QVERIFY(ok);
@@ -81,7 +81,7 @@ void tst_metacast::testStringToInt16()
     int16 out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
     QVERIFY(ok);
@@ -99,7 +99,7 @@ void tst_metacast::testStringToUInt16()
     uint16 out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
     QVERIFY(ok);
@@ -117,7 +117,7 @@ void tst_metacast::testStringToInt32()
     int32 out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
     QVERIFY(ok);
@@ -135,7 +135,7 @@ void tst_metacast::testStringToUInt32()
     uint32 out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
     QVERIFY(ok);
@@ -153,7 +153,7 @@ void tst_metacast::testStringToInt64()
     int64 out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
     QVERIFY(ok);
@@ -171,7 +171,7 @@ void tst_metacast::testStringToUInt64()
     uint64 out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3", &ok);
     QVERIFY(ok);
@@ -189,7 +189,7 @@ void tst_metacast::testStringToFloat()
     float out {};
 
     char *end {};
-    wchar_t *wend {};;
+    wchar *wend {};;
 
     out = Calibri::metaCast<decltype(out)>("3.03", &ok);
     QVERIFY(ok);
@@ -207,7 +207,7 @@ void tst_metacast::testStringToDouble()
     double out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3.003", &ok);
     QVERIFY(ok);
@@ -225,7 +225,7 @@ void tst_metacast::testStringToLongDouble()
     longdouble out {};
 
     char *end {};
-    wchar_t *wend {};
+    wchar *wend {};
 
     out = Calibri::metaCast<decltype(out)>("3.0003", &ok);
     QVERIFY(ok);

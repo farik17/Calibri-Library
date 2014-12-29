@@ -47,8 +47,8 @@ auto ByteArray::toHex(bool *ok) const noexcept -> ByteArray
         encodedData.reserve(size() * 2);
 
         for (auto it = std::begin(*this), end = std::end(*this); it != end; ++it) {
-            encodedData.push_back(Constants::Hex::alphabet[*it >> 4 & 0x0f]);
-            encodedData.push_back(Constants::Hex::alphabet[*it & 0x0f]);
+            encodedData.emplace_back(Constants::Hex::alphabet[*it >> 4 & 0x0f]);
+            encodedData.emplace_back(Constants::Hex::alphabet[*it & 0x0f]);
         }
 
         if (ok)
@@ -88,10 +88,10 @@ auto ByteArray::toBase64(bool *ok) const noexcept -> ByteArray
 
             ++it;
 
-            encodedData.push_back(Constants::Base64::alphabet[(block[0] & 0xfc) >> 2]);
-            encodedData.push_back(Constants::Base64::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
-            encodedData.push_back(Constants::Base64::alphabet[((block[1] & 0x0f) << 2) + ((block[2] & 0xc0) >> 6)]);
-            encodedData.push_back(Constants::Base64::alphabet[(block[2] & 0x3f)]);
+            encodedData.emplace_back(Constants::Base64::alphabet[(block[0] & 0xfc) >> 2]);
+            encodedData.emplace_back(Constants::Base64::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
+            encodedData.emplace_back(Constants::Base64::alphabet[((block[1] & 0x0f) << 2) + ((block[2] & 0xc0) >> 6)]);
+            encodedData.emplace_back(Constants::Base64::alphabet[(block[2] & 0x3f)]);
         }
 
         switch (paddingSize) {
@@ -100,10 +100,10 @@ auto ByteArray::toBase64(bool *ok) const noexcept -> ByteArray
             block[1] = *++it;
             block[2] = *++it;
 
-            encodedData.push_back(Constants::Base64::alphabet[(block[0] & 0xfc) >> 2]);
-            encodedData.push_back(Constants::Base64::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
-            encodedData.push_back(Constants::Base64::alphabet[((block[1] & 0x0f) << 2) + ((block[2] & 0xc0) >> 6)]);
-            encodedData.push_back('=');
+            encodedData.emplace_back(Constants::Base64::alphabet[(block[0] & 0xfc) >> 2]);
+            encodedData.emplace_back(Constants::Base64::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
+            encodedData.emplace_back(Constants::Base64::alphabet[((block[1] & 0x0f) << 2) + ((block[2] & 0xc0) >> 6)]);
+            encodedData.emplace_back('=');
 
             break;
 
@@ -111,10 +111,10 @@ auto ByteArray::toBase64(bool *ok) const noexcept -> ByteArray
             block[0] = *it;
             block[1] = *++it;
 
-            encodedData.push_back(Constants::Base64::alphabet[(block[0] & 0xfc) >> 2]);
-            encodedData.push_back(Constants::Base64::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
-            encodedData.push_back('=');
-            encodedData.push_back('=');
+            encodedData.emplace_back(Constants::Base64::alphabet[(block[0] & 0xfc) >> 2]);
+            encodedData.emplace_back(Constants::Base64::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
+            encodedData.emplace_back('=');
+            encodedData.emplace_back('=');
 
             break;
 
@@ -152,11 +152,11 @@ auto ByteArray::fromHex(const ByteArray &data, bool *ok) noexcept -> ByteArray
         for (auto it = std::begin(data), end = std::end(data); it != end; ++it) {
             char symbol {};
 
-            if (std::isdigit(*it)) {
+            if (::isdigit(*it)) {
                 symbol = (*it - '0') << 4;
-            } else if (std::islower(*it)) {
+            } else if (::islower(*it)) {
                 symbol = (*it - 'a' + 10) << 4;
-            } else if (std::isupper(*it)) {
+            } else if (::isupper(*it)) {
                 symbol = (*it - 'A' + 10) << 4;
             } else {
                 if (ok)
@@ -167,11 +167,11 @@ auto ByteArray::fromHex(const ByteArray &data, bool *ok) noexcept -> ByteArray
 
             ++it;
 
-            if (std::isdigit(*it)) {
+            if (::isdigit(*it)) {
                 symbol |= (*it - '0');
-            } else if (std::islower(*it)) {
+            } else if (::islower(*it)) {
                 symbol |= (*it - 'a' + 10);
-            } else if (std::isupper(*it)) {
+            } else if (::isupper(*it)) {
                 symbol |= (*it - 'A' + 10);
             } else {
                 if (ok)
@@ -180,7 +180,7 @@ auto ByteArray::fromHex(const ByteArray &data, bool *ok) noexcept -> ByteArray
                 return {};
             }
 
-            decodedData.push_back(symbol);
+            decodedData.emplace_back(symbol);
         }
 
         if (ok)
@@ -225,11 +225,11 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
 
         while (it != end) {
             for (auto i = 0; i < 4; ++i, ++it) {
-                if (std::isupper(*it)) {
+                if (::isupper(*it)) {
                     block[i] = *it - 'A';
-                } else if (std::islower(*it)) {
+                } else if (::islower(*it)) {
                     block[i] = *it - 'a' + 26;
-                } else if (std::isdigit(*it)) {
+                } else if (::isdigit(*it)) {
                     block[i] = *it - '0' + 52;
                 } else if (*it == '+') {
                     block[i] = 62;
@@ -243,19 +243,19 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
                 }
             }
 
-            decodedData.push_back((block[0] << 2) + ((block[1] & 0x30) >> 4));
-            decodedData.push_back(((block[1] & 0xf) << 4) + ((block[2] & 0x3c) >> 2));
-            decodedData.push_back(((block[2] & 0x3) << 6) + block[3]);
+            decodedData.emplace_back((block[0] << 2) + ((block[1] & 0x30) >> 4));
+            decodedData.emplace_back(((block[1] & 0xf) << 4) + ((block[2] & 0x3c) >> 2));
+            decodedData.emplace_back(((block[2] & 0x3) << 6) + block[3]);
         }
 
         switch (paddingSize) {
         case 1:
             for (auto i = 0; i < 3; ++i, ++it) {
-                if (std::isupper(*it)) {
+                if (::isupper(*it)) {
                     block[i] = *it - 'A';
-                } else if (std::islower(*it)) {
+                } else if (::islower(*it)) {
                     block[i] = *it - 'a' + 26;
-                } else if (std::isdigit(*it)) {
+                } else if (::isdigit(*it)) {
                     block[i] = *it - '0' + 52;
                 } else if (*it == '+') {
                     block[i] = 62;
@@ -269,18 +269,18 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
                 }
             }
 
-            decodedData.push_back((block[0] << 2) + ((block[1] & 0x30) >> 4));
-            decodedData.push_back(((block[1] & 0xf) << 4) + ((block[2] & 0x3c) >> 2));
+            decodedData.emplace_back((block[0] << 2) + ((block[1] & 0x30) >> 4));
+            decodedData.emplace_back(((block[1] & 0xf) << 4) + ((block[2] & 0x3c) >> 2));
 
             break;
 
         case 2:
             for (auto i = 0; i < 2; ++i, ++it) {
-                if (std::isupper(*it)) {
+                if (::isupper(*it)) {
                     block[i] = *it - 'A';
-                } else if (std::islower(*it)) {
+                } else if (::islower(*it)) {
                     block[i] = *it - 'a' + 26;
-                } else if (std::isdigit(*it)) {
+                } else if (::isdigit(*it)) {
                     block[i] = *it - '0' + 52;
                 } else if (*it == '+') {
                     block[i] = 62;
@@ -294,7 +294,7 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
                 }
             }
 
-            decodedData.push_back((block[0] << 2) + ((block[1] & 0x30) >> 4));
+            decodedData.emplace_back((block[0] << 2) + ((block[1] & 0x30) >> 4));
 
             break;
 

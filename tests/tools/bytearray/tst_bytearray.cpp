@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include "tools/bytearray.h"
+#include <tools/bytearray.h>
 
 class tst_bytearray : public QObject
 {
@@ -19,16 +19,25 @@ void tst_bytearray::testUpper()
 {
     bool ok { false };
 
-    auto out = Calibri::ByteArray("some data").toUpper(&ok);
+    auto in = Calibri::ByteArray("some data");
+    auto out = in.toUpper(&ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("SOME DATA"));
+    out = Calibri::ByteArray("some data").toUpper(&ok);
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::ByteArray("SOME DATA"));
+
 }
 
 void tst_bytearray::testLower()
 {
     bool ok { false };
 
-    auto out = Calibri::ByteArray("SOME DATA").toLower(&ok);
+    auto in = Calibri::ByteArray("SOME DATA");
+    auto out = in.toLower(&ok);
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::ByteArray("some data"));
+    out = Calibri::ByteArray("SOME DATA").toLower(&ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("some data"));
 }

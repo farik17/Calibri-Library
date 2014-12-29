@@ -14,6 +14,10 @@ Product {
     ]
 
     Depends {
+        name: "Source"
+    }
+
+    Depends {
         name: "Qt"
         submodules: [
             "testlib"

@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include "io/datastream.h"
+#include <io/datastream.h>
 
 class tst_DataStream : public QObject
 {
@@ -10,13 +10,13 @@ class tst_DataStream : public QObject
     
 private slots:
     void testInt8();
-    void testUint8();
+    void testUInt8();
     void testInt16();
-    void testUint16();
+    void testUInt16();
     void testInt32();
-    void testUint32();
+    void testUInt32();
     void testInt64();
-    void testUint64();
+    void testUInt64();
     void testFloat();
     void testDouble();
     void testLongDouble();
@@ -56,7 +56,7 @@ void tst_DataStream::testInt8()
     QCOMPARE(in, out);
 }
 
-void tst_DataStream::testUint8()
+void tst_DataStream::testUInt8()
 {
     uint8 in { 64 };
 
@@ -94,7 +94,7 @@ void tst_DataStream::testInt16()
     QCOMPARE(in, out);
 }
 
-void tst_DataStream::testUint16()
+void tst_DataStream::testUInt16()
 {
     uint16 in { 64 };
 
@@ -132,7 +132,7 @@ void tst_DataStream::testInt32()
     QCOMPARE(in, out);
 }
 
-void tst_DataStream::testUint32()
+void tst_DataStream::testUInt32()
 {
     uint32 in { 64 };
 
@@ -170,7 +170,7 @@ void tst_DataStream::testInt64()
     QCOMPARE(in, out);
 }
 
-void tst_DataStream::testUint64()
+void tst_DataStream::testUInt64()
 {
     uint64 in { 64 };
 
@@ -310,7 +310,7 @@ void tst_DataStream::testSeek()
     readStream >> size;
     readStream >> out;
 
-    QCOMPARE(in.size(), size);
+    QCOMPARE(in.size(), Calibri::metaCast<sizeinfo>(size));
     QCOMPARE(in, out);
 }
 

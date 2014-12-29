@@ -9,7 +9,7 @@ constexpr char endOfLine { '\n' };
 
 } // end namespace Constants
 
-inline auto Buffer::read(size_t size, bool *ok) noexcept -> ByteArray
+inline auto Buffer::read(sizeinfo size, bool *ok) noexcept -> ByteArray
 {
     try {
         ByteArray data { size };
@@ -37,7 +37,7 @@ inline auto Buffer::read(size_t size, bool *ok) noexcept -> ByteArray
     }
 }
 
-inline auto Buffer::write(const ByteArray &data, bool *ok) noexcept -> size_t
+inline auto Buffer::write(const ByteArray &data, bool *ok) noexcept -> sizeinfo
 {
     return write(data, data.size(), ok);
 }
@@ -58,7 +58,7 @@ auto Buffer::atEnd() const noexcept -> bool
     return pos() == m_byteArray.size();
 }
 
-auto Buffer::readData(char *data, size_t size, bool *ok) noexcept -> size_t
+auto Buffer::readData(char *data, sizeinfo size, bool *ok) noexcept -> sizeinfo
 {
     try {
         size = std::min<decltype(size)>(m_byteArray.size() - pos(), size);
@@ -81,7 +81,7 @@ auto Buffer::readData(char *data, size_t size, bool *ok) noexcept -> size_t
     }
 }
 
-auto Buffer::writeData(const char *data, size_t size, bool *ok) noexcept -> size_t
+auto Buffer::writeData(const char *data, sizeinfo size, bool *ok) noexcept -> sizeinfo
 {
     try {
         auto nextPos = pos() + size;
@@ -107,7 +107,7 @@ auto Buffer::writeData(const char *data, size_t size, bool *ok) noexcept -> size
     }
 }
 
-auto Buffer::readLineData(char *data, size_t size, bool *ok) noexcept -> size_t
+auto Buffer::readLineData(char *data, sizeinfo size, bool *ok) noexcept -> sizeinfo
 {
     try {
         size = std::min<decltype(size)>(m_byteArray.size() - pos(), size);
@@ -136,7 +136,7 @@ auto Buffer::readLineData(char *data, size_t size, bool *ok) noexcept -> size_t
     }
 }
 
-auto Buffer::seekData(size_t pos) noexcept -> bool
+auto Buffer::seekData(sizeinfo pos) noexcept -> bool
 {
     if (pos > m_byteArray.size())
         return false;
