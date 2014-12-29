@@ -3,6 +3,7 @@ import qbs
 Project {
     name: "Crypto"
     references: [
-        "digest/digest.qbs"
+        "digest/digest.qbs",
+        "cipher/cipher.qbs"
     ]
 }
