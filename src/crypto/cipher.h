@@ -18,14 +18,14 @@ enum class CipherAlgorithm : uint8 {
     DEScbc,
     DEScfb,
     DESofb,
-    DoubleDESecb,
-    DoubleDEScbc,
-    DoubleDEScfb,
-    DoubleDESofb,
-    TripleDESecb,
-    TripleDEScbc,
-    TripleDEScfb,
-    TripleDESofb,
+    DES2ecb,
+    DES2cbc,
+    DES2cfb,
+    DES2ofb,
+    DES3ecb,
+    DES3cbc,
+    DES3cfb,
+    DES3ofb,
     DESXcbc,
     RC4,
     IDEAecb,
@@ -141,7 +141,7 @@ auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 }
 
 template<CipherAlgorithm Algorithm,
-         typename std::enable_if<Algorithm == CipherAlgorithm::DoubleDESecb>::type... Enabler>
+         typename std::enable_if<Algorithm == CipherAlgorithm::DES2ecb>::type... Enabler>
 auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 {
 #if !defined(OPENSSL_NO_DES)
@@ -154,7 +154,7 @@ auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 }
 
 template<CipherAlgorithm Algorithm,
-         typename std::enable_if<Algorithm == CipherAlgorithm::DoubleDEScbc>::type... Enabler>
+         typename std::enable_if<Algorithm == CipherAlgorithm::DES2cbc>::type... Enabler>
 auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 {
 #if !defined(OPENSSL_NO_DES)
@@ -167,7 +167,7 @@ auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 }
 
 template<CipherAlgorithm Algorithm,
-         typename std::enable_if<Algorithm == CipherAlgorithm::DoubleDEScfb>::type... Enabler>
+         typename std::enable_if<Algorithm == CipherAlgorithm::DES2cfb>::type... Enabler>
 auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 {
 #if !defined(OPENSSL_NO_DES)
@@ -180,7 +180,7 @@ auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 }
 
 template<CipherAlgorithm Algorithm,
-         typename std::enable_if<Algorithm == CipherAlgorithm::DoubleDESofb>::type... Enabler>
+         typename std::enable_if<Algorithm == CipherAlgorithm::DES2ofb>::type... Enabler>
 auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 {
 #if !defined(OPENSSL_NO_DES)
@@ -193,7 +193,7 @@ auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 }
 
 template<CipherAlgorithm Algorithm,
-         typename std::enable_if<Algorithm == CipherAlgorithm::TripleDESecb>::type... Enabler>
+         typename std::enable_if<Algorithm == CipherAlgorithm::DES3ecb>::type... Enabler>
 auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 {
 #if !defined(OPENSSL_NO_DES)
@@ -206,7 +206,7 @@ auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 }
 
 template<CipherAlgorithm Algorithm,
-         typename std::enable_if<Algorithm == CipherAlgorithm::TripleDEScbc>::type... Enabler>
+         typename std::enable_if<Algorithm == CipherAlgorithm::DES3cbc>::type... Enabler>
 auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 {
 #if !defined(OPENSSL_NO_DES)
@@ -219,7 +219,7 @@ auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 }
 
 template<CipherAlgorithm Algorithm,
-         typename std::enable_if<Algorithm == CipherAlgorithm::TripleDEScfb>::type... Enabler>
+         typename std::enable_if<Algorithm == CipherAlgorithm::DES3cfb>::type... Enabler>
 auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 {
 #if !defined(OPENSSL_NO_DES)
@@ -232,7 +232,7 @@ auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 }
 
 template<CipherAlgorithm Algorithm,
-         typename std::enable_if<Algorithm == CipherAlgorithm::TripleDESofb>::type... Enabler>
+         typename std::enable_if<Algorithm == CipherAlgorithm::DES3ofb>::type... Enabler>
 auto cipherAlgorithm() noexcept -> const EVP_CIPHER *
 {
 #if !defined(OPENSSL_NO_DES)

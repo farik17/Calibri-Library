@@ -70,11 +70,11 @@ void tst_Cipher::testDES()
     QVERIFY(out.empty());
 #endif
 
-    //! DoubleDES
-    out = Calibri::cipher<Calibri::CipherAlgorithm::DoubleDESecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
+    //! DES2
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES2ecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_DES)
     QVERIFY(ok);
-    out = Calibri::cipher<Calibri::CipherAlgorithm::DoubleDESecb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES2ecb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("Some data"));
 #else
@@ -82,10 +82,10 @@ void tst_Cipher::testDES()
     QVERIFY(out.empty());
 #endif
 
-    out = Calibri::cipher<Calibri::CipherAlgorithm::DoubleDEScbc, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES2cbc, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_DES)
     QVERIFY(ok);
-    out = Calibri::cipher<Calibri::CipherAlgorithm::DoubleDEScbc, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES2cbc, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("Some data"));
 #else
@@ -93,10 +93,10 @@ void tst_Cipher::testDES()
     QVERIFY(out.empty());
 #endif
 
-    out = Calibri::cipher<Calibri::CipherAlgorithm::DoubleDEScfb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES2cfb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_DES)
     QVERIFY(ok);
-    out = Calibri::cipher<Calibri::CipherAlgorithm::DoubleDEScfb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES2cfb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("Some data"));
 #else
@@ -104,10 +104,10 @@ void tst_Cipher::testDES()
     QVERIFY(out.empty());
 #endif
 
-    out = Calibri::cipher<Calibri::CipherAlgorithm::DoubleDESofb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES2ofb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_DES)
     QVERIFY(ok);
-    out = Calibri::cipher<Calibri::CipherAlgorithm::DoubleDESofb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES2ofb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("Some data"));
 #else
@@ -115,11 +115,11 @@ void tst_Cipher::testDES()
     QVERIFY(out.empty());
 #endif
 
-    //! TripleDES
-    out = Calibri::cipher<Calibri::CipherAlgorithm::TripleDESecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
+    //! DES3
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES3ecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_DES)
     QVERIFY(ok);
-    out = Calibri::cipher<Calibri::CipherAlgorithm::TripleDESecb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES3ecb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("Some data"));
 #else
@@ -127,10 +127,10 @@ void tst_Cipher::testDES()
     QVERIFY(out.empty());
 #endif
 
-    out = Calibri::cipher<Calibri::CipherAlgorithm::TripleDEScbc, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES3cbc, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_DES)
     QVERIFY(ok);
-    out = Calibri::cipher<Calibri::CipherAlgorithm::TripleDEScbc, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES3cbc, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("Some data"));
 #else
@@ -138,10 +138,10 @@ void tst_Cipher::testDES()
     QVERIFY(out.empty());
 #endif
 
-    out = Calibri::cipher<Calibri::CipherAlgorithm::TripleDEScfb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES3cfb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_DES)
     QVERIFY(ok);
-    out = Calibri::cipher<Calibri::CipherAlgorithm::TripleDEScfb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES3cfb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("Some data"));
 #else
@@ -149,10 +149,10 @@ void tst_Cipher::testDES()
     QVERIFY(out.empty());
 #endif
 
-    out = Calibri::cipher<Calibri::CipherAlgorithm::TripleDESofb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES3ofb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_DES)
     QVERIFY(ok);
-    out = Calibri::cipher<Calibri::CipherAlgorithm::TripleDESofb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
+    out = Calibri::cipher<Calibri::CipherAlgorithm::DES3ofb, Calibri::CipherMode::Decrypt>(out, "Some key", "Some iv", &ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("Some data"));
 #else

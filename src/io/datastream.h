@@ -102,10 +102,10 @@ template<typename DeviceType,
          typename std::enable_if<std::is_arithmetic<DataType>::value>::type... Enabler>
 inline auto operator <<(DataStream<DeviceType> &dataStream, DataType data) noexcept -> DataStream<DeviceType> &
 {
-    if (dataStream.status() != DataStreamStatus::Ok)
+    if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok))
         return dataStream;
 
-    if (dataStream.device()->write(reinterpret_cast<const char *>(&data), sizeof(DataType)) != sizeof(DataType))
+    if (UNLIKELY(dataStream.device()->write(reinterpret_cast<const char *>(&data), sizeof(DataType)) != sizeof(DataType)))
         dataStream.setStatus(DataStreamStatus::WriteError);
 
     return dataStream;
@@ -118,10 +118,10 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const char *data) no
 
     dataStream << metaCast<uint32>(size);
 
-    if (dataStream.status() != DataStreamStatus::Ok)
+    if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok))
         return dataStream;
 
-    if (dataStream.device()->write(data, size) != size)
+    if (UNLIKELY(dataStream.device()->write(data, size) != size))
         dataStream.setStatus(DataStreamStatus::WriteError);
 
     return dataStream;
@@ -132,10 +132,10 @@ inline auto operator <<(DataStream<DeviceType> &dataStream, const std::string &d
 {
     dataStream << metaCast<uint32>(data.size());
 
-    if (dataStream.status() != DataStreamStatus::Ok)
+    if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok))
         return dataStream;
 
-    if (dataStream.device()->write(data.data(), data.size()) != data.size())
+    if (UNLIKELY(dataStream.device()->write(data.data(), data.size()) != data.size()))
         dataStream.setStatus(DataStreamStatus::WriteError);
 
     return dataStream;
@@ -310,10 +310,10 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, DataType &data) noex
 {
     data = 0;
 
-    if (dataStream.status() != DataStreamStatus::Ok)
+    if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok))
         return dataStream;
 
-    if (dataStream.device()->read(reinterpret_cast<char *>(&data), sizeof(DataType)) != sizeof(DataType)) {
+    if (UNLIKELY(dataStream.device()->read(reinterpret_cast<char *>(&data), sizeof(DataType)) != sizeof(DataType))) {
         dataStream.setStatus(DataStreamStatus::ReadError);
 
         data = 0;
@@ -331,12 +331,12 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcep
         uint32 size {};
         dataStream >> size;
 
-        if (dataStream.status() != DataStreamStatus::Ok)
+        if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok))
             return dataStream;
 
         data = new char[ metaCast<sizeinfo>(size + 1) ];
 
-        if (dataStream.device()->read(data, metaCast<sizeinfo>(size)) != metaCast<sizeinfo>(size)) {
+        if (UNLIKELY(dataStream.device()->read(data, metaCast<sizeinfo>(size)) != metaCast<sizeinfo>(size))) {
             dataStream.setStatus(DataStreamStatus::ReadError);
 
             delete[] data;
@@ -364,12 +364,12 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::string &data) n
         uint32 size {};
         dataStream >> size;
 
-        if (dataStream.status() != DataStreamStatus::Ok)
+        if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok))
             return dataStream;
 
         data.resize(metaCast<sizeinfo>(size));
 
-        if (dataStream.device()->read(&data.front(), metaCast<sizeinfo>(size)) != metaCast<sizeinfo>(size)) {
+        if (UNLIKELY(dataStream.device()->read(&data.front(), metaCast<sizeinfo>(size)) != metaCast<sizeinfo>(size))) {
             dataStream.setStatus(DataStreamStatus::ReadError);
 
             data.clear();
@@ -402,7 +402,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::vector<ValueTyp
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -437,7 +437,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::deque<ValueType
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -474,7 +474,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::forward_list<Va
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -509,7 +509,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::list<ValueType>
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -545,7 +545,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::set<ValueType> 
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -580,7 +580,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::multiset<ValueT
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -619,7 +619,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::map<KeyType, Va
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -658,7 +658,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::multimap<KeyTyp
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -696,7 +696,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_set<V
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -733,7 +733,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -774,7 +774,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_map<K
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;
@@ -815,7 +815,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
             ValueType value {};
             dataStream >> value;
 
-            if (dataStream.status() != DataStreamStatus::Ok) {
+            if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok)) {
                 data.clear();
 
                 break;

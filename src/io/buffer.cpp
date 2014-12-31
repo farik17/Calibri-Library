@@ -21,7 +21,7 @@ inline auto Buffer::read(sizeinfo size, bool *ok) noexcept -> ByteArray
         if (ok)
             *ok = success;
 
-        if (!success)
+        if (UNLIKELY(!success))
             return {};
 
         data.resize(processedBytes);
@@ -138,7 +138,7 @@ auto Buffer::readLineData(char *data, sizeinfo size, bool *ok) noexcept -> sizei
 
 auto Buffer::seekData(sizeinfo pos) noexcept -> bool
 {
-    if (pos > m_byteArray.size())
+    if (UNLIKELY(pos > m_byteArray.size()))
         return false;
 
     setPos(pos);

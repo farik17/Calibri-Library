@@ -511,7 +511,7 @@ inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::operator ()(
             ((*it).first)(std::forward<ArgumentsType>(arguments) ...);
 
         if (it != std::end(m_connections))
-            return (m_connections.back().first)(std::forward<ArgumentsType>(arguments) ...);
+            return ((*it).first)(std::forward<ArgumentsType>(arguments) ...);
 
         return ReturnType();
     } catch (const std::exception &ex) {

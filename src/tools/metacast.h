@@ -44,16 +44,16 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (castedData > std::numeric_limits<CastType>::max()
-                    || castedData < std::numeric_limits<CastType>::min()
-                    || !(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<char>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(castedData > std::numeric_limits<CastType>::max()
+                     || castedData < std::numeric_limits<CastType>::min()
+                     || metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (castedData > std::numeric_limits<CastType>::max()
-                    || castedData < std::numeric_limits<CastType>::min()
-                    || metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -84,14 +84,15 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (castedData > std::numeric_limits<CastType>::max()
-                    || !(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<char>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(castedData > std::numeric_limits<CastType>::max()
+                     || metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (castedData > std::numeric_limits<CastType>::max()
-                    || metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -120,12 +121,14 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<char>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -154,12 +157,14 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<char>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -187,12 +192,14 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<char>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -220,12 +227,14 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<char>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -253,12 +262,14 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<char>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<char>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -306,16 +317,16 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (castedData > std::numeric_limits<CastType>::max()
-                    || castedData < std::numeric_limits<CastType>::min()
-                    || !(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<wchar>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(castedData > std::numeric_limits<CastType>::max()
+                     || castedData < std::numeric_limits<CastType>::min()
+                     || metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (castedData > std::numeric_limits<CastType>::max()
-                    || castedData < std::numeric_limits<CastType>::min()
-                    || metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -346,14 +357,15 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (castedData > std::numeric_limits<CastType>::max()
-                    || !(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<wchar>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(castedData > std::numeric_limits<CastType>::max()
+                     || metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (castedData > std::numeric_limits<CastType>::max()
-                    || metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -382,12 +394,14 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<wchar>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -416,12 +430,14 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<wchar>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -449,12 +465,14 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<wchar>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -482,12 +500,14 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<wchar>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -515,12 +535,14 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
         break;
 
     default:
-        if (ok) {
-            if (!(*ok = (metaCast<sizeinfo>(end - data) == std::char_traits<wchar>::length(data))))
-                castedData = 0;
+        if (UNLIKELY(metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))) {
+            if (ok)
+                *ok = false;
+
+            castedData = 0;
         } else {
-            if (metaCast<sizeinfo>(end - data) != std::char_traits<wchar>::length(data))
-                castedData = 0;
+            if (ok)
+                *ok = true;
         }
 
         break;
@@ -586,7 +608,7 @@ inline auto metaCast(const char *data) noexcept -> CastType
         std::wstring castedData {};
         castedData.resize(std::mbstowcs(nullptr, data, 0));
 
-        if (std::mbstowcs(&castedData.front(), data, castedData.size()) == metaCast<sizeinfo>(-1))
+        if (UNLIKELY(std::mbstowcs(&castedData.front(), data, castedData.size()) == metaCast<sizeinfo>(-1)))
             return {};
 
         return castedData;
@@ -606,7 +628,7 @@ inline auto metaCast(const wchar *data) noexcept -> CastType
         std::string castedData {};
         castedData.resize(std::wcstombs(nullptr, data, 0));
 
-        if (std::wcstombs(&castedData.front(), data, castedData.size()) == metaCast<sizeinfo>(-1))
+        if (UNLIKELY(std::wcstombs(&castedData.front(), data, castedData.size()) == metaCast<sizeinfo>(-1)))
             return {};
 
         return castedData;
