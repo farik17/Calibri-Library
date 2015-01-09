@@ -102,13 +102,14 @@ void tst_Buffer::testReadLine()
     QCOMPARE(out, Calibri::ByteArray("some data 2"));
 
     in = { "Some data\nsome data 2\n" };
-    out.resize(10);
-    bytes = in.readLine(out, 10, &ok);
+    out.resize(15);
+    bytes = in.readLine(out, 15, &ok);
     QVERIFY(ok);
     QCOMPARE(bytes, Calibri::metaCast<sizeinfo>(10));
+    out.resize(bytes);
     QCOMPARE(out, Calibri::ByteArray("Some data\n"));
 
-    out = in.readLine(12, &ok);
+    out = in.readLine(15, &ok);
     QVERIFY(ok);
     QCOMPARE(out.size(), Calibri::metaCast<sizeinfo>(12));
     QCOMPARE(out, Calibri::ByteArray("some data 2\n"));
