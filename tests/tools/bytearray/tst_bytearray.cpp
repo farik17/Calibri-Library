@@ -23,6 +23,7 @@ void tst_bytearray::testUpper()
     auto out = in.toUpper(&ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("SOME DATA"));
+
     out = Calibri::ByteArray("some data").toUpper(&ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("SOME DATA"));
@@ -37,6 +38,7 @@ void tst_bytearray::testLower()
     auto out = in.toLower(&ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("some data"));
+
     out = Calibri::ByteArray("SOME DATA").toLower(&ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("some data"));
