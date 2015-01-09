@@ -23,7 +23,7 @@ private slots:
 
 void tst_Cipher::testDES()
 {
-    bool ok { false };
+    bool ok {};
 
     //! DES
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::DESecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
@@ -175,7 +175,7 @@ void tst_Cipher::testDES()
 
 void tst_Cipher::testRC4()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::RC4, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_RC4)
@@ -191,7 +191,7 @@ void tst_Cipher::testRC4()
 
 void tst_Cipher::testIDEA()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::IDEAecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_IDEA)
@@ -240,7 +240,7 @@ void tst_Cipher::testIDEA()
 
 void tst_Cipher::testRC2()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::RC2ecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_RC2)
@@ -289,7 +289,7 @@ void tst_Cipher::testRC2()
 
 void tst_Cipher::testBF()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::BFecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_BF)
@@ -338,7 +338,7 @@ void tst_Cipher::testBF()
 
 void tst_Cipher::testCAST5()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::CAST5ecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_CAST)
@@ -387,7 +387,7 @@ void tst_Cipher::testCAST5()
 
 void tst_Cipher::testRC5()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::RC5ecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
 #if !defined(OPENSSL_NO_RC5)
@@ -436,7 +436,7 @@ void tst_Cipher::testRC5()
 
 void tst_Cipher::testAES()
 {
-    bool ok { false };
+    bool ok {};
 
     //! AES128
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::AES128ecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
@@ -609,7 +609,7 @@ void tst_Cipher::testAES()
 
 void tst_Cipher::testCAMELLIA()
 {
-    bool ok { false };
+    bool ok {};
 
     //! CAMELLIA128
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::CAMELLIA128ecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);
@@ -749,7 +749,7 @@ void tst_Cipher::testCAMELLIA()
 
 void tst_Cipher::testSEED()
 {
-    bool ok { false };
+    bool ok {};
 
     //! CAMELLIA128
     auto out = Calibri::cipher<Calibri::CipherAlgorithm::SEEDecb, Calibri::CipherMode::Encrypt>("Some data", "Some key", "Some iv", &ok);

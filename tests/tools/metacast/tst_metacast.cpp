@@ -40,7 +40,7 @@ private slots:
 
 void tst_metacast::testStringToInt8()
 {
-    bool ok { false };
+    bool ok {};
 
     int8 out {};
 
@@ -58,7 +58,7 @@ void tst_metacast::testStringToInt8()
 
 void tst_metacast::testStringToUInt8()
 {
-    bool ok { false };
+    bool ok {};
 
     uint8 out {};
 
@@ -76,7 +76,7 @@ void tst_metacast::testStringToUInt8()
 
 void tst_metacast::testStringToInt16()
 {
-    bool ok { false };
+    bool ok {};
 
     int16 out {};
 
@@ -94,7 +94,7 @@ void tst_metacast::testStringToInt16()
 
 void tst_metacast::testStringToUInt16()
 {
-    bool ok { false };
+    bool ok {};
 
     uint16 out {};
 
@@ -112,7 +112,7 @@ void tst_metacast::testStringToUInt16()
 
 void tst_metacast::testStringToInt32()
 {
-    bool ok { false };
+    bool ok {};
 
     int32 out {};
 
@@ -130,7 +130,7 @@ void tst_metacast::testStringToInt32()
 
 void tst_metacast::testStringToUInt32()
 {
-    bool ok { false };
+    bool ok {};
 
     uint32 out {};
 
@@ -148,7 +148,7 @@ void tst_metacast::testStringToUInt32()
 
 void tst_metacast::testStringToInt64()
 {
-    bool ok { false };
+    bool ok {};
 
     int64 out {};
 
@@ -166,7 +166,7 @@ void tst_metacast::testStringToInt64()
 
 void tst_metacast::testStringToUInt64()
 {
-    bool ok { false };
+    bool ok {};
 
     uint64 out {};
 
@@ -184,7 +184,7 @@ void tst_metacast::testStringToUInt64()
 
 void tst_metacast::testStringToFloat()
 {
-    bool ok { false };
+    bool ok {};
 
     float out {};
 
@@ -202,7 +202,7 @@ void tst_metacast::testStringToFloat()
 
 void tst_metacast::testStringToDouble()
 {
-    bool ok { false };
+    bool ok {};
 
     double out {};
 
@@ -220,7 +220,7 @@ void tst_metacast::testStringToDouble()
 
 void tst_metacast::testStringToLongDouble()
 {
-    bool ok { false };
+    bool ok {};
 
     longdouble out {};
 
@@ -336,7 +336,7 @@ void tst_metacast::testWStringToString()
 
 void tst_metacast::testFailCases()
 {
-    bool ok { false };
+    bool ok {};
 
     auto outInteger = Calibri::metaCast<int8>("3Some data", &ok);
     QVERIFY(!ok);

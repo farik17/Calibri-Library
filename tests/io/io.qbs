@@ -3,6 +3,7 @@ import qbs
 Project {
     name: "Io"
     references: [
-        "datastream/datastream.qbs"
+        "datastream/datastream.qbs",
+        "buffer/buffer.qbs"
     ]
 }

@@ -9,7 +9,7 @@ constexpr char endOfLine { '\n' };
 
 } // end namespace Constants
 
-inline auto Buffer::read(sizeinfo size, bool *ok) noexcept -> ByteArray
+auto Buffer::read(sizeinfo size, bool *ok) noexcept -> ByteArray
 {
     try {
         ByteArray data { size };
@@ -37,7 +37,35 @@ inline auto Buffer::read(sizeinfo size, bool *ok) noexcept -> ByteArray
     }
 }
 
-inline auto Buffer::write(const ByteArray &data, bool *ok) noexcept -> sizeinfo
+auto Buffer::readLine(sizeinfo size, bool *ok) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { size };
+
+        bool success {};
+
+        auto processedBytes = readLine(data, size, &success);
+
+        if (ok)
+            *ok = success;
+
+        if (UNLIKELY(!success))
+            return {};
+
+        data.resize(processedBytes);
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        if (ok)
+            *ok = false;
+
+        return {};
+    }
+}
+
+auto Buffer::write(const ByteArray &data, bool *ok) noexcept -> sizeinfo
 {
     return write(data, data.size(), ok);
 }
@@ -116,7 +144,7 @@ auto Buffer::readLineData(char *data, sizeinfo size, bool *ok) noexcept -> sizei
         auto endOfLineIt = std::find(begin, std::end(m_byteArray), Constants::endOfLine);
 
         if (endOfLineIt != std::end(m_byteArray))
-            size = std::min<decltype(size)>(std::distance(begin, endOfLineIt), size);
+            size = std::min<decltype(size)>(std::distance(begin, endOfLineIt) + sizeof(Constants::endOfLine), size);
 
         std::copy_n(begin, size, data);
 

@@ -23,7 +23,7 @@ private slots:
 
 void tst_Digest::testMD2()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::MD2>("Some data", &ok);
 #if !defined(OPENSSL_NO_MD2)
@@ -37,7 +37,7 @@ void tst_Digest::testMD2()
 
 void tst_Digest::testMD4()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::MD4>("Some data", &ok);
 #if !defined(OPENSSL_NO_MD4)
@@ -51,7 +51,7 @@ void tst_Digest::testMD4()
 
 void tst_Digest::testMD5()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::MD5>("Some data", &ok);
 #if !defined(OPENSSL_NO_MD5)
@@ -65,7 +65,7 @@ void tst_Digest::testMD5()
 
 void tst_Digest::testSHA1()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::SHA1>("Some data", &ok);
 #if !defined(OPENSSL_NO_SHA)
@@ -79,7 +79,7 @@ void tst_Digest::testSHA1()
 
 void tst_Digest::testSHA224()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::SHA224>("Some data", &ok);
 #if !defined(OPENSSL_NO_SHA256)
@@ -93,7 +93,7 @@ void tst_Digest::testSHA224()
 
 void tst_Digest::testSHA256()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::SHA256>("Some data", &ok);
 #if !defined(OPENSSL_NO_SHA256)
@@ -107,7 +107,7 @@ void tst_Digest::testSHA256()
 
 void tst_Digest::testSHA384()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::SHA384>("Some data", &ok);
 #if !defined(OPENSSL_NO_SHA512)
@@ -121,7 +121,7 @@ void tst_Digest::testSHA384()
 
 void tst_Digest::testSHA512()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::SHA512>("Some data", &ok);
 #if !defined(OPENSSL_NO_SHA512)
@@ -135,7 +135,7 @@ void tst_Digest::testSHA512()
 
 void tst_Digest::testRipeMD160()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::RipeMD160>("Some data", &ok);
 #if !defined(OPENSSL_NO_RIPEMD)
@@ -149,7 +149,7 @@ void tst_Digest::testRipeMD160()
 
 void tst_Digest::testWhirlpool()
 {
-    bool ok { false };
+    bool ok {};
 
     auto out = Calibri::digest<Calibri::DigestAlgorithm::Whirlpool>("Some data", &ok);
 #if !defined(OPENSSL_NO_WHIRLPOOL)

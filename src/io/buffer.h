@@ -20,12 +20,17 @@ public:
     Buffer(Buffer &&other) noexcept;
 
     auto operator =(Buffer &&other) noexcept -> Buffer &;
+    auto operator ==(const Buffer &other) const noexcept -> bool;
+    auto operator !=(const Buffer &other) const noexcept -> bool;
 
     auto data() const noexcept -> const ByteArray &;
     auto size() const noexcept -> sizeinfo;
 
     using IORandomAccessInterface::read;
     auto read(sizeinfo size, bool *ok = nullptr) noexcept -> ByteArray;
+
+    using IORandomAccessInterface::readLine;
+    auto readLine(sizeinfo size, bool *ok = nullptr) noexcept -> ByteArray;
 
     using IORandomAccessInterface::write;
     auto write(const ByteArray &data, bool *ok = nullptr) noexcept -> sizeinfo;
@@ -78,6 +83,16 @@ inline auto Buffer::operator =(Buffer &&other) noexcept -> Buffer &
     other.reset();
 
     return *this;
+}
+
+inline auto Buffer::operator ==(const Buffer &other) const noexcept -> bool
+{
+    return m_byteArray == other.m_byteArray;
+}
+
+inline auto Buffer::operator !=(const Buffer &other) const noexcept -> bool
+{
+    return m_byteArray != other.m_byteArray;
 }
 
 inline auto Buffer::data() const noexcept -> const ByteArray &
