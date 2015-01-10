@@ -393,7 +393,7 @@ void tst_DataStream::testList()
 void tst_DataStream::testSet()
 {
     std::set<std::string> in {};
-    in.insert("string data");
+    in.emplace("string data");
 
     Calibri::Buffer data {};
 
@@ -413,8 +413,8 @@ void tst_DataStream::testSet()
 void tst_DataStream::testMultiSet()
 {
     std::multiset<std::string> in {};
-    in.insert("string data");
-    in.insert("string data");
+    in.emplace("string data");
+    in.emplace("string data");
 
     Calibri::Buffer data {};
 
@@ -434,8 +434,8 @@ void tst_DataStream::testMultiSet()
 void tst_DataStream::testMap()
 {
     std::map<std::string, std::string> in {};
-    in.insert(std::make_pair("key one", "value one"));
-    in.insert(std::make_pair("key two", "value two"));
+    in.emplace("key one", "value one");
+    in.emplace("key two", "value two");
 
     Calibri::Buffer data {};
 
@@ -455,8 +455,8 @@ void tst_DataStream::testMap()
 void tst_DataStream::testMultiMap()
 {
     std::multimap<std::string, std::string> in {};
-    in.insert(std::make_pair("key one", "value one"));
-    in.insert(std::make_pair("key one", "value two"));
+    in.emplace("key one", "value one");
+    in.emplace("key one", "value two");
 
     Calibri::Buffer data {};
 
@@ -476,7 +476,7 @@ void tst_DataStream::testMultiMap()
 void tst_DataStream::testUnorderedSet()
 {
     std::unordered_set<std::string> in {};
-    in.insert("string data");
+    in.emplace("string data");
 
     Calibri::Buffer data {};
 
@@ -496,8 +496,8 @@ void tst_DataStream::testUnorderedSet()
 void tst_DataStream::testUnorderedMultiSet()
 {
     std::unordered_multiset<std::string> in {};
-    in.insert("string data");
-    in.insert("string data");
+    in.emplace("string data");
+    in.emplace("string data");
 
     Calibri::Buffer data {};
 
@@ -517,8 +517,8 @@ void tst_DataStream::testUnorderedMultiSet()
 void tst_DataStream::testUnorderedMap()
 {
     std::unordered_map<std::string, std::string> in {};
-    in.insert(std::make_pair("key one", "value one"));
-    in.insert(std::make_pair("key two", "value two"));
+    in.emplace("key one", "value one");
+    in.emplace("key two", "value two");
 
     Calibri::Buffer data {};
 
@@ -538,8 +538,8 @@ void tst_DataStream::testUnorderedMap()
 void tst_DataStream::testUnorderedMultiMap()
 {
     std::unordered_multimap<std::string, std::string> in {};
-    in.insert(std::make_pair("key one", "value one"));
-    in.insert(std::make_pair("key one", "value two"));
+    in.emplace("key one", "value one");
+    in.emplace("key one", "value two");
 
     Calibri::Buffer data {};
 
