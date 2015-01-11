@@ -334,7 +334,7 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, char *&data) noexcep
         if (UNLIKELY(dataStream.status() != DataStreamStatus::Ok))
             return dataStream;
 
-        data = new char[ metaCast<sizeinfo>(size + 1) ];
+        data = new char[ metaCast<sizeinfo>(size + sizeof(Constants::terminator)) ];
 
         if (UNLIKELY(dataStream.device()->read(data, metaCast<sizeinfo>(size)) != metaCast<sizeinfo>(size))) {
             dataStream.setStatus(DataStreamStatus::ReadError);
