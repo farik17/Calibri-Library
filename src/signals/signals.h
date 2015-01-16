@@ -534,7 +534,11 @@ inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(Call
 
         auto it = m_connections.emplace(std::end(m_connections), std::piecewise_construct, std::forward_as_tuple(callable), std::forward_as_tuple(callable));
 
-        callable->connected(this);
+        if (UNLIKELY(!callable->connected(this))) {
+            m_connections.erase(it);
+
+            return nullptr;
+        }
 
         return &((*it).first);
     } catch (const std::exception &ex) {
@@ -564,7 +568,11 @@ inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(Call
 
         it = m_connections.emplace(std::end(m_connections), std::piecewise_construct, std::forward_as_tuple(callable), std::forward_as_tuple(callable));
 
-        callable->connected(this);
+        if (UNLIKELY(!callable->connected(this))) {
+            m_connections.erase(it);
+
+            return nullptr;
+        }
 
         return &((*it).first);
     } catch (const std::exception &ex) {
@@ -589,7 +597,11 @@ inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(Obje
 
         auto it = m_connections.emplace(std::end(m_connections), std::piecewise_construct, std::forward_as_tuple(object, callable), std::forward_as_tuple(object));
 
-        object->connected(this);
+        if (UNLIKELY(!object->connected(this))) {
+            m_connections.erase(it);
+
+            return nullptr;
+        }
 
         return &((*it).first);
     } catch (const std::exception &ex) {
@@ -621,7 +633,11 @@ inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::connect(Obje
 
         it = m_connections.emplace(std::end(m_connections), std::piecewise_construct, std::forward_as_tuple(object, callable), std::forward_as_tuple(object));
 
-        object->connected(this);
+        if (UNLIKELY(!object->connected(this))) {
+            m_connections.erase(it);
+
+            return nullptr;
+        }
 
         return &((*it).first);
     } catch (const std::exception &ex) {
@@ -798,7 +814,8 @@ inline auto Signal<SignalSignature<ReturnType, ArgumentsType ...>>::disconnect(C
         });
 
         if (it != std::end(m_connections)) {
-            ((*it).second)->disconnected(this);
+            if ((*it).second)
+                ((*it).second)->disconnected(this);
 
             m_connections.erase(it);
 

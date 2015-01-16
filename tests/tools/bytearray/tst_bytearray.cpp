@@ -9,11 +9,35 @@ class tst_bytearray : public QObject
     Q_OBJECT
 
 private slots:
+    void testTrimmed();
     void testUpper();
     void testLower();
     void testHex();
     void testBase64();
 };
+
+void tst_bytearray::testTrimmed()
+{
+    bool ok {};
+
+    Calibri::ByteArray in { " \t\r\nsome data   " };
+    auto out = in.trimmed(&ok);
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::ByteArray("some data"));
+
+    in = { "\t \n \r\n " };
+    out = in.trimmed(&ok);
+    QVERIFY(!ok);
+    QCOMPARE(out, Calibri::ByteArray());
+
+    out = Calibri::ByteArray(" \t\r\nsome data   ").trimmed(&ok);
+    QVERIFY(ok);
+    QCOMPARE(out, Calibri::ByteArray("some data"));
+
+    out = Calibri::ByteArray("\t \n \r\n ").trimmed(&ok);
+    QVERIFY(!ok);
+    QCOMPARE(out, Calibri::ByteArray());
+}
 
 void tst_bytearray::testUpper()
 {
@@ -27,7 +51,6 @@ void tst_bytearray::testUpper()
     out = Calibri::ByteArray("some data").toUpper(&ok);
     QVERIFY(ok);
     QCOMPARE(out, Calibri::ByteArray("SOME DATA"));
-
 }
 
 void tst_bytearray::testLower()
