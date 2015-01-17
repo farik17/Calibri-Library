@@ -22,20 +22,27 @@ public:
     ByteArray(sizeinfo size, char symbol);
     ByteArray(const char *data, sizeinfo size);
     ByteArray(const char *data);
+    ByteArray(ByteArray::const_iterator from, ByteArray::const_iterator to);
 
     operator const char *() const noexcept;
     operator const void *() const noexcept;
     operator char *() noexcept;
     operator void *() noexcept;
 
+    auto simplified(bool *ok = nullptr) const & noexcept -> ByteArray;
+    auto simplified(bool *ok = nullptr) && noexcept -> ByteArray &&;
     auto trimmed(bool *ok = nullptr) const & noexcept -> ByteArray;
-    auto trimmed(bool *ok = nullptr) && noexcept -> ByteArray;
+    auto trimmed(bool *ok = nullptr) && noexcept -> ByteArray &&;
     auto toUpper(bool *ok = nullptr) const & noexcept -> ByteArray;
     auto toUpper(bool *ok = nullptr) && noexcept -> ByteArray &&;
     auto toLower(bool *ok = nullptr) const & noexcept -> ByteArray;
     auto toLower(bool *ok = nullptr) && noexcept -> ByteArray &&;
+
     auto toHex(bool *ok = nullptr) const noexcept -> ByteArray;
     auto toBase64(bool *ok = nullptr) const noexcept -> ByteArray;
+
+    auto startsWith(const ByteArray &data) const noexcept -> bool;
+    auto endsWith(const ByteArray &data) const noexcept -> bool;
 
     static auto fromHex(const ByteArray &data, bool *ok = nullptr) noexcept -> ByteArray;
     static auto fromBase64(const ByteArray &data, bool *ok = nullptr) noexcept -> ByteArray;
@@ -61,6 +68,11 @@ inline ByteArray::ByteArray(const char *data, sizeinfo size) :
 
 inline ByteArray::ByteArray(const char *data) :
     ByteArray(data, std::char_traits<char>::length(data))
+{
+}
+
+inline ByteArray::ByteArray(ByteArray::const_iterator from, ByteArray::const_iterator to) :
+    std::vector<char>(from ,to)
 {
 }
 
@@ -102,15 +114,10 @@ inline auto ByteArray::trimmed(bool *ok) const & noexcept -> ByteArray
             return !::isspace(symbol);
         }).base();
 
-        ByteArray trimmedData {};
-        trimmedData.reserve(std::distance(from ,to));
-
-        std::copy(from, to, std::back_inserter(trimmedData));
-
         if (ok)
             *ok = true;
 
-        return trimmedData;
+        return { from, to };
     } catch (const std::exception &ex) {
         std::cerr << __func__ << " : " << ex.what() << std::endl;
 
@@ -121,7 +128,7 @@ inline auto ByteArray::trimmed(bool *ok) const & noexcept -> ByteArray
     }
 }
 
-inline auto ByteArray::trimmed(bool *ok) && noexcept -> ByteArray
+inline auto ByteArray::trimmed(bool *ok) && noexcept -> ByteArray &&
 {
     try {
         auto it = std::find_if(std::begin(*this), std::end(*this), [](char symbol) noexcept {
@@ -245,6 +252,22 @@ inline auto ByteArray::toLower(bool *ok) && noexcept -> ByteArray &&
 
         return std::move(*this);
     }
+}
+
+inline auto ByteArray::startsWith(const ByteArray &data) const noexcept -> bool
+{
+    if (data.size() > size())
+        return false;
+
+    return std::equal(std::begin(*this), std::next(std::begin(*this), data.size()), std::begin(data));
+}
+
+inline auto ByteArray::endsWith(const ByteArray &data) const noexcept -> bool
+{
+    if (data.size() > size())
+        return false;
+
+    return std::equal(crbegin(), std::next(crbegin(), data.size()), data.crbegin());
 }
 
 /*!
