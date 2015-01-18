@@ -256,18 +256,30 @@ inline auto ByteArray::toLower(bool *ok) && noexcept -> ByteArray &&
 
 inline auto ByteArray::startsWith(const ByteArray &data) const noexcept -> bool
 {
-    if (data.size() > size())
-        return false;
+    try {
+        if (data.size() > size())
+            return false;
 
-    return std::equal(std::begin(*this), std::next(std::begin(*this), data.size()), std::begin(data));
+        return std::equal(std::begin(*this), std::next(std::begin(*this), data.size()), std::begin(data));
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return false;
+    }
 }
 
 inline auto ByteArray::endsWith(const ByteArray &data) const noexcept -> bool
 {
-    if (data.size() > size())
-        return false;
+    try {
+        if (data.size() > size())
+            return false;
 
-    return std::equal(crbegin(), std::next(crbegin(), data.size()), data.crbegin());
+        return std::equal(crbegin(), std::next(crbegin(), data.size()), data.crbegin());
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return false;
+    }
 }
 
 /*!
