@@ -9,8 +9,6 @@ class tst_bytearray : public QObject
     Q_OBJECT
 
 private slots:
-    void testSimplified();
-    void testTrimmed();
     void testUpper();
     void testLower();
     void testStartsWith();
@@ -18,52 +16,6 @@ private slots:
     void testHex();
     void testBase64();
 };
-
-void tst_bytearray::testSimplified()
-{
-    bool ok {};
-
-    Calibri::ByteArray in { " \t\r\nsome data, some \r\ndata\n2\t  " };
-    auto out = in.simplified(&ok);
-    QVERIFY(ok);
-    QCOMPARE(out, Calibri::ByteArray("some data, some data 2"));
-
-    in = { "\t \n \r\n " };
-    out = in.simplified(&ok);
-    QVERIFY(!ok);
-    QCOMPARE(out, Calibri::ByteArray());
-
-    out = Calibri::ByteArray(" \t\r\nsome data, some \r\ndata\n2\t  ").simplified(&ok);
-    QVERIFY(ok);
-    QCOMPARE(out, Calibri::ByteArray("some data, some data 2"));
-
-    out = Calibri::ByteArray("\t \n \r\n ").simplified(&ok);
-    QVERIFY(!ok);
-    QCOMPARE(out, Calibri::ByteArray());
-}
-
-void tst_bytearray::testTrimmed()
-{
-    bool ok {};
-
-    Calibri::ByteArray in { " \t\r\nsome data   " };
-    auto out = in.trimmed(&ok);
-    QVERIFY(ok);
-    QCOMPARE(out, Calibri::ByteArray("some data"));
-
-    in = { "\t \n \r\n " };
-    out = in.trimmed(&ok);
-    QVERIFY(!ok);
-    QCOMPARE(out, Calibri::ByteArray());
-
-    out = Calibri::ByteArray(" \t\r\nsome data   ").trimmed(&ok);
-    QVERIFY(ok);
-    QCOMPARE(out, Calibri::ByteArray("some data"));
-
-    out = Calibri::ByteArray("\t \n \r\n ").trimmed(&ok);
-    QVERIFY(!ok);
-    QCOMPARE(out, Calibri::ByteArray());
-}
 
 void tst_bytearray::testUpper()
 {

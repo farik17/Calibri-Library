@@ -29,10 +29,6 @@ public:
     operator char *() noexcept;
     operator void *() noexcept;
 
-    auto simplified(bool *ok = nullptr) const & noexcept -> ByteArray;
-    auto simplified(bool *ok = nullptr) && noexcept -> ByteArray &&;
-    auto trimmed(bool *ok = nullptr) const & noexcept -> ByteArray;
-    auto trimmed(bool *ok = nullptr) && noexcept -> ByteArray &&;
     auto toUpper(bool *ok = nullptr) const & noexcept -> ByteArray;
     auto toUpper(bool *ok = nullptr) && noexcept -> ByteArray &&;
     auto toLower(bool *ok = nullptr) const & noexcept -> ByteArray;
@@ -94,78 +90,6 @@ inline ByteArray::operator char *() noexcept
 inline ByteArray::operator void *() noexcept
 {
     return data();
-}
-
-inline auto ByteArray::trimmed(bool *ok) const & noexcept -> ByteArray
-{
-    try {
-        auto from = std::find_if(std::begin(*this), std::end(*this), [](char symbol) noexcept {
-            return !::isspace(symbol);
-        });
-
-        if (from == std::end(*this)) {
-            if (ok)
-                *ok = false;
-
-            return {};
-        }
-
-        auto to = std::find_if(crbegin(), crend(), [](char symbol) noexcept {
-            return !::isspace(symbol);
-        }).base();
-
-        if (ok)
-            *ok = true;
-
-        return { from, to };
-    } catch (const std::exception &ex) {
-        std::cerr << __func__ << " : " << ex.what() << std::endl;
-
-        if (ok)
-            *ok = false;
-
-        return {};
-    }
-}
-
-inline auto ByteArray::trimmed(bool *ok) && noexcept -> ByteArray &&
-{
-    try {
-        auto it = std::find_if(std::begin(*this), std::end(*this), [](char symbol) noexcept {
-            return !::isspace(symbol);
-        });
-
-        if (it == std::end(*this)) {
-            if (ok)
-                *ok = false;
-
-            clear();
-
-            return std::move(*this);
-        }
-
-        erase(std::begin(*this), it);
-
-        it = std::find_if(rbegin(), rend(), [](char symbol) noexcept {
-            return !::isspace(symbol);
-        }).base();
-
-        erase(it, std::end(*this));
-
-        if (ok)
-            *ok = true;
-
-        return std::move(*this);
-    } catch (const std::exception &ex) {
-        std::cerr << __func__ << " : " << ex.what() << std::endl;
-
-        if (ok)
-            *ok = false;
-
-        clear();
-
-        return std::move(*this);
-    }
 }
 
 inline auto ByteArray::toUpper(bool *ok) const & noexcept -> ByteArray

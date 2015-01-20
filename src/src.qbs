@@ -96,4 +96,13 @@ Product {
             "*.cpp"
         ]
     }
+
+    Group {
+        name: "Algorithm"
+        prefix: "algorithm/"
+        files: [
+            "*.h",
+            "*.cpp"
+        ]
+    }
 }

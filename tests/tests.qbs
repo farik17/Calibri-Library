@@ -5,6 +5,7 @@ Project {
     references: [
         "io/io.qbs",
         "tools/tools.qbs",
-        "crypto/crypto.qbs"
+        "crypto/crypto.qbs",
+        "algorithm/algorithm.qbs"
     ]
 }
