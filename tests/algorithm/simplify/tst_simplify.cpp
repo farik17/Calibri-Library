@@ -27,6 +27,16 @@ void tst_Simplify::testSimplifyString()
     ok = Calibri::simplify(in);
     QVERIFY(ok);
     QCOMPARE(in, std::string());
+
+    in = { "Some data" };
+    ok = Calibri::simplify(in);
+    QVERIFY(ok);
+    QCOMPARE(in, std::string("Some data"));
+
+    in = { "" };
+    ok = Calibri::simplify(in);
+    QVERIFY(ok);
+    QCOMPARE(in, std::string());
 }
 
 void tst_Simplify::testSimplifyWString()
@@ -42,6 +52,16 @@ void tst_Simplify::testSimplifyWString()
     ok = Calibri::simplify(in);
     QVERIFY(ok);
     QCOMPARE(in, std::wstring());
+
+    in = { L"Some data" };
+    ok = Calibri::simplify(in);
+    QVERIFY(ok);
+    QCOMPARE(in, std::wstring(L"Some data"));
+
+    in = { L"" };
+    ok = Calibri::simplify(in);
+    QVERIFY(ok);
+    QCOMPARE(in, std::wstring());
 }
 
 void tst_Simplify::testSimplifyByteArray()
@@ -54,6 +74,16 @@ void tst_Simplify::testSimplifyByteArray()
     QCOMPARE(in, Calibri::ByteArray("some data, some data 2"));
 
     in = { "\t \n \r\n " };
+    ok = Calibri::simplify(in);
+    QVERIFY(ok);
+    QCOMPARE(in, Calibri::ByteArray());
+
+    in = { "Some data" };
+    ok = Calibri::simplify(in);
+    QVERIFY(ok);
+    QCOMPARE(in, Calibri::ByteArray("Some data"));
+
+    in = { "" };
     ok = Calibri::simplify(in);
     QVERIFY(ok);
     QCOMPARE(in, Calibri::ByteArray());

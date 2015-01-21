@@ -8,44 +8,9 @@ namespace Calibri {
 
 namespace Constants {
 
-constexpr char whitespace { ' ' };
+constexpr char space { ' ' };
 
 } // end namespace Constants
-
-namespace Internal {
-
-template<typename DataType,
-         typename InputIteratorType = typename DataType::iterator,
-         typename ValueType = typename DataType::value_type,
-         typename std::enable_if<(std::is_same<DataType, std::string>::value
-                                 || std::is_same<DataType, std::wstring>::value)>::type ...Enabler>
-inline auto insert(DataType &data, InputIteratorType inputIterator, ValueType value) noexcept -> InputIteratorType
-{
-    try {
-        return data.insert(inputIterator, value);
-    } catch (const std::exception &ex) {
-        std::cerr << __func__ << " : " << ex.what() << std::endl;
-
-        return std::end(data);
-    }
-}
-
-template<typename DataType,
-         typename InputIteratorType = typename DataType::iterator,
-         typename ValueType = typename DataType::value_type,
-         typename std::enable_if<std::is_same<DataType, ByteArray>::value>::type ...Enabler>
-inline auto insert(DataType &data, InputIteratorType inputIterator, ValueType value) noexcept -> InputIteratorType
-{
-    try {
-        return data.emplace(inputIterator, value);
-    } catch (const std::exception &ex) {
-        std::cerr << __func__ << " : " << ex.what() << std::endl;
-
-        return std::end(data);
-    }
-}
-
-} // end namespace Internal
 
 template<typename DataType,
          typename std::enable_if<(std::is_same<DataType, std::string>::value
@@ -75,7 +40,7 @@ inline auto simplify(DataType &data) noexcept -> bool
 
         auto to = std::find_if_not(from, std::end(data), ::isspace);
 
-        it = std::next(Internal::insert(data, data.erase(from, to), Constants::whitespace));
+        it = std::next(data.insert(data.erase(from, to), Constants::space));
 
         do {
             from = std::find_if(it, std::end(data), ::isspace);
@@ -85,7 +50,7 @@ inline auto simplify(DataType &data) noexcept -> bool
 
             to = std::find_if_not(from, std::end(data), ::isspace);
 
-            it = std::next(Internal::insert(data, data.erase(from, to), Constants::whitespace));
+            it = std::next(data.insert(data.erase(from, to), Constants::space));
         } while (true);
 
         return true;

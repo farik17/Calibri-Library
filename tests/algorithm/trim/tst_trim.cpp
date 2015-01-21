@@ -27,6 +27,16 @@ void tst_Trim::testTrimString()
     ok = Calibri::trim(in);
     QVERIFY(ok);
     QCOMPARE(in, std::string());
+
+    in = { "Some data" };
+    ok = Calibri::trim(in);
+    QVERIFY(ok);
+    QCOMPARE(in, std::string("Some data"));
+
+    in = { "" };
+    ok = Calibri::trim(in);
+    QVERIFY(ok);
+    QCOMPARE(in, std::string());
 }
 
 void tst_Trim::testTrimWString()
@@ -42,6 +52,16 @@ void tst_Trim::testTrimWString()
     ok = Calibri::trim(in);
     QVERIFY(ok);
     QCOMPARE(in, std::wstring());
+
+    in = { L"Some data" };
+    ok = Calibri::trim(in);
+    QVERIFY(ok);
+    QCOMPARE(in, std::wstring(L"Some data"));
+
+    in = { L"" };
+    ok = Calibri::trim(in);
+    QVERIFY(ok);
+    QCOMPARE(in, std::wstring());
 }
 
 void tst_Trim::testTrimByteArray()
@@ -54,6 +74,16 @@ void tst_Trim::testTrimByteArray()
     QCOMPARE(in, Calibri::ByteArray("some data"));
 
     in = { "\t \n \r\n " };
+    ok = Calibri::trim(in);
+    QVERIFY(ok);
+    QCOMPARE(in, Calibri::ByteArray());
+
+    in = { "Some data" };
+    ok = Calibri::trim(in);
+    QVERIFY(ok);
+    QCOMPARE(in, Calibri::ByteArray("Some data"));
+
+    in = { "" };
     ok = Calibri::trim(in);
     QVERIFY(ok);
     QCOMPARE(in, Calibri::ByteArray());

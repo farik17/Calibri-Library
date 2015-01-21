@@ -40,6 +40,11 @@ void tst_Split::testSplitToStringVector()
     ok = Calibri::split(out, std::string(";;Some;;;;data;;"), std::string(";;"));
     QVERIFY(ok);
     QCOMPARE(out, check);
+
+    check = { "Some data" };
+    ok = Calibri::split(out, std::string("Some data"), std::string(";"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
 }
 
 void tst_Split::testSplitToWStringVector()
@@ -57,6 +62,11 @@ void tst_Split::testSplitToWStringVector()
     QCOMPARE(out, check);
 
     ok = Calibri::split(out, std::wstring(L";;Some;;;;data;;"), std::wstring(L";;"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
+
+    check = { L"Some data" };
+    ok = Calibri::split(out, std::wstring(L"Some data"), std::wstring(L";"));
     QVERIFY(ok);
     QCOMPARE(out, check);
 }
@@ -78,6 +88,11 @@ void tst_Split::testSplitToByteArrayVector()
     ok = Calibri::split(out, Calibri::ByteArray(";;Some;;;;data;;"), Calibri::ByteArray(";;"));
     QVERIFY(ok);
     QCOMPARE(out, check);
+
+    check = { "Some data" };
+    ok = Calibri::split(out, Calibri::ByteArray("Some data"), Calibri::ByteArray(";"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
 }
 
 void tst_Split::testSplitToStringDeque()
@@ -95,6 +110,11 @@ void tst_Split::testSplitToStringDeque()
     QCOMPARE(out, check);
 
     ok = Calibri::split(out, std::string(";;Some;;;;data;;"), std::string(";;"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
+
+    check = { "Some data" };
+    ok = Calibri::split(out, std::string("Some data"), std::string(";"));
     QVERIFY(ok);
     QCOMPARE(out, check);
 }
@@ -116,6 +136,11 @@ void tst_Split::testSplitToWStringDeque()
     ok = Calibri::split(out, std::wstring(L";;Some;;;;data;;"), std::wstring(L";;"));
     QVERIFY(ok);
     QCOMPARE(out, check);
+
+    check = { L"Some data" };
+    ok = Calibri::split(out, std::wstring(L"Some data"), std::wstring(L";"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
 }
 
 void tst_Split::testSplitToByteArrayDeque()
@@ -133,6 +158,11 @@ void tst_Split::testSplitToByteArrayDeque()
     QCOMPARE(out, check);
 
     ok = Calibri::split(out, Calibri::ByteArray(";;Some;;;;data;;"), Calibri::ByteArray(";;"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
+
+    check = { "Some data" };
+    ok = Calibri::split(out, Calibri::ByteArray("Some data"), Calibri::ByteArray(";"));
     QVERIFY(ok);
     QCOMPARE(out, check);
 }
@@ -154,6 +184,11 @@ void tst_Split::testSplitToStringForwardList()
     ok = Calibri::split(out, std::string(";;Some;;;;data;;"), std::string(";;"));
     QVERIFY(ok);
     QCOMPARE(out, check);
+
+    check = { "Some data" };
+    ok = Calibri::split(out, std::string("Some data"), std::string(";"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
 }
 
 void tst_Split::testSplitToWStringForwardList()
@@ -171,6 +206,11 @@ void tst_Split::testSplitToWStringForwardList()
     QCOMPARE(out, check);
 
     ok = Calibri::split(out, std::wstring(L";;Some;;;;data;;"), std::wstring(L";;"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
+
+    check = { L"Some data" };
+    ok = Calibri::split(out, std::wstring(L"Some data"), std::wstring(L";"));
     QVERIFY(ok);
     QCOMPARE(out, check);
 }
@@ -192,6 +232,11 @@ void tst_Split::testSplitToByteArrayForwardList()
     ok = Calibri::split(out, Calibri::ByteArray(";;Some;;;;data;;"), Calibri::ByteArray(";;"));
     QVERIFY(ok);
     QCOMPARE(out, check);
+
+    check = { "Some data" };
+    ok = Calibri::split(out, Calibri::ByteArray("Some data"), Calibri::ByteArray(";"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
 }
 
 void tst_Split::testSplitToStringList()
@@ -209,6 +254,11 @@ void tst_Split::testSplitToStringList()
     QCOMPARE(out, check);
 
     ok = Calibri::split(out, std::string(";;Some;;;;data;;"), std::string(";;"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
+
+    check = { "Some data" };
+    ok = Calibri::split(out, std::string("Some data"), std::string(";"));
     QVERIFY(ok);
     QCOMPARE(out, check);
 }
@@ -230,6 +280,11 @@ void tst_Split::testSplitToWStringList()
     ok = Calibri::split(out, std::wstring(L";;Some;;;;data;;"), std::wstring(L";;"));
     QVERIFY(ok);
     QCOMPARE(out, check);
+
+    check = { L"Some data" };
+    ok = Calibri::split(out, std::wstring(L"Some data"), std::wstring(L";"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
 }
 
 void tst_Split::testSplitToByteArrayList()
@@ -247,6 +302,11 @@ void tst_Split::testSplitToByteArrayList()
     QCOMPARE(out, check);
 
     ok = Calibri::split(out, Calibri::ByteArray(";;Some;;;;data;;"), Calibri::ByteArray(";;"));
+    QVERIFY(ok);
+    QCOMPARE(out, check);
+
+    check = { "Some data" };
+    ok = Calibri::split(out, Calibri::ByteArray("Some data"), Calibri::ByteArray(";"));
     QVERIFY(ok);
     QCOMPARE(out, check);
 }
