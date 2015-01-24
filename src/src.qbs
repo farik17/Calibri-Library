@@ -105,4 +105,13 @@ Product {
             "*.cpp"
         ]
     }
+
+    Group {
+        name: "FileSystem"
+        prefix: "filesystem/"
+        files: [
+            "*.h",
+            "*.cpp"
+        ]
+    }
 }
