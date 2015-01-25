@@ -53,12 +53,44 @@ inline auto createDirectory(const std::string &path) noexcept -> bool
 
 inline auto createDirectories(const std::string &path) noexcept -> bool
 {
-    std::vector<std::string> directories {};
+    std::vector<std::string> entries {};
 
-    if (!split(directories, path, &Internal::isSeparator))
+    if (!split(entries, path, &Internal::isSeparator))
         return false;
 
+#if defined(OS_WINDOWS)
+    std::string currentEntry {};
+#elif defined(OS_LINUX) || defined(OS_UNIX)
+    std::string current { nativeSeparator() };
+#endif
+
+    for (auto &entry : entries) {
+        std::string nextEntry { currentEntry + entry + nativeSeparator() };
+
+        FileInfo fileInfo(nextEntry);
+
+        if (fileInfo.isDirectory()) {
+            currentEntry = std::move(nextEntry);
+
+            continue;
+        }
+
+        if (!createDirectory(nextEntry))
+            return false;
+
+        currentEntry = std::move(nextEntry);
+    }
+
     return true;
+}
+
+inline auto removeDirectory(const std::string &path) noexcept -> bool
+{
+#if defined(OS_WINDOWS)
+    return ::_rmdir(path.data()) == 0;
+#elif defined(OS_LINUX) || defined(OS_UNIX)
+    return ::rmdir(path.data()) == 0;
+#endif
 }
 
 } // end namespace Calibri
