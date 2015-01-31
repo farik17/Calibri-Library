@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include <crypto/digest.h>
+#include <crypto/digest.hpp>
 
 class tst_Digest : public QObject
 {

@@ -1,8 +1,8 @@
 import qbs
 
 Product {
-    name: "SimplifyTest"
-    targetName: "tst_simplify"
+    name: "MetaCastTest"
+    targetName: "tst_metacast"
     destinationDirectory: project.binaryDestinationDirectory
     consoleApplication: true
     type: [
@@ -30,12 +30,6 @@ Product {
 
     cpp.includePaths: [
         project.libraryDirectory
-    ]
-    cpp.libraryPaths: [
-        project.libraryDestinationDirectory
-    ]
-    cpp.dynamicLibraries: [
-        project.libraryName
     ]
     cpp.cxxFlags: project.compilerFlags
 }

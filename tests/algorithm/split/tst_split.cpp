@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include <algorithm/split.h>
+#include <algorithm/split.hpp>
 
 class tst_Split : public QObject
 {

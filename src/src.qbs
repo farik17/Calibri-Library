@@ -8,6 +8,9 @@ Product {
         "staticlibrary",
         "dynamiclibrary"
     ]
+    files: [
+        "*.hpp"
+    ]
 
     Depends {
         name: "cpp"
@@ -47,7 +50,7 @@ Product {
         name: "Global"
         prefix: "global/"
         files: [
-            "*.h",
+            "*.hpp",
             "*.cpp"
         ]
     }
@@ -56,16 +59,16 @@ Product {
         name: "Io"
         prefix: "io/"
         files: [
-            "*.h",
+            "*.hpp",
             "*.cpp"
         ]
     }
 
     Group {
-        name: "Tools"
-        prefix: "tools/"
+        name: "Tool"
+        prefix: "tool/"
         files: [
-            "*.h",
+            "*.hpp",
             "*.cpp"
         ]
     }
@@ -74,16 +77,16 @@ Product {
         name: "Thread"
         prefix: "thread/"
         files: [
-            "*.h",
+            "*.hpp",
             "*.cpp"
         ]
     }
 
     Group {
-        name: "Signals"
-        prefix: "signals/"
+        name: "Signal"
+        prefix: "signal/"
         files: [
-            "*.h",
+            "*.hpp",
             "*.cpp"
         ]
     }
@@ -92,7 +95,7 @@ Product {
         name: "Crypto"
         prefix: "crypto/"
         files: [
-            "*.h",
+            "*.hpp",
             "*.cpp"
         ]
     }
@@ -101,7 +104,7 @@ Product {
         name: "Algorithm"
         prefix: "algorithm/"
         files: [
-            "*.h",
+            "*.hpp",
             "*.cpp"
         ]
     }
@@ -110,7 +113,7 @@ Product {
         name: "FileSystem"
         prefix: "filesystem/"
         files: [
-            "*.h",
+            "*.hpp",
             "*.cpp"
         ]
     }

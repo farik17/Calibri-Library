@@ -2,8 +2,8 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include <io/buffer.h>
-#include <tools/metacast.h>
+#include <io/buffer.hpp>
+#include <tool/metacast.hpp>
 
 class tst_Buffer : public QObject
 {

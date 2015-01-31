@@ -1,5 +1,8 @@
 //! Self includes
-#include "buffer.h"
+#include "buffer.hpp"
+
+//! Calibri-Library includes
+#include "global/compilerdetection.hpp"
 
 namespace Calibri {
 

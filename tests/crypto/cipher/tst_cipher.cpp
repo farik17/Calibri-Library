@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include <crypto/cipher.h>
+#include <crypto/cipher.hpp>
 
 class tst_Cipher : public QObject
 {

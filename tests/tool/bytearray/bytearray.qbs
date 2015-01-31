@@ -1,8 +1,8 @@
 import qbs
 
 Product {
-    name: "SimplifyTest"
-    targetName: "tst_simplify"
+    name: "ByteArrayTest"
+    targetName: "tst_bytearray"
     destinationDirectory: project.binaryDestinationDirectory
     consoleApplication: true
     type: [

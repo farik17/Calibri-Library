@@ -1,8 +1,8 @@
 import qbs
 
 Product {
-    name: "SimplifyTest"
-    targetName: "tst_simplify"
+    name: "SignalTest"
+    targetName: "tst_signal"
     destinationDirectory: project.binaryDestinationDirectory
     consoleApplication: true
     type: [

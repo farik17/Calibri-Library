@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include <algorithm/trim.h>
+#include <algorithm/trim.hpp>
 
 class tst_Trim : public QObject
 {

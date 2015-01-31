@@ -2,7 +2,7 @@
 #include <QtTest/QtTest>
 
 //! Calibri-Library includes
-#include <algorithm/simplify.h>
+#include <algorithm/simplify.hpp>
 
 class tst_Simplify : public QObject
 {
