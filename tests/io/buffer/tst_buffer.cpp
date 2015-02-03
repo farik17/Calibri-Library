@@ -3,7 +3,7 @@
 
 //! Calibri-Library includes
 #include <io/buffer.hpp>
-#include <tool/metacast.hpp>
+#include <tools/metacast.hpp>
 
 class tst_Buffer : public QObject
 {

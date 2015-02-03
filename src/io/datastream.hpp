@@ -13,8 +13,8 @@
 
 //! Calibri-Library includes
 #include "buffer.hpp"
-#include "tool/disablecopyable.hpp"
-#include "tool/metacast.hpp"
+#include "tools/disablecopyable.hpp"
+#include "tools/metacast.hpp"
 
 namespace Calibri {
 

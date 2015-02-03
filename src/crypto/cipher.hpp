@@ -9,7 +9,7 @@
 
 //! Calibri-Library includes
 #include "global/compilerdetection.hpp"
-#include "tool/bytearray.hpp"
+#include "tools/bytearray.hpp"
 
 namespace Calibri {
 

@@ -8,8 +8,8 @@
 #include <openssl/evp.h>
 
 //! Calibri-Library includes
-#include "tool/bytearray.hpp"
-#include "tool/metacast.hpp"
+#include "tools/bytearray.hpp"
+#include "tools/metacast.hpp"
 
 namespace Calibri {
 

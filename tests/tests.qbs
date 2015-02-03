@@ -4,9 +4,9 @@ Project {
     name: "Tests"
     references: [
         "io/io.qbs",
-        "tool/tool.qbs",
+        "tools/tools.qbs",
         "crypto/crypto.qbs",
-        "algorithm/algorithm.qbs",
-        "signal/signal.qbs"
+        "algorithms/algorithms.qbs",
+        "signals/signals.qbs"
     ]
 }

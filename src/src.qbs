@@ -65,8 +65,8 @@ Product {
     }
 
     Group {
-        name: "Tool"
-        prefix: "tool/"
+        name: "Tools"
+        prefix: "tools/"
         files: [
             "*.hpp",
             "*.cpp"
@@ -83,8 +83,8 @@ Product {
     }
 
     Group {
-        name: "Signal"
-        prefix: "signal/"
+        name: "Signals"
+        prefix: "signals/"
         files: [
             "*.hpp",
             "*.cpp"
@@ -101,8 +101,8 @@ Product {
     }
 
     Group {
-        name: "Algorithm"
-        prefix: "algorithm/"
+        name: "Algorithms"
+        prefix: "algorithms/"
         files: [
             "*.hpp",
             "*.cpp"
