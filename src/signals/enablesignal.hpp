@@ -21,7 +21,7 @@ public:
     auto context() const noexcept -> SpinLock &;
 
 private:
-    SpinLock *m_context { &Variables::threadContext };
+    SpinLock &m_context { Variables::threadContext };
 };
 
 /*!
@@ -29,7 +29,7 @@ private:
  */
 inline auto EnableSignal::context() const noexcept -> SpinLock &
 {
-    return *m_context;
+    return m_context;
 }
 
 } // end namespace Calibri
