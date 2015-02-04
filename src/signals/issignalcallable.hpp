@@ -7,6 +7,8 @@
 
 namespace Calibri {
 
+namespace Signals {
+
 namespace Internal {
 
 //! Forward declarations
@@ -45,6 +47,8 @@ public:
 };
 
 } // end namespace Internal
+
+} // end namespace Signals
 
 } // end namespace Calibri
 

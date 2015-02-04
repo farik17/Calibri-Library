@@ -6,6 +6,8 @@
 
 namespace Calibri {
 
+namespace Signals {
+
 namespace Variables {
 
 thread_local SpinLock threadContext {};
@@ -31,6 +33,10 @@ inline auto EnableSignal::context() const noexcept -> SpinLock &
 {
     return m_context;
 }
+
+} // end namespace Signals
+
+using Signals::EnableSignal;
 
 } // end namespace Calibri
 

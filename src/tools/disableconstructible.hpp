@@ -6,6 +6,8 @@
 
 namespace Calibri {
 
+namespace Tools {
+
 /*!
  *  DisableCopyable class
  */
@@ -14,6 +16,10 @@ class DisableConstructible : private DisableCopyable
 private:
     DisableConstructible() = delete;
 };
+
+} // end namespace Tools
+
+using Tools::DisableConstructible;
 
 } // end namespace Calibri
 

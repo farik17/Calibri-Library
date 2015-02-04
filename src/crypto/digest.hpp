@@ -13,6 +13,8 @@
 
 namespace Calibri {
 
+namespace Crypto {
+
 //! Enumerations
 enum class DigestAlgorithm : uint8 {
     MD2,
@@ -291,6 +293,11 @@ auto digest(const ByteArray &data, bool *ok = nullptr) noexcept -> ByteArray
         return {};
     }
 }
+
+} // end namespace Crypto
+
+using Crypto::DigestAlgorithm;
+using Crypto::digest;
 
 } // end namespace Calibri
 

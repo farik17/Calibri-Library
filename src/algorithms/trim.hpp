@@ -6,6 +6,8 @@
 
 namespace Calibri {
 
+namespace Algorithms {
+
 template<typename DataType,
          typename std::enable_if<(std::is_same<DataType, std::string>::value
                                  || std::is_same<DataType, std::wstring>::value
@@ -36,6 +38,10 @@ inline auto trim(DataType &data) noexcept -> bool
         return false;
     }
 }
+
+} // end namespace Algorithms
+
+using Algorithms::trim;
 
 } // end namespace Calibri
 

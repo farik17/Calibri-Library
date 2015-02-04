@@ -11,6 +11,8 @@
 
 namespace Calibri {
 
+namespace Thread {
+
 namespace Internal {
 
 inline void yield(uint32 spin) noexcept
@@ -62,6 +64,10 @@ inline auto SpinLock::tryLock() noexcept -> bool
 {
     return !m_atomicFlag.test_and_set(std::memory_order_acquire);
 }
+
+} // end namespace Thread
+
+using Thread::SpinLock;
 
 } // end namespace Calibri
 

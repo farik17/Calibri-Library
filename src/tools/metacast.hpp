@@ -13,6 +13,8 @@
 
 namespace Calibri {
 
+namespace Tools {
+
 //! Convert convertible types
 template<typename CastType,
          typename DataType,
@@ -655,6 +657,10 @@ inline auto metaCast(const std::wstring &data) noexcept -> CastType
 {
     return metaCast<CastType>(data.data());
 }
+
+} // end namespace Tools
+
+using Tools::metaCast;
 
 } // end namespace Calibri
 

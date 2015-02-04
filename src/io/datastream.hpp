@@ -18,6 +18,8 @@
 
 namespace Calibri {
 
+namespace Io {
+
 //! Enumerations
 enum class DataStreamStatus : uint8 {
     Ok,
@@ -835,6 +837,11 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
         return dataStream;
     }
 }
+
+} // end namespace Io
+
+using Io::DataStreamStatus;
+using Io::DataStream;
 
 } // end namespace Calibri
 

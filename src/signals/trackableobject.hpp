@@ -11,6 +11,8 @@
 
 namespace Calibri {
 
+namespace Signals {
+
 namespace Internal {
 
 //! Forward declarations
@@ -50,8 +52,8 @@ inline TrackableObject::~TrackableObject() noexcept
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        for (const auto &pair : m_observers)
-            (pair.first)->destroyed(this);
+        for (const auto &item : m_observers)
+            (item.first)->destroyed(this);
     } catch (const std::exception &ex) {
         std::cerr << __func__ << " : " << ex.what() << std::endl;
     }
@@ -62,8 +64,8 @@ inline auto TrackableObject::connected(TrackableObjectObserver *observer) noexce
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<TrackableObjectObserver *, uint32> &pair) {
-            return pair.first == observer;
+        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<TrackableObjectObserver *, uint32> &item) {
+            return item.first == observer;
         });
 
         if (it != std::end(m_observers))
@@ -84,8 +86,8 @@ inline auto TrackableObject::disconnected(TrackableObjectObserver *observer) noe
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<TrackableObjectObserver *, uint32> &pair) {
-            return pair.first == observer;
+        auto it = std::find_if(std::begin(m_observers), std::end(m_observers), [ observer ](const std::pair<TrackableObjectObserver *, uint32> &item) {
+            return item.first == observer;
         });
 
         if (it != std::end(m_observers)) {
@@ -104,6 +106,8 @@ inline auto TrackableObject::disconnected(TrackableObjectObserver *observer) noe
 }
 
 } // end namespace Internal
+
+} // end namespace Signals
 
 } // end namespace Calibri
 

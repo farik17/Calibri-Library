@@ -17,6 +17,8 @@
 
 namespace Calibri {
 
+namespace Signals {
+
 namespace Variables {
 
 SpinLock globalContext {};
@@ -232,6 +234,8 @@ isConnectedTo(ObjectType *object, MemberFunction<CallableReturnType, ObjectType,
 }
 
 } // end namespace Internal
+
+} // end namespace Signals
 
 } // end namespace Calibri
 

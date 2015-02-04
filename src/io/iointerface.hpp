@@ -10,6 +10,8 @@
 
 namespace Calibri {
 
+namespace Io {
+
 /*!
  *  IOInterface class
  */
@@ -126,6 +128,11 @@ inline auto IORandomAccessInterface::setPos(sizeinfo pos) noexcept -> void
 {
     m_pos = pos;
 }
+
+} // end namespace Io
+
+using Io::IOInterface;
+using Io::IORandomAccessInterface;
 
 } // end namespace Calibri
 

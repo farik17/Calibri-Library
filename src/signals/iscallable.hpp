@@ -6,6 +6,8 @@
 
 namespace Calibri {
 
+namespace Signals {
+
 namespace Internal {
 
 /*!
@@ -39,6 +41,8 @@ template<typename ...>
 constexpr auto isCallable(...) noexcept -> std::false_type;
 
 } // end namespace Internal
+
+} // end namespace Signals
 
 } // end namespace Calibri
 

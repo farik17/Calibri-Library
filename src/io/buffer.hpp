@@ -7,6 +7,8 @@
 
 namespace Calibri {
 
+namespace Io {
+
 /*!
  *  Buffer class
  */
@@ -112,6 +114,10 @@ inline auto operator <<(std::ostream &stream, const Buffer &buffer) noexcept -> 
 {
     return stream << buffer.data();
 }
+
+} // end namespace Io
+
+using Io::Buffer;
 
 } // end namespace Calibri
 

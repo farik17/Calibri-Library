@@ -11,6 +11,8 @@
 
 namespace Calibri {
 
+namespace Algorithms {
+
 template<typename ContainerType,
          typename DataType = typename ContainerType::value_type,
          typename PredicateType,
@@ -276,6 +278,10 @@ inline auto split(ContainerType &container, const DataType &data, DataType &&sep
         return false;
     }
 }
+
+} // end namespace Algorithms
+
+using Algorithms::split;
 
 } // end namespace Calibri
 

@@ -6,9 +6,11 @@
 
 namespace Calibri {
 
-namespace Constants {
+namespace Tools {
 
 namespace Hex {
+
+namespace Constants {
 
 constexpr std::array<char, 16> alphabet {
     {
@@ -19,9 +21,13 @@ constexpr std::array<char, 16> alphabet {
     }
 };
 
+} // end namespace Constants
+
 } // end namespace Hex
 
 namespace Base64 {
+
+namespace Constants {
 
 constexpr std::array<char, 64> alphabet {
     {
@@ -36,9 +42,9 @@ constexpr std::array<char, 64> alphabet {
     }
 };
 
-} // end namespace Base64
-
 } // end namespace Constants
+
+} // end namespace Base64
 
 auto ByteArray::toHex(bool *ok) const noexcept -> ByteArray
 {
@@ -47,8 +53,8 @@ auto ByteArray::toHex(bool *ok) const noexcept -> ByteArray
         encodedData.reserve(size() * 2);
 
         for (auto it = std::begin(*this), end = std::end(*this); it != end; ++it) {
-            encodedData.emplace_back(Constants::Hex::alphabet[*it >> 4 & 0x0f]);
-            encodedData.emplace_back(Constants::Hex::alphabet[*it & 0x0f]);
+            encodedData.emplace_back(Hex::Constants::alphabet[*it >> 4 & 0x0f]);
+            encodedData.emplace_back(Hex::Constants::alphabet[*it & 0x0f]);
         }
 
         if (ok)
@@ -88,10 +94,10 @@ auto ByteArray::toBase64(bool *ok) const noexcept -> ByteArray
 
             ++it;
 
-            encodedData.emplace_back(Constants::Base64::alphabet[(block[0] & 0xfc) >> 2]);
-            encodedData.emplace_back(Constants::Base64::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
-            encodedData.emplace_back(Constants::Base64::alphabet[((block[1] & 0x0f) << 2) + ((block[2] & 0xc0) >> 6)]);
-            encodedData.emplace_back(Constants::Base64::alphabet[(block[2] & 0x3f)]);
+            encodedData.emplace_back(Base64::Constants::alphabet[(block[0] & 0xfc) >> 2]);
+            encodedData.emplace_back(Base64::Constants::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
+            encodedData.emplace_back(Base64::Constants::alphabet[((block[1] & 0x0f) << 2) + ((block[2] & 0xc0) >> 6)]);
+            encodedData.emplace_back(Base64::Constants::alphabet[(block[2] & 0x3f)]);
         }
 
         switch (paddingSize) {
@@ -100,9 +106,9 @@ auto ByteArray::toBase64(bool *ok) const noexcept -> ByteArray
             block[1] = *++it;
             block[2] = *++it;
 
-            encodedData.emplace_back(Constants::Base64::alphabet[(block[0] & 0xfc) >> 2]);
-            encodedData.emplace_back(Constants::Base64::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
-            encodedData.emplace_back(Constants::Base64::alphabet[((block[1] & 0x0f) << 2) + ((block[2] & 0xc0) >> 6)]);
+            encodedData.emplace_back(Base64::Constants::alphabet[(block[0] & 0xfc) >> 2]);
+            encodedData.emplace_back(Base64::Constants::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
+            encodedData.emplace_back(Base64::Constants::alphabet[((block[1] & 0x0f) << 2) + ((block[2] & 0xc0) >> 6)]);
             encodedData.emplace_back('=');
 
             break;
@@ -111,8 +117,8 @@ auto ByteArray::toBase64(bool *ok) const noexcept -> ByteArray
             block[0] = *it;
             block[1] = *++it;
 
-            encodedData.emplace_back(Constants::Base64::alphabet[(block[0] & 0xfc) >> 2]);
-            encodedData.emplace_back(Constants::Base64::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
+            encodedData.emplace_back(Base64::Constants::alphabet[(block[0] & 0xfc) >> 2]);
+            encodedData.emplace_back(Base64::Constants::alphabet[((block[0] & 0x03) << 4) + ((block[1] & 0xf0) >> 4)]);
             encodedData.emplace_back('=');
             encodedData.emplace_back('=');
 
@@ -315,5 +321,7 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
         return {};
     }
 }
+
+} // end namespace Tools
 
 } // end namespace Calibri

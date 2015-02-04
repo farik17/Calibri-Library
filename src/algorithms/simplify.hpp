@@ -6,6 +6,8 @@
 
 namespace Calibri {
 
+namespace Algorithms {
+
 namespace Constants {
 
 constexpr char space { ' ' };
@@ -62,6 +64,10 @@ inline auto simplify(DataType &data) noexcept -> bool
         return false;
     }
 }
+
+} // end namespace Algorithms
+
+using Algorithms::simplify;
 
 } // end namespace Calibri
 

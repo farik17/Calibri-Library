@@ -6,6 +6,8 @@
 
 namespace Calibri {
 
+namespace Signals {
+
 namespace Internal {
 
 //! Aliases
@@ -98,6 +100,8 @@ inline auto MemberFunctionWrapper<MemberFunction<ReturnType, ObjectType, Argumen
 }
 
 } // end namespace Internal
+
+} // end namespace Signals
 
 } // end namespace Calibri
 

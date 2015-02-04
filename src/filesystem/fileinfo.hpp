@@ -4,7 +4,7 @@
 //! Calibri-Library includes
 #include "global/systemdetection.hpp"
 #include "global/type.hpp"
-#include "tool/metacast.hpp"
+#include "tools/metacast.hpp"
 
 //! System includes
 #if defined(OS_WINDOWS)
@@ -14,6 +14,8 @@
 #endif
 
 namespace Calibri {
+
+namespace FileSystem {
 
 //! Enumerations
 enum class FileType : uint8 {
@@ -140,6 +142,11 @@ inline auto FileInfo::isOther() const noexcept -> bool
 {
     return !isDirectory() && !isRegularFile() && !isSymLink();
 }
+
+} // end namespace FileSystem
+
+using FileSystem::FileType;
+using FileSystem::FileInfo;
 
 } // end namespace Calibri
 

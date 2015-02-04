@@ -9,6 +9,8 @@
 
 namespace Calibri {
 
+namespace Tools {
+
 //! Enumerations
 enum class ElapsedTimerMetric : uint8 {
     Hours,
@@ -124,6 +126,11 @@ inline auto ElapsedTimer::hasExpired(uint64 timeout) const noexcept -> bool
 {
     return timeout < elapsed<Metric>();
 }
+
+} // end namespace Tools
+
+using Tools::ElapsedTimerMetric;
+using Tools::ElapsedTimer;
 
 } // end namespace Calibri
 

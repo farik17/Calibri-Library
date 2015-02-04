@@ -12,6 +12,8 @@
 
 namespace Calibri {
 
+namespace Signals {
+
 //! Enumerations
 enum class SignalConnectionMode : uint8 {
     DefaultConnection,
@@ -118,9 +120,9 @@ inline Signal<Internal::Function<ReturnType, ArgumentsType ...>>::~Signal() noex
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        for (const auto &pair : m_connections) {
-            if (pair.second)
-                pair.second->disconnected(this);
+        for (const auto &item : m_connections) {
+            if (item.second)
+                item.second->disconnected(this);
         }
     } catch (const std::exception &ex) {
         std::cerr << __func__ << " : " << ex.what() << std::endl;
@@ -188,8 +190,8 @@ inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::connect(C
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &pair) {
-            return pair.first.isConnectedTo(callable);
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &item) {
+            return item.first.isConnectedTo(callable);
         });
 
         if (it != std::end(m_connections))
@@ -253,8 +255,8 @@ inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::connect(O
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ object, &callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &pair) {
-            return pair.first.isConnectedTo(object, callable);
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ object, &callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &item) {
+            return item.first.isConnectedTo(object, callable);
         });
 
         if (it != std::end(m_connections))
@@ -308,8 +310,8 @@ inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::connect(C
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &pair) {
-            return pair.first.isConnectedTo(callable);
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &item) {
+            return item.first.isConnectedTo(callable);
         });
 
         if (it != std::end(m_connections))
@@ -353,8 +355,8 @@ inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::disconnec
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &pair) {
-            return pair.first.isConnectedTo(callable);
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &item) {
+            return item.first.isConnectedTo(callable);
         });
 
         if (it != std::end(m_connections)) {
@@ -384,8 +386,8 @@ inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::disconnec
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ object, &callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &pair) {
-            return pair.first.isConnectedTo(object, callable);
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ object, &callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &item) {
+            return item.first.isConnectedTo(object, callable);
         });
 
         if (it != std::end(m_connections)) {
@@ -413,8 +415,8 @@ inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::disconnec
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &pair) {
-            return pair.first.isConnectedTo(callable);
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ callable ](const std::pair<ConnectionType, Internal::TrackableObject *> &item) {
+            return item.first.isConnectedTo(callable);
         });
 
         if (it != std::end(m_connections)) {
@@ -438,8 +440,8 @@ inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::disconnec
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ signalConnection ](const std::pair<ConnectionType, Internal::TrackableObject *> &pair) {
-            return pair.first == *signalConnection;
+        auto it = std::find_if(std::begin(m_connections), std::end(m_connections), [ signalConnection ](const std::pair<ConnectionType, Internal::TrackableObject *> &item) {
+            return &item.first == signalConnection;
         });
 
         if (it != std::end(m_connections)) {
@@ -484,13 +486,18 @@ inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::destroyed
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        m_connections.remove_if([ trackableObject ](const std::pair<ConnectionType, Internal::TrackableObject *> &pair) {
-            return pair.second == trackableObject;
+        m_connections.remove_if([ trackableObject ](const std::pair<ConnectionType, Internal::TrackableObject *> &item) {
+            return item.second == trackableObject;
         });
     } catch (const std::exception &ex) {
         std::cerr << __func__ << " : " << ex.what() << std::endl;
     }
 }
+
+} // end namespace Signals
+
+using Signals::SignalConnectionMode;
+using Signals::Signal;
 
 } // end namespace Calibri
 

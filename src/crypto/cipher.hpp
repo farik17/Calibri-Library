@@ -13,6 +13,8 @@
 
 namespace Calibri {
 
+namespace Crypto {
+
 //! Enumerations
 enum class CipherAlgorithm : uint8 {
     DESecb,
@@ -1079,6 +1081,12 @@ auto cipher(const ByteArray &data, const ByteArray &key, const ByteArray &iv, bo
         return {};
     }
 }
+
+} // end namespace Crypto
+
+using Crypto::CipherAlgorithm;
+using Crypto::CipherMode;
+using Crypto::cipher;
 
 } // end namespace Calibri
 

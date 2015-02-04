@@ -6,6 +6,8 @@
 
 namespace Calibri {
 
+namespace Io {
+
 namespace Constants {
 
 constexpr char endOfLine { '\n' };
@@ -176,5 +178,7 @@ auto Buffer::seekData(sizeinfo pos) noexcept -> bool
 
     return true;
 }
+
+} // end namespace Io
 
 } // end namespace Calibri

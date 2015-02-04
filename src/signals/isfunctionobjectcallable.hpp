@@ -7,6 +7,8 @@
 
 namespace Calibri {
 
+namespace Signals {
+
 namespace Internal {
 
 /*!
@@ -23,6 +25,8 @@ public:
 };
 
 } // end namespace Internal
+
+} // end namespace Signals
 
 } // end namespace Calibri
 

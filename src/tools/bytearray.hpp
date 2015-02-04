@@ -11,6 +11,8 @@
 
 namespace Calibri {
 
+namespace Tools {
+
 /*!
  *  ByteArray class
  */
@@ -219,6 +221,10 @@ inline auto operator <<(std::ostream &stream, const ByteArray &byteArray) noexce
 
     return stream;
 }
+
+} // end namespace Tools
+
+using Tools::ByteArray;
 
 } // end namespace Calibri
 

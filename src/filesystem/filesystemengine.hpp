@@ -7,6 +7,8 @@
 
 namespace Calibri {
 
+namespace FileSystem {
+
 inline constexpr auto isCaseSensitive() noexcept -> bool
 {
 #if defined(OS_WINDOWS)
@@ -101,6 +103,15 @@ inline auto createDirectories(const std::string &path) noexcept -> bool
         return false;
     }
 }
+
+} // end namespace FileSystem
+
+using FileSystem::isCaseSensitive;
+using FileSystem::isSeparator;
+using FileSystem::nativeSeparator;
+using FileSystem::createDirectory;
+using FileSystem::removeDirectory;
+using FileSystem::createDirectories;
 
 } // end namespace Calibri
 
