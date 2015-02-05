@@ -4,54 +4,268 @@
 //! Calibri-Library includes
 #include <signals/signal.hpp>
 
-int func(int value) noexcept { return value * value; }
+class Trackable : public Calibri::EnableSignal
+{
+public:
+    auto multiplier(int value) noexcept -> int { return value * value; }
+    auto constMultiplier(int value) const noexcept -> int { return value * value; }
+};
 
-class tst_Signal : public QObject
+inline auto multiplier(int value) noexcept -> int { return value * value; }
+
+class tst_Signal : public QObject, public Calibri::EnableSignal
 {
     Q_OBJECT
 
 private slots:
-    void testConnect();
+    void testFunction();
+    void testFunctionObject();
+    void testMemberFunction();
+    void testConstMemberFunction();
+    void testSignal();
+
+signals:
+    void sig(int);
 };
 
-void tst_Signal::testConnect()
+void tst_Signal::testFunction()
 {
     Calibri::Signal<int (int)> signal;
 
-    QVERIFY(signal.connect(::func));
-    QVERIFY(signal.disconnect(::func));
-    QVERIFY(!signal.disconnect(::func));
+    QVERIFY(signal.connect(::multiplier));
+    QVERIFY(signal.disconnect(::multiplier));
+    QVERIFY(!signal.disconnect(::multiplier));
 
-    QVERIFY(signal.connect(::func));
-    QVERIFY(signal.connect(::func));
-    QVERIFY(signal.disconnect(::func));
-    QVERIFY(signal.disconnect(::func));
-    QVERIFY(!signal.disconnect(::func));
+    QVERIFY(signal.connect(::multiplier));
+    QVERIFY(signal.connect(::multiplier));
+    QVERIFY(signal.disconnect(::multiplier));
+    QVERIFY(signal.disconnect(::multiplier));
+    QVERIFY(!signal.disconnect(::multiplier));
 
-    QVERIFY(signal.connect(::func));
-    QVERIFY(!signal.connect<Calibri::SignalConnectionMode::UniqueConnection>(::func));
-    QVERIFY(signal.disconnect(::func));
-    QVERIFY(!signal.disconnect(::func));
+    QVERIFY(signal.connect(::multiplier));
+    QVERIFY(!signal.connect<Calibri::SignalConnectionMode::UniqueConnection>(::multiplier));
+    QVERIFY(signal.disconnect(::multiplier));
+    QVERIFY(!signal.disconnect(::multiplier));
 
-    auto connection = signal.connect([](int value) noexcept { return value * value; });
+    auto connection = signal.connect(::multiplier);
     QVERIFY(connection);
     QVERIFY(signal.disconnect(connection));
     QVERIFY(!signal.disconnect(connection));
 
-    connection = signal.connect([](int value) noexcept { return value * value; });
+    connection = signal.connect(::multiplier);
     QVERIFY(connection);
-    QVERIFY(signal.connect(::func));
+    QVERIFY(signal.connect(::multiplier));
     QVERIFY(signal.disconnect(connection));
     QVERIFY(!signal.disconnect(connection));
-    QVERIFY(signal.disconnect(::func));
-    QVERIFY(!signal.disconnect(::func));
+    QVERIFY(signal.disconnect(::multiplier));
+    QVERIFY(!signal.disconnect(::multiplier));
 
-    connection = signal.connect([](int value) noexcept { return value * value; });
+    connection = signal.connect(::multiplier);
     QVERIFY(connection);
-    QVERIFY(signal.connect(::func));
+    QVERIFY(signal.connect(::multiplier));
     signal.disconnectAll();
     QVERIFY(!signal.disconnect(connection));
-    QVERIFY(!signal.disconnect(::func));
+    QVERIFY(!signal.disconnect(::multiplier));
+
+    QVERIFY(signal.connect(::multiplier));
+    QCOMPARE(signal(5), 25);
+}
+
+void tst_Signal::testFunctionObject()
+{
+    Calibri::Signal<int (int)> signal;
+
+    auto connection = signal.connect([](int value) { return value * value; });
+    QVERIFY(connection);
+    QVERIFY(signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(connection));
+
+    auto firstConnection = signal.connect([](int value) { return value * value; });
+    QVERIFY(firstConnection);
+    auto secondConnection = signal.connect([](int value) { return value * value; });
+    QVERIFY(secondConnection);
+    QVERIFY(signal.disconnect(firstConnection));
+    QVERIFY(!signal.disconnect(firstConnection));
+    QVERIFY(signal.disconnect(secondConnection));
+    QVERIFY(!signal.disconnect(secondConnection));
+
+    firstConnection = signal.connect([](int value) { return value * value; });
+    QVERIFY(firstConnection);
+    secondConnection = signal.connect([](int value) { return value * value; });
+    QVERIFY(secondConnection);
+    signal.disconnectAll();
+    QVERIFY(!signal.disconnect(firstConnection));
+    QVERIFY(!signal.disconnect(secondConnection));
+
+    QVERIFY(signal.connect([](int value) { return value * value; }));
+    QCOMPARE(signal(5), 25);
+}
+
+void tst_Signal::testMemberFunction()
+{
+    Calibri::Signal<int (int)> signal;
+
+    auto trackable = new Trackable;
+
+    auto connection = signal.connect(trackable, &Trackable::multiplier);
+    QVERIFY(connection);
+    delete trackable;
+    QVERIFY(!signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::multiplier));
+
+    trackable = new Trackable;
+
+    QVERIFY(signal.connect(trackable, &Trackable::multiplier));
+    QVERIFY(signal.disconnect(trackable, &Trackable::multiplier));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::multiplier));
+
+    QVERIFY(signal.connect(trackable, &Trackable::multiplier));
+    QVERIFY(signal.connect(trackable, &Trackable::multiplier));
+    QVERIFY(signal.disconnect(trackable, &Trackable::multiplier));
+    QVERIFY(signal.disconnect(trackable, &Trackable::multiplier));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::multiplier));
+
+    QVERIFY(signal.connect(trackable, &Trackable::multiplier));
+    QVERIFY(!signal.connect<Calibri::SignalConnectionMode::UniqueConnection>(trackable, &Trackable::multiplier));
+    QVERIFY(signal.disconnect(trackable, &Trackable::multiplier));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::multiplier));
+
+    connection = signal.connect(trackable, &Trackable::multiplier);
+    QVERIFY(connection);
+    QVERIFY(signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(connection));
+
+    connection = signal.connect(trackable, &Trackable::multiplier);
+    QVERIFY(connection);
+    QVERIFY(signal.connect(trackable, &Trackable::multiplier));
+    QVERIFY(signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(connection));
+    QVERIFY(signal.disconnect(trackable, &Trackable::multiplier));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::multiplier));
+
+    connection = signal.connect(trackable, &Trackable::multiplier);
+    QVERIFY(connection);
+    QVERIFY(signal.connect(trackable, &Trackable::multiplier));
+    signal.disconnectAll();
+    QVERIFY(!signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::multiplier));
+
+    QVERIFY(signal.connect(trackable, &Trackable::multiplier));
+    QCOMPARE(signal(5), 25);
+
+    delete trackable;
+}
+
+void tst_Signal::testConstMemberFunction()
+{
+    Calibri::Signal<int (int)> signal;
+
+    auto trackable = new Trackable;
+
+    auto connection = signal.connect(trackable, &Trackable::multiplier);
+    QVERIFY(connection);
+    delete trackable;
+    QVERIFY(!signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::multiplier));
+
+    trackable = new Trackable;
+
+    QVERIFY(signal.connect(trackable, &Trackable::constMultiplier));
+    QVERIFY(signal.disconnect(trackable, &Trackable::constMultiplier));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::constMultiplier));
+
+    QVERIFY(signal.connect(trackable, &Trackable::constMultiplier));
+    QVERIFY(signal.connect(trackable, &Trackable::constMultiplier));
+    QVERIFY(signal.disconnect(trackable, &Trackable::constMultiplier));
+    QVERIFY(signal.disconnect(trackable, &Trackable::constMultiplier));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::constMultiplier));
+
+    QVERIFY(signal.connect(trackable, &Trackable::constMultiplier));
+    QVERIFY(!signal.connect<Calibri::SignalConnectionMode::UniqueConnection>(trackable, &Trackable::constMultiplier));
+    QVERIFY(signal.disconnect(trackable, &Trackable::constMultiplier));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::constMultiplier));
+
+    connection = signal.connect(trackable, &Trackable::constMultiplier);
+    QVERIFY(connection);
+    QVERIFY(signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(connection));
+
+    connection = signal.connect(trackable, &Trackable::constMultiplier);
+    QVERIFY(connection);
+    QVERIFY(signal.connect(trackable, &Trackable::constMultiplier));
+    QVERIFY(signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(connection));
+    QVERIFY(signal.disconnect(trackable, &Trackable::constMultiplier));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::constMultiplier));
+
+    connection = signal.connect(trackable, &Trackable::constMultiplier);
+    QVERIFY(connection);
+    QVERIFY(signal.connect(trackable, &Trackable::constMultiplier));
+    signal.disconnectAll();
+    QVERIFY(!signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(trackable, &Trackable::constMultiplier));
+
+    QVERIFY(signal.connect(trackable, &Trackable::constMultiplier));
+    QCOMPARE(signal(5), 25);
+
+    delete trackable;
+}
+
+void tst_Signal::testSignal()
+{
+    Calibri::Signal<int (int)> signal;
+
+    auto callable = new decltype(signal)();
+    callable->connect(::multiplier);
+
+    auto connection = signal.connect(callable);
+    QVERIFY(connection);
+    delete callable;
+    QVERIFY(!signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(callable));
+
+    callable = new decltype(signal)();
+    callable->connect(::multiplier);
+
+    QVERIFY(signal.connect(callable));
+    QVERIFY(signal.disconnect(callable));
+    QVERIFY(!signal.disconnect(callable));
+
+    QVERIFY(signal.connect(callable));
+    QVERIFY(signal.connect(callable));
+    QVERIFY(signal.disconnect(callable));
+    QVERIFY(signal.disconnect(callable));
+    QVERIFY(!signal.disconnect(callable));
+
+    QVERIFY(signal.connect(callable));
+    QVERIFY(!signal.connect<Calibri::SignalConnectionMode::UniqueConnection>(callable));
+    QVERIFY(signal.disconnect(callable));
+    QVERIFY(!signal.disconnect(callable));
+
+    connection = signal.connect(callable);
+    QVERIFY(connection);
+    QVERIFY(signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(connection));
+
+    connection = signal.connect(callable);
+    QVERIFY(connection);
+    QVERIFY(signal.connect(callable));
+    QVERIFY(signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(connection));
+    QVERIFY(signal.disconnect(callable));
+    QVERIFY(!signal.disconnect(callable));
+
+    connection = signal.connect(callable);
+    QVERIFY(connection);
+    QVERIFY(signal.connect(callable));
+    signal.disconnectAll();
+    QVERIFY(!signal.disconnect(connection));
+    QVERIFY(!signal.disconnect(callable));
+
+    QVERIFY(signal.connect(callable));
+    QCOMPARE(signal(5), 25);
+
+    delete callable;
 }
 
 QTEST_MAIN(tst_Signal)

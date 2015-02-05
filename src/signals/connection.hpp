@@ -81,6 +81,11 @@ public:
              typename ...CallableArgumentsType>
     auto isConnectedTo(ObjectType *object, MemberFunction<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunction) const noexcept -> bool;
 
+    template<typename ObjectType,
+             typename CallableReturnType,
+             typename ...CallableArgumentsType>
+    auto isConnectedTo(ObjectType *object, ConstMemberFunction<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunction) const noexcept -> bool;
+
 private:
     void *m_callable {};
 
@@ -223,6 +228,23 @@ template<typename ObjectType,
          typename ...CallableArgumentsType>
 inline auto Connection<Function<ReturnType, ArgumentsType ...>>::
 isConnectedTo(ObjectType *object, MemberFunction<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunction) const noexcept -> bool
+{
+    if (m_comparator) {
+        auto memberFunctionWrapper = Internal::MemberFunctionWrapper<decltype(memberFunction)>(object, memberFunction);
+
+        return m_comparator(m_callable, reinterpret_cast<decltype(m_callable)>(&memberFunctionWrapper));
+    }
+
+    return false;
+}
+
+template<typename ReturnType,
+         typename ...ArgumentsType>
+template<typename ObjectType,
+         typename CallableReturnType,
+         typename ...CallableArgumentsType>
+inline auto Connection<Function<ReturnType, ArgumentsType ...>>::
+isConnectedTo(ObjectType *object, ConstMemberFunction<CallableReturnType, ObjectType, CallableArgumentsType ...> memberFunction) const noexcept -> bool
 {
     if (m_comparator) {
         auto memberFunctionWrapper = Internal::MemberFunctionWrapper<decltype(memberFunction)>(object, memberFunction);

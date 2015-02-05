@@ -9,11 +9,11 @@ namespace Calibri {
 
 namespace Signals {
 
-namespace Internal {
-
 //! Forward declarations
 template<typename ...>
 class Signal;
+
+namespace Internal {
 
 /*!
  *  IsSignal class
