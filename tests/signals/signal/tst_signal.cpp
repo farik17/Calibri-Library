@@ -11,6 +11,16 @@ public:
     auto constMultiplier(int value) const noexcept -> int { return value * value; }
 };
 
+class SumMarshaller
+{
+public:
+    auto operator ()(int value) noexcept -> bool { m_sum += value; return false; }
+    operator int() const noexcept { return m_sum; }
+
+private:
+    int m_sum {};
+};
+
 inline auto multiplier(int value) noexcept -> int { return value * value; }
 
 class tst_Signal : public QObject, public Calibri::EnableSignal
@@ -23,6 +33,9 @@ private slots:
     void testMemberFunction();
     void testConstMemberFunction();
     void testSignal();
+    void testLastValue();
+    void testVoidReturnType();
+    void testMarshaller();
 
 signals:
     void sig(int);
@@ -266,6 +279,42 @@ void tst_Signal::testSignal()
     QCOMPARE(signal(5), 25);
 
     delete callable;
+}
+
+void tst_Signal::testLastValue()
+{
+    Calibri::Signal<int (int)> signal;
+
+    QVERIFY(signal.connect([](int value) { return value * value; }));
+    QVERIFY(signal.connect([](int value) { return value * value + value; }));
+
+    QCOMPARE(signal(5), 30);
+}
+
+void tst_Signal::testVoidReturnType()
+{
+    Calibri::Signal<void (int &)> signal;
+
+    QVERIFY(signal.connect([](int &value) { value *= value; }));
+    QVERIFY(signal.connect([](int &value) { value += value; }));
+
+    int value = 5;
+
+    signal(value);
+
+    QCOMPARE(value, 50);
+}
+
+void tst_Signal::testMarshaller()
+{
+    Calibri::Signal<int (int )> signal;
+    QVERIFY(signal.connect([](int value) { return value + value; }));
+    QVERIFY(signal.connect([](int value) { return value + value; }));
+    QVERIFY(signal.connect([](int value) { return value + value; }));
+    QVERIFY(signal.connect([](int value) { return value + value; }));
+    QVERIFY(signal.connect([](int value) { return value + value; }));
+
+    QCOMPARE(signal(SumMarshaller(), 5), 50);
 }
 
 QTEST_MAIN(tst_Signal)

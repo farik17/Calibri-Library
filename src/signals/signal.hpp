@@ -8,6 +8,7 @@
 
 //! Calibri-Library includes
 #include "connection.hpp"
+#include "lastvalue.hpp"
 #include "global/compilerdetection.hpp"
 
 namespace Calibri {
@@ -38,6 +39,17 @@ class Signal<Internal::Function<ReturnType, ArgumentsType ...>> : private Disabl
 public:
     virtual ~Signal() noexcept;
 
+    template<typename MarshallerType,
+             typename std::enable_if<(Internal::IsFunctionObjectCallable<typename std::decay<MarshallerType>::type, bool, ReturnType>::value
+                                     && std::is_convertible<MarshallerType, ReturnType>::value)>::type ...Enabler>
+    auto operator ()(MarshallerType &&marshaller, ArgumentsType &&...arguments) noexcept -> ReturnType;
+
+    template<typename MarshallerType = Internal::LastValue<ReturnType>,
+             typename std::enable_if<std::is_convertible<MarshallerType, ReturnType>::value>::type ...Enabler>
+    auto operator ()(ArgumentsType &&...arguments) noexcept -> ReturnType;
+
+    template<typename MarshallerType = Internal::LastValue<ReturnType>,
+             typename std::enable_if<!std::is_convertible<MarshallerType, ReturnType>::value>::type ...Enabler>
     auto operator ()(ArgumentsType &&...arguments) noexcept -> ReturnType;
 
     template<SignalConnectionMode ConnectionMode = SignalConnectionMode::DefaultConnection,
@@ -81,7 +93,7 @@ public:
     auto connect(CallableType callable) noexcept -> ConnectionType *;
 
     template<typename CallableType,
-             typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::remove_reference<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
+             typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::decay<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
     auto connect(CallableType &&callable) noexcept -> ConnectionType *;
 
     template<typename CallableType,
@@ -131,18 +143,47 @@ inline Signal<Internal::Function<ReturnType, ArgumentsType ...>>::~Signal() noex
 
 template<typename ReturnType,
          typename ...ArgumentsType>
+template<typename MarshallerType,
+         typename std::enable_if<(Internal::IsFunctionObjectCallable<typename std::decay<MarshallerType>::type, bool, ReturnType>::value
+                                 && std::is_convertible<MarshallerType, ReturnType>::value)>::type ...Enabler>
+auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::operator ()(MarshallerType &&marshaller, ArgumentsType &&...arguments) noexcept -> ReturnType
+{
+    try {
+        std::lock_guard<SpinLock> locker { m_context };
+
+        for (auto &item : m_connections) {
+            if (marshaller((item.first)(std::forward<ArgumentsType>(arguments) ...)))
+                break;
+        }
+
+        return marshaller;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return ReturnType();
+    }
+}
+
+template<typename ReturnType,
+         typename ...ArgumentsType>
+template<typename MarshallerType,
+         typename std::enable_if<std::is_convertible<MarshallerType, ReturnType>::value>::type ...Enabler>
+inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::operator ()(ArgumentsType &&...arguments) noexcept -> ReturnType
+{
+    return (*this)(MarshallerType(), std::forward<ArgumentsType>(arguments) ...);
+}
+
+template<typename ReturnType,
+         typename ...ArgumentsType>
+template<typename MarshallerType,
+         typename std::enable_if<!std::is_convertible<MarshallerType, ReturnType>::value>::type ...Enabler>
 inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::operator ()(ArgumentsType &&...arguments) noexcept -> ReturnType
 {
     try {
         std::lock_guard<SpinLock> locker { m_context };
 
-        auto it = std::begin(m_connections);
-
-        for (decltype(it) end = std::prev(std::end(m_connections)); it != end; ++it)
-            ((*it).first)(std::forward<ArgumentsType>(arguments) ...);
-
-        if (it != std::end(m_connections))
-            return ((*it).first)(std::forward<ArgumentsType>(arguments) ...);
+        for (auto &item : m_connections)
+            (item.first)(std::forward<ArgumentsType>(arguments) ...);
 
         return ReturnType();
     } catch (const std::exception &ex) {
@@ -330,7 +371,7 @@ inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::connect(C
 template<typename ReturnType,
          typename ...ArgumentsType>
 template<typename CallableType,
-         typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::remove_reference<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
+         typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::decay<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
 inline auto Signal<Internal::Function<ReturnType, ArgumentsType ...>>::connect(CallableType &&callable) noexcept -> ConnectionType *
 {
     try {

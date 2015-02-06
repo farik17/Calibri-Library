@@ -54,7 +54,7 @@ public:
     Connection(CallableType *callable) noexcept;
 
     template<typename CallableType,
-             typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::remove_reference<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
+             typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::decay<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
     Connection(CallableType &&callable) noexcept;
 
     template<typename CallableType,
@@ -114,11 +114,11 @@ inline Connection<Function<ReturnType, ArgumentsType ...>>::Connection(CallableT
 template<typename ReturnType,
          typename ...ArgumentsType>
 template<typename CallableType,
-         typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::remove_reference<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
+         typename std::enable_if<Internal::IsFunctionObjectCallable<typename std::decay<CallableType>::type, ReturnType, ArgumentsType ...>::value>::type ...Enabler>
 inline Connection<Function<ReturnType, ArgumentsType ...>>::Connection(CallableType &&callable) noexcept
 {
     try {
-        using FunctionObjectType = typename std::remove_reference<CallableType>::type;
+        using FunctionObjectType = typename std::decay<CallableType>::type;
 
         m_callable = new FunctionObjectType(std::forward<CallableType>(callable));
         m_invoker = [](void *callable, ArgumentsType &&...arguments) -> ReturnType {
