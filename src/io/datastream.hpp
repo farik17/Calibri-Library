@@ -398,8 +398,6 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::vector<ValueTyp
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(metaCast<sizeinfo>(size));
-
         for (decltype(size) i = 0; i < size; ++i) {
             ValueType value {};
             dataStream >> value;
@@ -692,8 +690,6 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_set<V
         uint32 size {};
         dataStream >> size;
 
-        data.reserve(metaCast<sizeinfo>(size));
-
         for (decltype(size) i = 0; i < size; ++i) {
             ValueType value {};
             dataStream >> value;
@@ -728,8 +724,6 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
 
         uint32 size {};
         dataStream >> size;
-
-        data.reserve(metaCast<sizeinfo>(size));
 
         for (decltype(size) i = 0; i < size; ++i) {
             ValueType value {};
@@ -766,8 +760,6 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_map<K
 
         uint32 size {};
         dataStream >> size;
-
-        data.reserve(metaCast<sizeinfo>(size));
 
         for (decltype(size) i = 0; i < size; ++i) {
             KeyType key {};
@@ -807,8 +799,6 @@ inline auto operator >>(DataStream<DeviceType> &dataStream, std::unordered_multi
 
         uint32 size {};
         dataStream >> size;
-
-        data.reserve(metaCast<sizeinfo>(size));
 
         for (decltype(size) i = 0; i < size; ++i) {
             KeyType key {};

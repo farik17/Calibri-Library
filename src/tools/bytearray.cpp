@@ -50,7 +50,6 @@ auto ByteArray::toHex(bool *ok) const noexcept -> ByteArray
 {
     try {
         ByteArray encodedData {};
-        encodedData.reserve(size() * 2);
 
         for (auto it = std::begin(*this), end = std::end(*this); it != end; ++it) {
             encodedData.emplace_back(Hex::Constants::alphabet[*it >> 4 & 0x0f]);
@@ -74,15 +73,12 @@ auto ByteArray::toHex(bool *ok) const noexcept -> ByteArray
 auto ByteArray::toBase64(bool *ok) const noexcept -> ByteArray
 {
     try {
-        auto moduloSize = size() % 3;
-        auto paddingSize = 3 - moduloSize;
-
         ByteArray encodedData {};
-        encodedData.reserve((size() / 3 + (paddingSize != 0
-                ? 1
-                : 0)) * 4);
 
         std::array<char, 3> block;
+
+        auto moduloSize = size() % 3;
+        auto paddingSize = 3 - moduloSize;
 
         auto it = std::begin(*this);
         auto end = std::prev(std::end(*this), moduloSize);
@@ -153,7 +149,6 @@ auto ByteArray::fromHex(const ByteArray &data, bool *ok) noexcept -> ByteArray
         }
 
         ByteArray decodedData {};
-        decodedData.reserve(data.size() / 2);
 
         for (auto it = std::begin(data), end = std::end(data); it != end; ++it) {
             char symbol {};
@@ -213,16 +208,15 @@ auto ByteArray::fromBase64(const ByteArray &data, bool *ok) noexcept -> ByteArra
             return {};
         }
 
+        ByteArray decodedData {};
+
+        std::array<char, 4> block;
+
         auto paddingSize = *data.rbegin() == '='
                 ? (*std::next(data.rbegin()) == '='
                    ? 2
                    : 1)
                 : 0;
-
-        ByteArray decodedData {};
-        decodedData.reserve((data.size() / 4) * 3 - paddingSize);
-
-        std::array<char, 4> block;
 
         auto it = std::begin(data);
         auto end = paddingSize != 0

@@ -15,6 +15,8 @@ private slots:
     void testEndsWith();
     void testHex();
     void testBase64();
+    void testAppend();
+    void testConcatenateOperator();
 };
 
 void tst_bytearray::testUpper()
@@ -81,6 +83,45 @@ void tst_bytearray::testBase64()
     QVERIFY(ok);
 
     QCOMPARE(out, Calibri::ByteArray("Some date"));
+}
+
+void tst_bytearray::testAppend()
+{
+    bool ok {};
+
+    QCOMPARE(Calibri::ByteArray("Some").append(Calibri::ByteArray(" data"), &ok), Calibri::ByteArray("Some data"));
+    QVERIFY(ok);
+    QCOMPARE(Calibri::ByteArray("Some").append(" data", 5, &ok), Calibri::ByteArray("Some data"));
+    QVERIFY(ok);
+    QCOMPARE(Calibri::ByteArray("Some").append(" data", &ok), Calibri::ByteArray("Some data"));
+    QVERIFY(ok);
+    QCOMPARE(Calibri::ByteArray("Some dat").append('a', &ok), Calibri::ByteArray("Some data"));
+    QVERIFY(ok);
+    QCOMPARE(Calibri::ByteArray("Some").append({ ' ', 'd', 'a', 't', 'a' }, &ok), Calibri::ByteArray("Some data"));
+    QVERIFY(ok);
+}
+
+void tst_bytearray::testConcatenateOperator()
+{
+    Calibri::ByteArray some { "Some" };
+    Calibri::ByteArray data { " data" };
+    Calibri::ByteArray someDat { "Some dat" };
+    Calibri::ByteArray omeData { "ome data" };
+
+    QCOMPARE(some + data, Calibri::ByteArray("Some data"));
+    QCOMPARE(Calibri::ByteArray("Some") + Calibri::ByteArray(" data"), Calibri::ByteArray("Some data"));
+    QCOMPARE(Calibri::ByteArray("Some") + data, Calibri::ByteArray("Some data"));
+    QCOMPARE(some + Calibri::ByteArray(" data"), Calibri::ByteArray("Some data"));
+
+    QCOMPARE(some + " data", Calibri::ByteArray("Some data"));
+    QCOMPARE(Calibri::ByteArray("Some") + " data", Calibri::ByteArray("Some data"));
+    QCOMPARE("Some" + data, Calibri::ByteArray("Some data"));
+    QCOMPARE("Some" + Calibri::ByteArray(" data"), Calibri::ByteArray("Some data"));
+
+    QCOMPARE(someDat + 'a', Calibri::ByteArray("Some data"));
+    QCOMPARE(Calibri::ByteArray("Some dat") + 'a', Calibri::ByteArray("Some data"));
+    QCOMPARE('S' + omeData, Calibri::ByteArray("Some data"));
+    QCOMPARE('S' + Calibri::ByteArray("ome data"), Calibri::ByteArray("Some data"));
 }
 
 QTEST_MAIN(tst_bytearray)

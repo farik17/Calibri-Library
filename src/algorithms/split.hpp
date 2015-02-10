@@ -38,7 +38,6 @@ inline auto split(ContainerType &container, const DataType &data, PredicateType 
         }
 
         DataType chunk;
-        chunk.reserve(std::distance(from, to));
 
         std::copy(from, to, std::back_inserter(chunk));
 
@@ -51,8 +50,6 @@ inline auto split(ContainerType &container, const DataType &data, PredicateType 
                 break;
 
             to = std::find_if(from, std::end(data), predicate);
-
-            chunk.reserve(std::distance(from ,to));
 
             std::copy(from, to, std::back_inserter(chunk));
 
@@ -95,7 +92,6 @@ inline auto split(ContainerType &container, const DataType &data, PredicateType 
         }
 
         DataType chunk;
-        chunk.reserve(std::distance(from, to));
 
         std::copy(from, to, std::back_inserter(chunk));
 
@@ -108,8 +104,6 @@ inline auto split(ContainerType &container, const DataType &data, PredicateType 
                 break;
 
             to = std::find_if(from, std::end(data), predicate);
-
-            chunk.reserve(std::distance(from ,to));
 
             std::copy(from, to, std::back_inserter(chunk));
 
@@ -149,13 +143,13 @@ inline auto split(ContainerType &container, const DataType &data, SeparatorType 
 
 template<typename ContainerType,
          typename DataType,
-         typename std::enable_if<((std::is_same<ContainerType, std::vector<typename std::decay<DataType>::type>>::value
-                                 || std::is_same<ContainerType, std::deque<typename std::decay<DataType>::type>>::value
-                                 || std::is_same<ContainerType, std::list<typename std::decay<DataType>::type>>::value)
-                                 && (std::is_same<typename std::decay<DataType>::type, std::string>::value
-                                 || std::is_same<typename std::decay<DataType>::type, std::wstring>::value
-                                 || std::is_same<typename std::decay<DataType>::type, ByteArray>::value))>::type ...Enabler>
-inline auto split(ContainerType &container, const DataType &data, DataType &&separator) noexcept -> bool
+         typename std::enable_if<((std::is_same<ContainerType, std::vector<DataType>>::value
+                                 || std::is_same<ContainerType, std::deque<DataType>>::value
+                                 || std::is_same<ContainerType, std::list<DataType>>::value)
+                                 && (std::is_same<DataType, std::string>::value
+                                 || std::is_same<DataType, std::wstring>::value
+                                 || std::is_same<DataType, ByteArray>::value))>::type ...Enabler>
+inline auto split(ContainerType &container, const DataType &data, const DataType &separator) noexcept -> bool
 {
     try {
         container.clear();
@@ -174,8 +168,6 @@ inline auto split(ContainerType &container, const DataType &data, DataType &&sep
         DataType chunk;
 
         if (size != 0) {
-            chunk.reserve(size);
-
             std::copy(from, to, std::back_inserter(chunk));
 
             container.emplace_back(std::move(chunk));
@@ -192,8 +184,6 @@ inline auto split(ContainerType &container, const DataType &data, DataType &&sep
             size = std::distance(from ,to);
 
             if (size != 0) {
-                chunk.reserve(size);
-
                 std::copy(from, to, std::back_inserter(chunk));
 
                 container.emplace_back(std::move(chunk));
@@ -215,11 +205,11 @@ inline auto split(ContainerType &container, const DataType &data, DataType &&sep
 
 template<typename ContainerType,
          typename DataType,
-         typename std::enable_if<(std::is_same<ContainerType, std::forward_list<typename std::decay<DataType>::type>>::value
-                                 && (std::is_same<typename std::decay<DataType>::type, std::string>::value
-                                 || std::is_same<typename std::decay<DataType>::type, std::wstring>::value
-                                 || std::is_same<typename std::decay<DataType>::type, ByteArray>::value))>::type ...Enabler>
-inline auto split(ContainerType &container, const DataType &data, DataType &&separator) noexcept -> bool
+         typename std::enable_if<(std::is_same<ContainerType, std::forward_list<DataType>>::value
+                                 && (std::is_same<DataType, std::string>::value
+                                 || std::is_same<DataType, std::wstring>::value
+                                 || std::is_same<DataType, ByteArray>::value))>::type ...Enabler>
+inline auto split(ContainerType &container, const DataType &data, const DataType &&separator) noexcept -> bool
 {
     try {
         container.clear();
@@ -240,8 +230,6 @@ inline auto split(ContainerType &container, const DataType &data, DataType &&sep
         auto it = container.cbefore_begin();
 
         if (size != 0) {
-            chunk.reserve(size);
-
             std::copy(from, to, std::back_inserter(chunk));
 
             it = container.emplace_after(it, std::move(chunk));
@@ -258,8 +246,6 @@ inline auto split(ContainerType &container, const DataType &data, DataType &&sep
             size = std::distance(from ,to);
 
             if (size != 0) {
-                chunk.reserve(size);
-
                 std::copy(from, to, std::back_inserter(chunk));
 
                 it = container.emplace_after(it, std::move(chunk));

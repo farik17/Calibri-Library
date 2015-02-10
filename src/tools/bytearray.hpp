@@ -31,6 +31,17 @@ public:
     operator char *() noexcept;
     operator void *() noexcept;
 
+    auto operator +=(const ByteArray &data) noexcept -> ByteArray &;
+    auto operator +=(const char *data) noexcept -> ByteArray &;
+    auto operator +=(char symbol) noexcept -> ByteArray &;
+    auto operator +=(std::initializer_list<char> data) noexcept -> ByteArray &;
+
+    auto append(const ByteArray &data, bool *ok = nullptr) noexcept -> ByteArray &;
+    auto append(const char *data, sizeinfo size, bool *ok = nullptr) noexcept -> ByteArray &;
+    auto append(const char *data, bool *ok = nullptr) noexcept -> ByteArray &;
+    auto append(char symbol, bool *ok = nullptr) noexcept -> ByteArray &;
+    auto append(std::initializer_list<char> data, bool *ok = nullptr) noexcept -> ByteArray &;
+
     auto toUpper(bool *ok = nullptr) const & noexcept -> ByteArray;
     auto toUpper(bool *ok = nullptr) && noexcept -> ByteArray &&;
     auto toLower(bool *ok = nullptr) const & noexcept -> ByteArray;
@@ -94,11 +105,103 @@ inline ByteArray::operator void *() noexcept
     return data();
 }
 
+inline auto ByteArray::operator +=(const ByteArray &data) noexcept -> ByteArray &
+{
+    return append(data);
+}
+
+inline auto ByteArray::operator +=(const char *data) noexcept -> ByteArray &
+{
+    return append(data);
+}
+
+inline auto ByteArray::operator +=(char symbol) noexcept -> ByteArray &
+{
+    return append(symbol);
+}
+
+inline auto ByteArray::operator +=(std::initializer_list<char> data) noexcept -> ByteArray &
+{
+    return append(data);
+}
+
+inline auto ByteArray::append(const ByteArray &data, bool *ok) noexcept -> ByteArray &
+{
+    try {
+        insert(std::end(*this), std::begin(data), std::end(data));
+
+        if (ok)
+            *ok = true;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        if (ok)
+            *ok = false;
+    }
+
+    return *this;
+}
+
+inline auto ByteArray::append(const char *data, sizeinfo size, bool *ok) noexcept -> ByteArray &
+{
+    try {
+        insert(std::end(*this), data, std::next(data, size));
+
+        if (ok)
+            *ok = true;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        if (ok)
+            *ok = false;
+    }
+
+    return *this;
+}
+
+inline auto ByteArray::append(const char *data, bool *ok) noexcept -> ByteArray &
+{
+    return append(data, std::char_traits<char>::length(data), ok);
+}
+
+inline auto ByteArray::append(char symbol, bool *ok) noexcept -> ByteArray &
+{
+    try {
+        push_back(symbol);
+
+        if (ok)
+            *ok = true;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        if (ok)
+            *ok = false;
+    }
+
+    return *this;
+}
+
+inline auto ByteArray::append(std::initializer_list<char> data, bool *ok) noexcept -> ByteArray &
+{
+    try {
+        insert(std::end(*this), std::begin(data), std::end(data));
+
+        if (ok)
+            *ok = true;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        if (ok)
+            *ok = false;
+    }
+
+    return *this;
+}
+
 inline auto ByteArray::toUpper(bool *ok) const & noexcept -> ByteArray
 {
     try {
         ByteArray transformedData {};
-        transformedData.reserve(size());
 
         std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), ::toupper);
 
@@ -141,7 +244,6 @@ inline auto ByteArray::toLower(bool *ok) const & noexcept -> ByteArray
 {
     try {
         ByteArray transformedData {};
-        transformedData.reserve(size());
 
         std::transform(std::begin(*this), std::end(*this), std::back_inserter(transformedData), ::tolower);
 
@@ -209,12 +311,181 @@ inline auto ByteArray::endsWith(const ByteArray &data) const noexcept -> bool
 }
 
 /*!
- *  ostream operators
+ *  Non-member operators
  */
-inline auto operator <<(std::ostream &stream, const ByteArray &byteArray) noexcept -> std::ostream &
+inline auto operator +(const ByteArray &left, const ByteArray &right) noexcept -> ByteArray
 {
     try {
-        std::copy(std::begin(byteArray), std::end(byteArray), std::ostreambuf_iterator<char>(stream));
+        ByteArray data { left };
+        data += right;
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+
+inline auto operator +(ByteArray &&left, ByteArray &&right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { std::move(left) };
+        data += right;
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(ByteArray &&left, const ByteArray &right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { std::move(left) };
+        data += right;
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(const ByteArray &left, ByteArray &&right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { std::move(right) };
+        data.insert(std::begin(data), std::begin(left), std::end(left));
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(const ByteArray &left, const char *right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { left };
+        data += right;
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(ByteArray &&left, const char *right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { std::move(left) };
+        data += right;
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(const char *left, const ByteArray &right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { left };
+        data += right;
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(const char *left, ByteArray &&right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { std::move(right) };
+        data.insert(std::begin(data), left, std::next(left, std::char_traits<char>::length(left)));
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(const ByteArray &left, char right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { left };
+        data += right;
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(ByteArray &&left, char right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { std::move(left) };
+        data += right;
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(char left, const ByteArray &right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { right };
+        data.insert(std::begin(data), left);
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator +(char left, ByteArray &&right) noexcept -> ByteArray
+{
+    try {
+        ByteArray data { std::move(right) };
+        data.insert(std::begin(data), left);
+
+        return data;
+    } catch (const std::exception &ex) {
+        std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+        return {};
+    }
+}
+
+inline auto operator <<(std::ostream &stream, const ByteArray &data) noexcept -> std::ostream &
+{
+    try {
+        std::copy(std::begin(data), std::end(data), std::ostreambuf_iterator<char>(stream));
     } catch (const std::exception &ex) {
         std::cerr << __func__ << " : " << ex.what() << std::endl;
     }

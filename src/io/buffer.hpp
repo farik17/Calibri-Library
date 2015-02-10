@@ -108,11 +108,11 @@ inline auto Buffer::size() const noexcept -> sizeinfo
 }
 
 /*!
- *  ostream operators
+ *  Non-member operators
  */
-inline auto operator <<(std::ostream &stream, const Buffer &buffer) noexcept -> std::ostream &
+inline auto operator <<(std::ostream &stream, const Buffer &data) noexcept -> std::ostream &
 {
-    return stream << buffer.data();
+    return stream << data.data();
 }
 
 } // end namespace Io

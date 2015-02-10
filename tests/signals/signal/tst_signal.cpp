@@ -14,7 +14,10 @@ public:
 class SumMarshaller
 {
 public:
+    SumMarshaller() = default;
+
     auto operator ()(int value) noexcept -> bool { m_sum += value; return false; }
+
     operator int() const noexcept { return m_sum; }
 
 private:
