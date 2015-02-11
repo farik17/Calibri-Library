@@ -2,7 +2,7 @@
 #define CALIBRI_IO_BUFFER_HPP
 
 //! Calibri-Library includes
-#include "iointerface.hpp"
+#include "iorandomaccessinterface.hpp"
 #include "tools/bytearray.hpp"
 
 namespace Calibri {

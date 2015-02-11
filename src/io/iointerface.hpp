@@ -2,7 +2,6 @@
 #define CALIBRI_IO_IOINTERFACE_HPP
 
 //! Std includes
-#include <cstddef>
 #include <string>
 
 //! Calibri-Library includes
@@ -68,71 +67,9 @@ inline auto IOInterface::putChar(char character) noexcept -> bool
     return true;
 }
 
-/*!
- *  IORandomAccessInterface class
- */
-class IORandomAccessInterface : public IOInterface
-{
-public:
-    constexpr IORandomAccessInterface() noexcept = default;
-
-    auto pos() const noexcept -> sizeinfo;
-    auto seek(sizeinfo pos) noexcept -> bool;
-    auto skip(sizeinfo size) noexcept -> bool;
-    auto reset() noexcept -> void;
-
-    auto readLine(char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo;
-
-    virtual auto canReadLine() const noexcept -> bool = 0;
-    virtual auto atEnd() const noexcept -> bool = 0;
-
-protected:
-    auto setPos(sizeinfo pos) noexcept -> void;
-
-    virtual auto readLineData(char *data, sizeinfo size, bool *ok = nullptr) noexcept -> sizeinfo = 0;
-    virtual auto seekData(sizeinfo pos) noexcept -> bool = 0;
-
-private:
-    sizeinfo m_pos {};
-};
-
-/*!
- *  IORandomAccessInterface inline methods
- */
-inline auto IORandomAccessInterface::pos() const noexcept -> sizeinfo
-{
-    return m_pos;
-}
-
-inline auto IORandomAccessInterface::seek(sizeinfo pos) noexcept -> bool
-{
-    return seekData(pos);
-}
-
-inline auto IORandomAccessInterface::skip(sizeinfo size) noexcept -> bool
-{
-    return seek(pos() + size);
-}
-
-inline auto IORandomAccessInterface::reset() noexcept -> void
-{
-    setPos(0);
-}
-
-inline auto IORandomAccessInterface::readLine(char *data, sizeinfo size, bool *ok) noexcept -> sizeinfo
-{
-    return readLineData(data, size, ok);
-}
-
-inline auto IORandomAccessInterface::setPos(sizeinfo pos) noexcept -> void
-{
-    m_pos = pos;
-}
-
 } // end namespace Io
 
 using Io::IOInterface;
-using Io::IORandomAccessInterface;
 
 } // end namespace Calibri
 

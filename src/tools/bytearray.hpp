@@ -36,11 +36,16 @@ public:
     auto operator +=(char symbol) noexcept -> ByteArray &;
     auto operator +=(std::initializer_list<char> data) noexcept -> ByteArray &;
 
-    auto append(const ByteArray &data, bool *ok = nullptr) noexcept -> ByteArray &;
-    auto append(const char *data, sizeinfo size, bool *ok = nullptr) noexcept -> ByteArray &;
-    auto append(const char *data, bool *ok = nullptr) noexcept -> ByteArray &;
-    auto append(char symbol, bool *ok = nullptr) noexcept -> ByteArray &;
-    auto append(std::initializer_list<char> data, bool *ok = nullptr) noexcept -> ByteArray &;
+    auto append(const ByteArray &data, bool *ok = nullptr) & noexcept -> ByteArray &;
+    auto append(const ByteArray &data, bool *ok = nullptr) && noexcept -> ByteArray &&;
+    auto append(const char *data, sizeinfo size, bool *ok = nullptr) & noexcept -> ByteArray &;
+    auto append(const char *data, sizeinfo size, bool *ok = nullptr) && noexcept -> ByteArray &&;
+    auto append(const char *data, bool *ok = nullptr) & noexcept -> ByteArray &;
+    auto append(const char *data, bool *ok = nullptr) && noexcept -> ByteArray &&;
+    auto append(char symbol, bool *ok = nullptr) & noexcept -> ByteArray &;
+    auto append(char symbol, bool *ok = nullptr) && noexcept -> ByteArray &&;
+    auto append(std::initializer_list<char> data, bool *ok = nullptr) & noexcept -> ByteArray &;
+    auto append(std::initializer_list<char> data, bool *ok = nullptr) && noexcept -> ByteArray &&;
 
     auto toUpper(bool *ok = nullptr) const & noexcept -> ByteArray;
     auto toUpper(bool *ok = nullptr) && noexcept -> ByteArray &&;
@@ -125,7 +130,7 @@ inline auto ByteArray::operator +=(std::initializer_list<char> data) noexcept ->
     return append(data);
 }
 
-inline auto ByteArray::append(const ByteArray &data, bool *ok) noexcept -> ByteArray &
+inline auto ByteArray::append(const ByteArray &data, bool *ok) & noexcept -> ByteArray &
 {
     try {
         insert(std::end(*this), std::begin(data), std::end(data));
@@ -142,7 +147,12 @@ inline auto ByteArray::append(const ByteArray &data, bool *ok) noexcept -> ByteA
     return *this;
 }
 
-inline auto ByteArray::append(const char *data, sizeinfo size, bool *ok) noexcept -> ByteArray &
+inline auto ByteArray::append(const ByteArray &data, bool *ok) && noexcept -> ByteArray &&
+{
+    return std::move(append(data, ok));
+}
+
+inline auto ByteArray::append(const char *data, sizeinfo size, bool *ok) & noexcept -> ByteArray &
 {
     try {
         insert(std::end(*this), data, std::next(data, size));
@@ -159,12 +169,22 @@ inline auto ByteArray::append(const char *data, sizeinfo size, bool *ok) noexcep
     return *this;
 }
 
-inline auto ByteArray::append(const char *data, bool *ok) noexcept -> ByteArray &
+inline auto ByteArray::append(const char *data, sizeinfo size, bool *ok) && noexcept -> ByteArray &&
+{
+    return std::move(append(data, size, ok));
+}
+
+inline auto ByteArray::append(const char *data, bool *ok) & noexcept -> ByteArray &
 {
     return append(data, std::char_traits<char>::length(data), ok);
 }
 
-inline auto ByteArray::append(char symbol, bool *ok) noexcept -> ByteArray &
+inline auto ByteArray::append(const char *data, bool *ok) && noexcept -> ByteArray &&
+{
+    return std::move(append(data, ok));
+}
+
+inline auto ByteArray::append(char symbol, bool *ok) & noexcept -> ByteArray &
 {
     try {
         push_back(symbol);
@@ -181,7 +201,12 @@ inline auto ByteArray::append(char symbol, bool *ok) noexcept -> ByteArray &
     return *this;
 }
 
-inline auto ByteArray::append(std::initializer_list<char> data, bool *ok) noexcept -> ByteArray &
+inline auto ByteArray::append(char symbol, bool *ok) && noexcept -> ByteArray &&
+{
+    return std::move(append(symbol, ok));
+}
+
+inline auto ByteArray::append(std::initializer_list<char> data, bool *ok) & noexcept -> ByteArray &
 {
     try {
         insert(std::end(*this), std::begin(data), std::end(data));
@@ -196,6 +221,11 @@ inline auto ByteArray::append(std::initializer_list<char> data, bool *ok) noexce
     }
 
     return *this;
+}
+
+inline auto ByteArray::append(std::initializer_list<char> data, bool *ok) && noexcept -> ByteArray &&
+{
+    return std::move(append(data, ok));
 }
 
 inline auto ByteArray::toUpper(bool *ok) const & noexcept -> ByteArray

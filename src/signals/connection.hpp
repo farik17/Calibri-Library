@@ -44,9 +44,9 @@ template<typename ReturnType,
          typename ...ArgumentsType>
 class Connection<Function<ReturnType, ArgumentsType ...>> : private DisableCopyable
 {
-    using Invoker = ReturnType (*)(void *, ArgumentsType &&...);
-    using Deleter = void (*)(void *);
-    using Comparator = bool (*)(void *, void *);
+    using Invoker = ReturnType (*)(void *, ArgumentsType &&...) noexcept;
+    using Deleter = void (*)(void *) noexcept;
+    using Comparator = bool (*)(void *, void *) noexcept;
 
 public:
     template<typename CallableType,
@@ -67,7 +67,7 @@ public:
                                      && std::is_base_of<EnableSignal, ObjectType>::value)>::type ...Enabler>
     Connection(ObjectType *object, CallableType callable) noexcept;
 
-    ~Connection() noexcept;
+    virtual ~Connection() noexcept;
 
     auto operator !=(const Connection &other) const noexcept -> bool;
     auto operator ==(const Connection &other) const noexcept -> bool;
@@ -106,7 +106,7 @@ inline Connection<Function<ReturnType, ArgumentsType ...>>::Connection(CallableT
     using SignalType = CallableType;
 
     m_callable = reinterpret_cast<decltype(m_callable)>(callable);
-    m_invoker = [](void *callable, ArgumentsType &&...arguments) -> ReturnType {
+    m_invoker = [](void *callable, ArgumentsType &&...arguments) noexcept -> ReturnType {
         return (*reinterpret_cast<SignalType *>(callable))(std::forward<ArgumentsType>(arguments) ...);
     };
 }
@@ -121,8 +121,16 @@ inline Connection<Function<ReturnType, ArgumentsType ...>>::Connection(CallableT
         using FunctionObjectType = typename std::decay<CallableType>::type;
 
         m_callable = new FunctionObjectType(std::forward<CallableType>(callable));
-        m_invoker = [](void *callable, ArgumentsType &&...arguments) -> ReturnType {
-            return (*reinterpret_cast<FunctionObjectType *>(callable))(std::forward<ArgumentsType>(arguments) ...);
+        m_invoker = [](void *callable, ArgumentsType &&...arguments) noexcept -> ReturnType {
+            try {
+                std::lock_guard<SpinLock> locker { Variables::globalContext };
+
+                return (*reinterpret_cast<FunctionObjectType *>(callable))(std::forward<ArgumentsType>(arguments) ...);
+            } catch (const std::exception &ex) {
+                std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+                return ReturnType();
+            }
         };
         m_deleter = [](void *callable) noexcept {
             delete reinterpret_cast<FunctionObjectType *>(callable);
@@ -141,10 +149,16 @@ inline Connection<Function<ReturnType, ArgumentsType ...>>::Connection(CallableT
     using FunctionType = CallableType;
 
     m_callable = reinterpret_cast<decltype(m_callable)>(callable);
-    m_invoker = [](void *callable, ArgumentsType &&...arguments) -> ReturnType {
-        std::lock_guard<SpinLock> locker { Variables::globalContext };
+    m_invoker = [](void *callable, ArgumentsType &&...arguments) noexcept -> ReturnType {
+        try {
+            std::lock_guard<SpinLock> locker { Variables::globalContext };
 
-        return reinterpret_cast<FunctionType>(callable)(std::forward<ArgumentsType>(arguments) ...);
+            return reinterpret_cast<FunctionType>(callable)(std::forward<ArgumentsType>(arguments) ...);
+        } catch (const std::exception &ex) {
+            std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+            return ReturnType();
+        }
     };
 }
 
@@ -159,10 +173,16 @@ inline Connection<Function<ReturnType, ArgumentsType ...>>::Connection(ObjectTyp
     using MemberFunctionType = Internal::MemberFunctionWrapper<CallableType>;
 
     m_callable = new MemberFunctionType(object, callable);
-    m_invoker = [](void *callable, ArgumentsType &&...arguments) -> ReturnType {
-        std::lock_guard<SpinLock> locker { reinterpret_cast<MemberFunctionType *>(callable)->object()->context() };
+    m_invoker = [](void *callable, ArgumentsType &&...arguments) noexcept -> ReturnType {
+        try {
+            std::lock_guard<SpinLock> locker { reinterpret_cast<MemberFunctionType *>(callable)->object()->context() };
 
-        return (*reinterpret_cast<MemberFunctionType *>(callable))(std::forward<ArgumentsType>(arguments) ...);
+            return (*reinterpret_cast<MemberFunctionType *>(callable))(std::forward<ArgumentsType>(arguments) ...);
+        } catch (const std::exception &ex) {
+            std::cerr << __func__ << " : " << ex.what() << std::endl;
+
+            return ReturnType();
+        }
     };
     m_deleter = [](void *callable) noexcept {
         delete reinterpret_cast<MemberFunctionType *>(callable);
@@ -204,13 +224,7 @@ template<typename ReturnType,
          typename ...ArgumentsType>
 inline auto Connection<Function<ReturnType, ArgumentsType ...>>::operator ()(ArgumentsType &&...arguments) const noexcept -> ReturnType
 {
-    try {
-        return m_invoker(m_callable, std::forward<ArgumentsType>(arguments) ...);
-    } catch (const std::exception &ex) {
-        std::cerr << __func__ << " : " << ex.what() << std::endl;
-
-        return ReturnType();
-    }
+    return m_invoker(m_callable, std::forward<ArgumentsType>(arguments) ...);
 }
 
 template<typename ReturnType,

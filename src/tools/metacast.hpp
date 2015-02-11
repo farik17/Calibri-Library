@@ -18,7 +18,7 @@ namespace Tools {
 //! Convert convertible types
 template<typename CastType,
          typename DataType,
-         typename std::enable_if<std::is_convertible<DataType, CastType>::value>::type... Enabler>
+         typename std::enable_if<std::is_convertible<DataType, CastType>::value>::type ...Enabler>
 inline auto metaCast(DataType data) noexcept -> CastType
 {
     return static_cast<CastType>(data);
@@ -29,7 +29,7 @@ template<typename CastType,
          uint8 Base = 10,
          typename std::enable_if<(std::is_same<CastType, int8>::value
                                  || std::is_same<CastType, int16>::value
-                                 || std::is_same<CastType, int32>::value)>::type... Enabler>
+                                 || std::is_same<CastType, int32>::value)>::type ...Enabler>
 inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
     char *end {};
@@ -69,7 +69,7 @@ template<typename CastType,
          uint8 Base = 10,
          typename std::enable_if<(std::is_same<CastType, uint8>::value
                                  || std::is_same<CastType, uint16>::value
-                                 || std::is_same<CastType, uint32>::value)>::type... Enabler>
+                                 || std::is_same<CastType, uint32>::value)>::type ...Enabler>
 inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
     char *end {};
@@ -106,7 +106,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
 template<typename CastType,
          uint8 Base = 10,
-         typename std::enable_if<std::is_same<CastType, int64>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, int64>::value>::type ...Enabler>
 inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
     char *end {};
@@ -142,7 +142,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 
 template<typename CastType,
          uint8 Base = 10,
-         typename std::enable_if<std::is_same<CastType, uint64>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, uint64>::value>::type ...Enabler>
 inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
     char *end {};
@@ -177,7 +177,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 }
 
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, float>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, float>::value>::type ...Enabler>
 inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
     char *end {};
@@ -212,7 +212,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 }
 
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, double>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, double>::value>::type ...Enabler>
 inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
     char *end {};
@@ -247,7 +247,7 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 }
 
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, longdouble>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, longdouble>::value>::type ...Enabler>
 inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 {
     char *end {};
@@ -284,14 +284,14 @@ inline auto metaCast(const char *data, bool *ok = nullptr) noexcept -> CastType
 //! Convert string to arithmetic types
 template<typename CastType,
          uint8 Base = 10,
-         typename std::enable_if<std::is_integral<CastType>::value>::type... Enabler>
+         typename std::enable_if<std::is_integral<CastType>::value>::type ...Enabler>
 inline auto metaCast(const std::string &data, bool *ok = nullptr) noexcept -> CastType
 {
     return metaCast<CastType, Base>(data.data(), ok);
 }
 
 template<typename CastType,
-         typename std::enable_if<std::is_floating_point<CastType>::value>::type... Enabler>
+         typename std::enable_if<std::is_floating_point<CastType>::value>::type ...Enabler>
 inline auto metaCast(const std::string &data, bool *ok = nullptr) noexcept -> CastType
 {
     return metaCast<CastType>(data.data(), ok);
@@ -302,7 +302,7 @@ template<typename CastType,
          uint8 Base = 10,
          typename std::enable_if<(std::is_same<CastType, int8>::value
                                  || std::is_same<CastType, int16>::value
-                                 || std::is_same<CastType, int32>::value)>::type... Enabler>
+                                 || std::is_same<CastType, int32>::value)>::type ...Enabler>
 inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 {
     wchar *end {};
@@ -342,7 +342,7 @@ template<typename CastType,
          uint8 Base = 10,
          typename std::enable_if<(std::is_same<CastType, uint8>::value
                                  || std::is_same<CastType, uint16>::value
-                                 || std::is_same<CastType, uint32>::value)>::type... Enabler>
+                                 || std::is_same<CastType, uint32>::value)>::type ...Enabler>
 inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 {
     wchar *end {};
@@ -379,7 +379,7 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 
 template<typename CastType,
          uint8 Base = 10,
-         typename std::enable_if<std::is_same<CastType, int64>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, int64>::value>::type ...Enabler>
 inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 {
     wchar *end {};
@@ -415,7 +415,7 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 
 template<typename CastType,
          uint8 Base = 10,
-         typename std::enable_if<std::is_same<CastType, uint64>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, uint64>::value>::type ...Enabler>
 inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 {
     wchar *end {};
@@ -450,7 +450,7 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 }
 
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, float>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, float>::value>::type ...Enabler>
 inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 {
     wchar *end {};
@@ -485,7 +485,7 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 }
 
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, double>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, double>::value>::type ...Enabler>
 inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 {
     wchar *end {};
@@ -520,7 +520,7 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 }
 
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, longdouble>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, longdouble>::value>::type ...Enabler>
 inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 {
     wchar *end {};
@@ -557,14 +557,14 @@ inline auto metaCast(const wchar *data, bool *ok = nullptr) noexcept -> CastType
 //! Convert wstring to arithmetic types
 template<typename CastType,
          uint8 Base = 10,
-         typename std::enable_if<std::is_integral<CastType>::value>::type... Enabler>
+         typename std::enable_if<std::is_integral<CastType>::value>::type ...Enabler>
 inline auto metaCast(const std::wstring &data, bool *ok = nullptr) noexcept -> CastType
 {
     return metaCast<CastType, Base>(data.data(), ok);
 }
 
 template<typename CastType,
-         typename std::enable_if<std::is_floating_point<CastType>::value>::type... Enabler>
+         typename std::enable_if<std::is_floating_point<CastType>::value>::type ...Enabler>
 inline auto metaCast(const std::wstring &data, bool *ok = nullptr) noexcept -> CastType
 {
     return metaCast<CastType>(data.data(), ok);
@@ -574,7 +574,7 @@ inline auto metaCast(const std::wstring &data, bool *ok = nullptr) noexcept -> C
 template<typename CastType,
          typename DataType,
          typename std::enable_if<(std::is_same<CastType, std::string>::value
-                                 && std::is_arithmetic<DataType>::value)>::type... Enabler>
+                                 && std::is_arithmetic<DataType>::value)>::type ...Enabler>
 inline auto metaCast(DataType data) noexcept -> CastType
 {
     try {
@@ -590,7 +590,7 @@ inline auto metaCast(DataType data) noexcept -> CastType
 template<typename CastType,
          typename DataType,
          typename std::enable_if<(std::is_same<CastType, std::wstring>::value
-                                 && std::is_arithmetic<DataType>::value)>::type... Enabler>
+                                 && std::is_arithmetic<DataType>::value)>::type ...Enabler>
 inline auto metaCast(DataType data) noexcept -> CastType
 {
     try {
@@ -604,7 +604,7 @@ inline auto metaCast(DataType data) noexcept -> CastType
 
 //! Convert cstring to wstring
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, std::wstring>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, std::wstring>::value>::type ...Enabler>
 inline auto metaCast(const char *data) noexcept -> CastType
 {
     try {
@@ -624,7 +624,7 @@ inline auto metaCast(const char *data) noexcept -> CastType
 
 //! Convert wcstring to string
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, std::string>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, std::string>::value>::type ...Enabler>
 inline auto metaCast(const wchar *data) noexcept -> CastType
 {
     try {
@@ -644,7 +644,7 @@ inline auto metaCast(const wchar *data) noexcept -> CastType
 
 //! Convert string to wstring
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, std::wstring>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, std::wstring>::value>::type ...Enabler>
 inline auto metaCast(const std::string &data) noexcept -> CastType
 {
     return metaCast<CastType>(data.data());
@@ -652,7 +652,7 @@ inline auto metaCast(const std::string &data) noexcept -> CastType
 
 //! Convert wstring to string
 template<typename CastType,
-         typename std::enable_if<std::is_same<CastType, std::string>::value>::type... Enabler>
+         typename std::enable_if<std::is_same<CastType, std::string>::value>::type ...Enabler>
 inline auto metaCast(const std::wstring &data) noexcept -> CastType
 {
     return metaCast<CastType>(data.data());
